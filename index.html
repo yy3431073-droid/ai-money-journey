@@ -3,132 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI 赚钱成长记录</title>
+  <title>AI 建站接单展示页</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, "Microsoft YaHei", sans-serif;
-      background: #f5f7fb;
-      color: #222;
+      background: #f6f8fb;
+      color: #172033;
     }
-
     .hero {
-      min-height: 100vh;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, #111827, #2563eb);
+      min-height: 92vh;
+      padding: 64px 20px 48px;
+      background: linear-gradient(135deg, #101827, #2457c5 58%, #21a67a);
       color: white;
       display: flex;
       align-items: center;
-      justify-content: center;
     }
-
-    .container {
-      max-width: 900px;
-      width: 100%;
-    }
-
+    .container { width: 100%; max-width: 1080px; margin: 0 auto; }
     .tag {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       padding: 8px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.15);
-      margin-bottom: 20px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
       font-size: 14px;
+      margin-bottom: 22px;
     }
-
-    h1 {
-      font-size: 44px;
-      line-height: 1.2;
-      margin: 0 0 20px;
-    }
-
-    p {
-      font-size: 18px;
-      line-height: 1.8;
-      margin: 0 0 18px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 34px;
-    }
-
-    .card {
-      background: white;
-      color: #222;
-      border-radius: 14px;
-      padding: 22px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-    }
-
-    .card h2 {
-      font-size: 20px;
-      margin: 0 0 10px;
-    }
-
-    .card p {
-      font-size: 15px;
-      color: #555;
-      margin: 0;
-    }
-
-    .button {
-      display: inline-block;
-      margin-top: 28px;
-      padding: 14px 22px;
-      background: #22c55e;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 32px;
-      }
-
-      p {
-        font-size: 16px;
-      }
-
-      .hero {
-        padding: 40px 18px;
-      }
+    h1 { max-width: 820px; font-size: 48px; line-height: 1.18; margin: 0 0 20px; }
+    .lead { max-width: 760px; font-size: 19px; line-height: 1.8; margin: 0 0 16px; color: rgba(255,255,255,0.9); }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 30px 0 36px; }
+    .button { display: inline-block; padding: 14px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
+    .primary { background: #25c46b; color: white; }
+    .secondary { background: rgba(255,255,255,0.14); color: white; border: 1px solid rgba(255,255,255,0.22); }
+    .cards, .service-grid, .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+    .card { background: white; color: #172033; border-radius: 10px; padding: 22px; box-shadow: 0 14px 36px rgba(10, 18, 32, 0.18); }
+    .card h2, .service h3, .step h3 { font-size: 20px; margin: 0 0 10px; }
+    .card p, .service p, .step p { font-size: 15px; line-height: 1.7; color: #536176; margin: 0; }
+    section { padding: 56px 20px; }
+    .section-title { font-size: 30px; margin: 0 0 14px; }
+    .section-desc { max-width: 760px; line-height: 1.8; color: #5a6678; margin: 0 0 26px; }
+    .service, .step { background: white; border: 1px solid #e4e9f2; border-radius: 10px; padding: 22px; }
+    .price { font-size: 28px; font-weight: 800; color: #1f6feb; margin: 12px 0; }
+    ul { padding-left: 20px; margin: 12px 0 0; color: #556276; line-height: 1.8; }
+    .contact { background: #101827; color: white; text-align: center; }
+    .contact p { color: rgba(255,255,255,0.82); }
+    @media (max-width: 640px) {
+      h1 { font-size: 34px; }
+      .lead { font-size: 16px; }
+      .hero { padding-top: 46px; }
+      .section-title { font-size: 24px; }
     }
   </style>
 </head>
 <body>
-  <section class="hero">
+  <header class="hero">
     <div class="container">
-      <div class="tag">非计算机大学生的 AI 赚钱挑战</div>
-      <h1>我正在用 AI，从 0 开始做项目赚钱。</h1>
-      <p>
-        我是一名普通大学生，正在挑战用 30 天跑通第一个 AI 赚钱闭环：
-        学会做网站、发布作品、记录成长，并尝试接到第一单。
-      </p>
-      <p>
-        这个页面是我的第一个 AI 网站项目，也是我从 0 到 1 的开始。
-      </p>
-
-      <a class="button" href="#">联系我</a>
-
-      <div class="cards">
-        <div class="card">
-          <h2>当前目标</h2>
-          <p>30 天内做出 4 个网站案例，并拿到第一笔收入。</p>
-        </div>
-        <div class="card">
-          <h2>学习方向</h2>
-          <p>AI 辅助建站、个人展示页、商家落地页和简单自动化。</p>
-        </div>
-        <div class="card">
-          <h2>项目记录</h2>
-          <p>每天记录自己用 AI 做项目、踩坑、修改和上线的过程。</p>
-        </div>
+      <div class="tag">非计算机大学生 · 用 Codex 辅助做网站</div>
+      <h1>我正在从小白开始，用 AI 做网站和落地页。</h1>
+      <p class="lead">我不是计算机专业，也没有系统学过编程。现在我用 Codex 辅助自己学习建站，挑战 30 天做出作品、上线案例，并尝试接到第一单。</p>
+      <p class="lead">如果你需要一个简单、清晰、能发给别人看的个人介绍页、作品集页或商家宣传页，我可以帮你做一个入门版本。</p>
+      <div class="actions">
+        <a class="button primary" href="#services">查看服务</a>
+        <a class="button secondary" href="#contact">联系我</a>
       </div>
+      <div class="cards">
+        <div class="card"><h2>当前目标</h2><p>30 天内做出 4 个网站案例，并跑通第一个低价试单。</p></div>
+        <div class="card"><h2>学习路线</h2><p>AI 辅助建站、落地页文案、页面美化、GitHub 与 Vercel 上线。</p></div>
+        <div class="card"><h2>适合客户</h2><p>大学生、个人博主、小商家、自由职业者、需要展示自己的普通人。</p></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">我现在可以做什么</h2>
+      <p class="section-desc">现阶段我先做简单、实用、能上线的网页。不追求复杂系统，先帮你把介绍、服务、作品和联系方式清楚展示出来。</p>
+      <div class="service-grid">
+        <div class="service"><h3>个人介绍页</h3><div class="price">99 元起</div><p>适合大学生、求职展示、个人主页、社交平台主页链接。</p><ul><li>个人介绍</li><li>目标和经历</li><li>联系方式</li></ul></div>
+        <div class="service"><h3>作品集展示页</h3><div class="price">199 元起</div><p>适合摄影、设计、剪辑、家教、内容创作者展示作品。</p><ul><li>作品分类</li><li>服务介绍</li><li>案例展示</li></ul></div>
+        <div class="service"><h3>商家宣传落地页</h3><div class="price">399 元起</div><p>适合小店、工作室、摊主、课程资料领取和活动宣传。</p><ul><li>宣传文案</li><li>服务亮点</li><li>手机可打开链接</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2 class="section-title">我的交付流程</h2>
+      <div class="step-grid">
+        <div class="step"><h3>1. 明确需求</h3><p>先确认你是谁、要展示什么、希望别人看到后做什么。</p></div>
+        <div class="step"><h3>2. 生成初版</h3><p>用 Codex 辅助完成页面结构、文案和基础美化。</p></div>
+        <div class="step"><h3>3. 修改优化</h3><p>根据你的反馈调整文字、颜色、布局和展示重点。</p></div>
+        <div class="step"><h3>4. 发布链接</h3><p>用 GitHub 和 Vercel 上线，生成一个手机也能打开的网址。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="section-title">这是我的第 2 天作品</h2>
+      <p>如果你也想看一个普通小白，能不能靠 AI 做出项目、接到第一单，可以继续关注我的 30 天记录。</p>
+      <p>联系我：可以先通过抖音私信沟通需求。</p>
     </div>
   </section>
 </body>
