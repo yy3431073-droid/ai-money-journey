@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大学生个人介绍页案例</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+    a { color: inherit; }
+    .hero {
+      min-height: 82vh;
+      padding: 42px 20px 56px;
+      background:
+        linear-gradient(135deg, rgba(19, 34, 61, 0.92), rgba(38, 91, 180, 0.9)),
+        url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+    .container { width: 100%; max-width: 1080px; margin: 0 auto; }
+    .nav {
+      position: absolute;
+      top: 22px;
+      left: 20px;
+      right: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    .nav a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
+    }
+    h1 {
+      max-width: 780px;
+      font-size: 52px;
+      line-height: 1.16;
+      margin: 0 0 22px;
+    }
+    .lead {
+      max-width: 720px;
+      font-size: 19px;
+      line-height: 1.8;
+      margin: 0 0 28px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .button {
+      display: inline-block;
+      padding: 14px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .primary { background: #24c26a; color: white; }
+    .secondary {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: white;
+    }
+    section { padding: 58px 20px; }
+    .section-title {
+      font-size: 32px;
+      margin: 0 0 14px;
+    }
+    .section-desc {
+      max-width: 760px;
+      color: #5b6577;
+      line-height: 1.8;
+      margin: 0 0 28px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #e3e8f1;
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    .card p, li {
+      color: #5b6577;
+      line-height: 1.75;
+      margin: 0;
+    }
+    ul { padding-left: 20px; margin: 10px 0 0; }
+    .profile {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .panel {
+      background: white;
+      border: 1px solid #e3e8f1;
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+    }
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+    .item {
+      padding-left: 16px;
+      border-left: 3px solid #2463c7;
+    }
+    .item strong { display: block; margin-bottom: 6px; }
+    .contact {
+      background: #12203a;
+      color: white;
+      text-align: center;
+    }
+    .contact p { color: rgba(255, 255, 255, 0.82); }
+    @media (max-width: 760px) {
+      .hero { min-height: auto; padding-top: 92px; }
+      h1 { font-size: 36px; }
+      .lead { font-size: 16px; }
+      .profile { grid-template-columns: 1fr; }
+      .section-title { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html">返回主页</a>
+    <a href="#contact">联系我</a>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="tag">案例 02 · 大学生个人介绍页</div>
+      <h1>把一个普通大学生，清楚地介绍给别人。</h1>
+      <p class="lead">这个页面适合放在简历、社交平台主页、作品集入口或求职沟通里。它不追求复杂功能，而是帮一个人把身份、经历、能力和联系方式讲清楚。</p>
+      <div class="actions">
+        <a class="button primary" href="#profile">查看页面结构</a>
+        <a class="button secondary" href="#contact">我也想做一个</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="profile">
+    <div class="container profile">
+      <div class="panel">
+        <h2 class="section-title">李同学 · 食品质量与安全专业</h2>
+        <p class="section-desc">一名正在寻找实习机会的大学生，关注食品安全、数据分析和 AI 工具应用。希望未来进入食品企业、快消品牌或相关外企，从质量、运营或数据方向开始积累经验。</p>
+        <div class="grid">
+          <div class="card">
+            <h3>当前身份</h3>
+            <p>准大二学生，专业是食品质量与安全，正在学习 AI 建站、数据分析和日语。</p>
+          </div>
+          <div class="card">
+            <h3>求职方向</h3>
+            <p>食品品控、数据运营、新媒体运营、AIGC 工具运营、食品品牌电商运营。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">个人亮点</h2>
+        <ul>
+          <li>有 1 个月新媒体运营实习经历，了解内容发布和账号运营流程。</li>
+          <li>正在用 Codex 从 0 学习做网站，已完成第一个上线作品。</li>
+          <li>计划把食品专业、AI 工具、数据分析和语言能力结合起来。</li>
+          <li>愿意长期记录成长过程，持续做项目和复盘。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2 class="section-title">经历时间线</h2>
+      <p class="section-desc">个人介绍页最重要的是让别人快速看懂“你是谁、做过什么、下一步想做什么”。所以这里用时间线来展示成长路径。</p>
+      <div class="timeline">
+        <div class="card item">
+          <strong>2026 年暑假 · 新媒体运营实习</strong>
+          <p>参与短视频内容整理、文案优化和账号运营，理解内容平台的发布流程和基础反馈逻辑。</p>
+        </div>
+        <div class="card item">
+          <strong>2026 年 8 月 · 开始 AI 建站挑战</strong>
+          <p>注册 GitHub 和 Vercel，使用 Codex 制作并上线第一个网站，开始记录 30 天成长过程。</p>
+        </div>
+        <div class="card item">
+          <strong>接下来 · 寒假实习准备</strong>
+          <p>重点投递食品企业品控、食品品牌运营、数据运营和 AIGC 工具运营相关岗位。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2 class="section-title">这个案例可以怎么卖？</h2>
+      <p class="section-desc">这类页面适合做成 99 元体验价，用来帮助同学、求职者、博主和自由职业者做一个手机能打开的个人介绍链接。</p>
+      <div class="grid">
+        <div class="card">
+          <h3>适合人群</h3>
+          <p>大学生、求职者、兼职接单者、家教、摄影剪辑、个人 IP 起步者。</p>
+        </div>
+        <div class="card">
+          <h3>交付内容</h3>
+          <p>个人介绍、经历展示、能力标签、联系方式、手机端适配、上线链接。</p>
+        </div>
+        <div class="card">
+          <h3>体验价</h3>
+          <p>99 元起。先做简单版本，后续可以升级成完整作品集页面。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="section-title">想要一个类似页面？</h2>
+      <p>可以抖音私信我，发送“个人介绍页”。我会先帮你整理页面内容，再用 Codex 辅助制作一个能打开的网页链接。</p>
+    </div>
+  </section>
+</body>
+</html>
