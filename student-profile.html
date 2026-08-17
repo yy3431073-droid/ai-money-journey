@@ -143,11 +143,20 @@
       max-width: 620px;
     }
     .stat {
+      display: block;
+      text-decoration: none;
       background: white;
       border: 1px solid #e2e8f3;
       border-radius: 10px;
       padding: 16px;
       box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .stat:hover {
+      transform: translateY(-4px);
+      border-color: #9db9ef;
+      box-shadow: 0 18px 36px rgba(31, 100, 216, 0.14);
     }
     .stat strong {
       display: block;
@@ -246,6 +255,25 @@
       color: #5b6577;
       line-height: 1.75;
       margin: 0;
+    }
+    .work-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
+    }
+    .work-tag {
+      align-self: flex-start;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #1f64d8;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .work-card .button {
+      margin-top: auto;
+      align-self: flex-start;
     }
     ul { padding-left: 20px; margin: 10px 0 0; }
     .switcher {
@@ -372,6 +400,7 @@
         <div class="nav-links">
           <a href="index.html">返回主页</a>
           <a href="#about">关于我</a>
+          <a href="#works">作品</a>
           <a href="#direction">方向</a>
           <a href="#timeline">记录</a>
           <a href="#contact">联系</a>
@@ -390,9 +419,9 @@
             <button class="button secondary" id="copyText" type="button">复制我的介绍</button>
           </div>
           <div class="mini-stats">
-            <div class="stat"><strong data-count="30">0</strong><span>天 AI 建站挑战</span></div>
-            <div class="stat"><strong data-count="4">0</strong><span>计划完成案例</span></div>
-            <div class="stat"><strong data-count="1">0</strong><span>已上线作品</span></div>
+            <a class="stat" href="#timeline"><strong data-count="30">0</strong><span>天 AI 建站挑战</span></a>
+            <a class="stat" href="#works"><strong data-count="4">0</strong><span>计划完成案例</span></a>
+            <a class="stat" href="#works"><strong data-count="2">0</strong><span>已上线作品</span></a>
           </div>
         </div>
 
@@ -426,6 +455,31 @@
         <div class="card">
           <h3>正在做的事</h3>
           <p>用 Codex 从 0 学建站，做个人介绍页、作品集页、商家宣传页，并记录 30 天 AI 项目挑战。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="works" class="container reveal">
+      <h2 class="section-title">已上线作品</h2>
+      <p class="section-desc">这里会持续放我用 Codex 做出来并上线的网页。现在已经有 2 个作品：一个是接单主页，一个是我的动态个人介绍页。后面还会继续补作品集页和商家宣传页。</p>
+      <div class="grid">
+        <div class="card work-card">
+          <span class="work-tag">作品 01 · 接单主页</span>
+          <h3>AI 建站接单展示页</h3>
+          <p>用于展示我可以提供的服务，包括个人介绍页、作品集展示页和商家宣传落地页，也放了体验价和联系入口。</p>
+          <a class="button secondary" href="index.html">打开作品</a>
+        </div>
+        <div class="card work-card">
+          <span class="work-tag">作品 02 · 个人主页</span>
+          <h3>Jasper 的动态个人介绍页</h3>
+          <p>加入头像、动态数字、方向切换、成长记录和复制介绍按钮，用来介绍我是谁、正在学什么、未来想走什么方向。</p>
+          <a class="button secondary" href="student-profile.html">打开作品</a>
+        </div>
+        <div class="card work-card">
+          <span class="work-tag">计划中 · 作品 03</span>
+          <h3>大学生作品集展示页</h3>
+          <p>下一步准备做一个适合摄影、剪辑、设计、家教或内容创作者使用的作品集页面。</p>
+          <a class="button secondary" href="#contact">我想做这个</a>
         </div>
       </div>
     </section>
