@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>大学生个人介绍页案例</title>
+  <title>Jasper 的个人介绍页</title>
   <style>
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: Arial, "Microsoft YaHei", sans-serif;
@@ -13,87 +14,219 @@
       color: #172033;
     }
     a { color: inherit; }
-    .hero {
-      min-height: 82vh;
-      padding: 42px 20px 56px;
+    .page {
+      min-height: 100vh;
+      overflow: hidden;
       background:
-        linear-gradient(135deg, rgba(19, 34, 61, 0.92), rgba(38, 91, 180, 0.9)),
-        url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80");
-      background-size: cover;
-      background-position: center;
-      color: white;
-      display: flex;
-      align-items: center;
+        radial-gradient(circle at 12% 18%, rgba(255, 207, 48, 0.28), transparent 28%),
+        radial-gradient(circle at 92% 8%, rgba(43, 201, 184, 0.22), transparent 26%),
+        #f5f7fb;
     }
-    .container { width: 100%; max-width: 1080px; margin: 0 auto; }
     .nav {
-      position: absolute;
-      top: 22px;
-      left: 20px;
-      right: 20px;
-      max-width: 1080px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(245, 247, 251, 0.78);
+      border-bottom: 1px solid rgba(210, 218, 231, 0.7);
+    }
+    .nav-inner {
+      max-width: 1120px;
       margin: 0 auto;
+      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14px;
+      gap: 16px;
     }
-    .nav a {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #24c26a;
+      box-shadow: 0 0 0 8px rgba(36, 194, 106, 0.12);
+    }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav-links a {
       text-decoration: none;
-      padding: 10px 14px;
+      font-size: 14px;
+      padding: 9px 12px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #344156;
+    }
+    .nav-links a:hover { background: white; }
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .hero {
+      min-height: calc(100vh - 62px);
+      padding: 58px 0 46px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+      gap: 38px;
+      align-items: center;
     }
     .tag {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 14px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-bottom: 20px;
+      background: white;
+      border: 1px solid #e2e8f3;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      color: #3a465a;
+      margin-bottom: 18px;
     }
     h1 {
-      max-width: 780px;
-      font-size: 52px;
-      line-height: 1.16;
-      margin: 0 0 22px;
+      font-size: 54px;
+      line-height: 1.12;
+      margin: 0 0 20px;
+      letter-spacing: 0;
     }
+    .highlight { color: #1f64d8; }
     .lead {
-      max-width: 720px;
-      font-size: 19px;
-      line-height: 1.8;
+      max-width: 680px;
+      font-size: 18px;
+      line-height: 1.85;
+      color: #546176;
       margin: 0 0 28px;
-      color: rgba(255, 255, 255, 0.9);
     }
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
     .button {
-      display: inline-block;
-      padding: 14px 20px;
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 13px 18px;
       border-radius: 10px;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 15px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
     }
     .primary { background: #24c26a; color: white; }
     .secondary {
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: white;
+      background: white;
+      color: #172033;
+      border: 1px solid #dfe6f1;
     }
-    section { padding: 58px 20px; }
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 620px;
+    }
+    .stat {
+      background: white;
+      border: 1px solid #e2e8f3;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    }
+    .stat strong {
+      display: block;
+      font-size: 30px;
+      color: #1f64d8;
+      margin-bottom: 4px;
+    }
+    .stat span { color: #5b6577; font-size: 14px; }
+    .profile-card {
+      position: relative;
+      background: #101827;
+      color: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 24px 60px rgba(16, 24, 39, 0.22);
+      transform: rotate(1.4deg);
+    }
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border: 1px dashed rgba(31, 100, 216, 0.35);
+      border-radius: 24px;
+      pointer-events: none;
+    }
+    .avatar-wrap {
+      overflow: hidden;
+      border-radius: 14px;
+      background: #ffd22f;
+      border: 4px solid white;
+    }
+    .avatar-wrap img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+    .profile-meta {
+      padding: 18px 6px 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+    }
+    .profile-meta h2 { margin: 0 0 6px; font-size: 26px; }
+    .profile-meta p { margin: 0; color: rgba(255, 255, 255, 0.76); }
+    .status {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(36, 194, 106, 0.14);
+      color: #7af0ab;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #24c26a;
+      animation: pulse 1.4s infinite;
+    }
+    section { padding: 64px 0; }
     .section-title {
-      font-size: 32px;
-      margin: 0 0 14px;
+      font-size: 34px;
+      margin: 0 0 12px;
     }
     .section-desc {
       max-width: 760px;
       color: #5b6577;
-      line-height: 1.8;
+      line-height: 1.85;
       margin: 0 0 28px;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
     }
     .card {
@@ -102,148 +235,331 @@
       border-radius: 10px;
       padding: 22px;
       box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 20px;
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
     }
+    .card h3 { margin: 0 0 10px; font-size: 20px; }
     .card p, li {
       color: #5b6577;
       line-height: 1.75;
       margin: 0;
     }
     ul { padding-left: 20px; margin: 10px 0 0; }
-    .profile {
+    .switcher {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 28px;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
       align-items: start;
     }
-    .panel {
-      background: white;
-      border: 1px solid #e3e8f1;
-      border-radius: 10px;
-      padding: 28px;
-      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+    .tabs {
+      display: grid;
+      gap: 10px;
     }
+    .tab {
+      border: 1px solid #dfe6f1;
+      background: white;
+      color: #344156;
+      text-align: left;
+      cursor: pointer;
+      padding: 15px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+    }
+    .tab.active {
+      background: #1f64d8;
+      border-color: #1f64d8;
+      color: white;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp 0.28s ease both; }
     .timeline {
       display: grid;
       gap: 14px;
     }
     .item {
+      border-left: 3px solid #1f64d8;
       padding-left: 16px;
-      border-left: 3px solid #2463c7;
     }
     .item strong { display: block; margin-bottom: 6px; }
     .contact {
-      background: #12203a;
+      background: #101827;
       color: white;
       text-align: center;
+      border-radius: 18px 18px 0 0;
     }
-    .contact p { color: rgba(255, 255, 255, 0.82); }
-    @media (max-width: 760px) {
-      .hero { min-height: auto; padding-top: 92px; }
-      h1 { font-size: 36px; }
-      .lead { font-size: 16px; }
-      .profile { grid-template-columns: 1fr; }
-      .section-title { font-size: 25px; }
+    .contact p {
+      max-width: 760px;
+      margin: 0 auto 22px;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.8;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(120px);
+      background: #101827;
+      color: white;
+      padding: 13px 16px;
+      border-radius: 10px;
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.24);
+      transition: transform 0.25s ease;
+      z-index: 50;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .to-top {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: #1f64d8;
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 0 12px 28px rgba(31, 100, 216, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(36, 194, 106, 0.55); }
+      70% { box-shadow: 0 0 0 10px rgba(36, 194, 106, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(36, 194, 106, 0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 36px;
+      }
+      h1 { font-size: 38px; }
+      .mini-stats { grid-template-columns: 1fr; }
+      .switcher { grid-template-columns: 1fr; }
+      .profile-card { transform: none; }
+      .nav-inner { align-items: flex-start; }
+      .nav-links { gap: 4px; }
     }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="index.html">返回主页</a>
-    <a href="#contact">联系我</a>
-  </nav>
-
-  <header class="hero">
-    <div class="container">
-      <div class="tag">案例 02 · 大学生个人介绍页</div>
-      <h1>把一个普通大学生，清楚地介绍给别人。</h1>
-      <p class="lead">这个页面适合放在简历、社交平台主页、作品集入口或求职沟通里。它不追求复杂功能，而是帮一个人把身份、经历、能力和联系方式讲清楚。</p>
-      <div class="actions">
-        <a class="button primary" href="#profile">查看页面结构</a>
-        <a class="button secondary" href="#contact">我也想做一个</a>
+  <div class="page">
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="brand-dot"></span>Jasper · AI 成长主页</div>
+        <div class="nav-links">
+          <a href="index.html">返回主页</a>
+          <a href="#about">关于我</a>
+          <a href="#direction">方向</a>
+          <a href="#timeline">记录</a>
+          <a href="#contact">联系</a>
+        </div>
       </div>
-    </div>
-  </header>
+    </nav>
 
-  <section id="profile">
-    <div class="container profile">
-      <div class="panel">
-        <h2 class="section-title">李同学 · 食品质量与安全专业</h2>
-        <p class="section-desc">一名正在寻找实习机会的大学生，关注食品安全、数据分析和 AI 工具应用。希望未来进入食品企业、快消品牌或相关外企，从质量、运营或数据方向开始积累经验。</p>
-        <div class="grid">
-          <div class="card">
-            <h3>当前身份</h3>
-            <p>准大二学生，专业是食品质量与安全，正在学习 AI 建站、数据分析和日语。</p>
+    <main class="container">
+      <header class="hero">
+        <div class="hero-copy reveal">
+          <div class="tag">非计算机专业 · Codex Learner · AI Creator</div>
+          <h1>你好，我是 Jasper，正在用 <span class="highlight">AI</span> 从小白开始做项目。</h1>
+          <p class="lead">我是一名食品质量与安全专业的准大二学生，有过 1 个月新媒体运营实习经历。现在我正在用 Codex 学习建站、做案例、记录成长，并尝试把 AI 能力变成真实作品和接单能力。</p>
+          <div class="actions">
+            <a class="button primary" href="#about">了解我的路线</a>
+            <button class="button secondary" id="copyText" type="button">复制我的介绍</button>
           </div>
-          <div class="card">
-            <h3>求职方向</h3>
-            <p>食品品控、数据运营、新媒体运营、AIGC 工具运营、食品品牌电商运营。</p>
+          <div class="mini-stats">
+            <div class="stat"><strong data-count="30">0</strong><span>天 AI 建站挑战</span></div>
+            <div class="stat"><strong data-count="4">0</strong><span>计划完成案例</span></div>
+            <div class="stat"><strong data-count="1">0</strong><span>已上线作品</span></div>
           </div>
         </div>
-      </div>
 
-      <div class="panel">
-        <h2 class="section-title">个人亮点</h2>
-        <ul>
-          <li>有 1 个月新媒体运营实习经历，了解内容发布和账号运营流程。</li>
-          <li>正在用 Codex 从 0 学习做网站，已完成第一个上线作品。</li>
-          <li>计划把食品专业、AI 工具、数据分析和语言能力结合起来。</li>
-          <li>愿意长期记录成长过程，持续做项目和复盘。</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+        <aside class="profile-card reveal">
+          <div class="avatar-wrap">
+            <img src="avatar.png" alt="Jasper 的 AI 创作者头像" />
+          </div>
+          <div class="profile-meta">
+            <div>
+              <h2>Jasper</h2>
+              <p>食品安全专业 / AI 建站学习者</p>
+            </div>
+            <div class="status"><span class="pulse"></span>持续更新</div>
+          </div>
+        </aside>
+      </header>
+    </main>
 
-  <section>
-    <div class="container">
-      <h2 class="section-title">经历时间线</h2>
-      <p class="section-desc">个人介绍页最重要的是让别人快速看懂“你是谁、做过什么、下一步想做什么”。所以这里用时间线来展示成长路径。</p>
-      <div class="timeline">
-        <div class="card item">
-          <strong>2026 年暑假 · 新媒体运营实习</strong>
-          <p>参与短视频内容整理、文案优化和账号运营，理解内容平台的发布流程和基础反馈逻辑。</p>
-        </div>
-        <div class="card item">
-          <strong>2026 年 8 月 · 开始 AI 建站挑战</strong>
-          <p>注册 GitHub 和 Vercel，使用 Codex 制作并上线第一个网站，开始记录 30 天成长过程。</p>
-        </div>
-        <div class="card item">
-          <strong>接下来 · 寒假实习准备</strong>
-          <p>重点投递食品企业品控、食品品牌运营、数据运营和 AIGC 工具运营相关岗位。</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container">
-      <h2 class="section-title">这个案例可以怎么卖？</h2>
-      <p class="section-desc">这类页面适合做成 99 元体验价，用来帮助同学、求职者、博主和自由职业者做一个手机能打开的个人介绍链接。</p>
+    <section id="about" class="container reveal">
+      <h2 class="section-title">这个页面是用来介绍我自己的</h2>
+      <p class="section-desc">它不是一张普通的静态名片，而是我的 AI 成长主页。以后我可以继续往里面加项目、案例、实习经历、学习记录和联系方式，让别人一打开就知道我是谁、会什么、正在做什么。</p>
       <div class="grid">
         <div class="card">
-          <h3>适合人群</h3>
-          <p>大学生、求职者、兼职接单者、家教、摄影剪辑、个人 IP 起步者。</p>
+          <h3>当前身份</h3>
+          <p>准大二学生，专业是食品质量与安全，正在把食品专业、AI 工具、数据分析和内容运营结合起来。</p>
         </div>
         <div class="card">
-          <h3>交付内容</h3>
-          <p>个人介绍、经历展示、能力标签、联系方式、手机端适配、上线链接。</p>
+          <h3>已有经历</h3>
+          <p>暑假做过 1 个月新媒体运营，接触过选题、文案、发布和内容反馈，这能帮助我做抖音成长账号。</p>
         </div>
         <div class="card">
-          <h3>体验价</h3>
-          <p>99 元起。先做简单版本，后续可以升级成完整作品集页面。</p>
+          <h3>正在做的事</h3>
+          <p>用 Codex 从 0 学建站，做个人介绍页、作品集页、商家宣传页，并记录 30 天 AI 项目挑战。</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="contact" class="contact">
-    <div class="container">
-      <h2 class="section-title">想要一个类似页面？</h2>
-      <p>可以抖音私信我，发送“个人介绍页”。我会先帮你整理页面内容，再用 Codex 辅助制作一个能打开的网页链接。</p>
-    </div>
-  </section>
+    <section id="direction" class="container reveal">
+      <h2 class="section-title">我的发展方向</h2>
+      <p class="section-desc">点击下面的标签，可以切换查看我的几个方向。这个地方就是“动态”的：以后还可以继续加更多模块，比如作品列表、实习投递记录、学习进度。</p>
+      <div class="switcher">
+        <div class="tabs" role="tablist" aria-label="发展方向">
+          <button class="tab active" type="button" data-tab="ai">AI 建站与接单</button>
+          <button class="tab" type="button" data-tab="food">食品 + AI / 数据</button>
+          <button class="tab" type="button" data-tab="media">抖音成长记录</button>
+          <button class="tab" type="button" data-tab="intern">寒假实习准备</button>
+        </div>
+        <div class="card">
+          <div class="tab-panel active" id="ai">
+            <h3>AI 建站与接单</h3>
+            <p>先做简单但能交付的网页：个人介绍页、作品集页、商家宣传页。目标是把“我会用 AI”变成别人能看见、能付费的作品。</p>
+          </div>
+          <div class="tab-panel" id="food">
+            <h3>食品 + AI / 数据</h3>
+            <p>长期方向不是硬转纯计算机，而是把食品安全专业和 AI 工具、Excel、数据分析结合，未来去做食品企业数字化、质量数据分析或智能检测相关方向。</p>
+          </div>
+          <div class="tab-panel" id="media">
+            <h3>抖音成长记录</h3>
+            <p>我会记录自己从小白开始学 Codex、做网站、踩坑、上线、找客户的过程，希望认识一群同样在学 AI、做项目的人。</p>
+          </div>
+          <div class="tab-panel" id="intern">
+            <h3>寒假实习准备</h3>
+            <p>优先看 AIGC 运营、食品品牌运营、数据运营、食品品控和外企/日企相关实习，把专业、运营经历和 AI 项目串起来。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline" class="container reveal">
+      <h2 class="section-title">成长记录</h2>
+      <p class="section-desc">这个模块会随着我的项目推进继续增加。现在先记录从注册工具到做出个人主页的过程。</p>
+      <div class="timeline">
+        <div class="card item">
+          <strong>暑假 · 新媒体运营实习</strong>
+          <p>做过一个月左右新媒体运营，开始理解内容、流量和反馈。</p>
+        </div>
+        <div class="card item">
+          <strong>第 1 天 · 注册 GitHub 和 Vercel</strong>
+          <p>完成账号注册，学会把网页变成别人能打开的链接。</p>
+        </div>
+        <div class="card item">
+          <strong>第 2 天 · 做出个人介绍页</strong>
+          <p>加入头像、动态数字、切换标签和成长记录，让页面更像真正的个人主页。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">如果你也在学 AI，可以来交流</h2>
+        <p>我现在正在从小白开始，用 Codex 做网站、做案例、发抖音记录成长。如果你也想学 AI 建站，或者想要一个类似的个人介绍页，可以抖音私信我：发送“个人介绍页”。</p>
+        <a class="button primary" href="index.html">查看我的接单主页</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">已复制介绍，可以粘贴到抖音或简历里</div>
+  <button class="to-top" id="toTop" type="button" aria-label="返回顶部">↑</button>
+
+  <script>
+    const counters = document.querySelectorAll("[data-count]");
+    const revealItems = document.querySelectorAll(".reveal");
+    const toTop = document.getElementById("toTop");
+    const toast = document.getElementById("toast");
+
+    function animateCounter(element) {
+      const target = Number(element.dataset.count);
+      let current = 0;
+      const step = Math.max(1, Math.ceil(target / 36));
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        element.textContent = current;
+      }, 28);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          entry.target.querySelectorAll("[data-count]").forEach((counter) => {
+            if (!counter.dataset.done) {
+              counter.dataset.done = "true";
+              animateCounter(counter);
+            }
+          });
+        }
+      });
+    }, { threshold: 0.16 });
+
+    revealItems.forEach((item) => observer.observe(item));
+
+    document.querySelectorAll(".tab").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach((panel) => panel.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.tab).classList.add("active");
+      });
+    });
+
+    document.getElementById("copyText").addEventListener("click", async () => {
+      const text = "你好，我是 Jasper，食品质量与安全专业准大二学生。正在用 Codex 从 0 学习 AI 建站，记录 30 天做项目、做案例、尝试接单的过程。";
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        const input = document.createElement("textarea");
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+      }
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1800);
+    });
+
+    window.addEventListener("scroll", () => {
+      toTop.classList.toggle("visible", window.scrollY > 500);
+    });
+
+    toTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
 </body>
 </html>
