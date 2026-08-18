@@ -307,6 +307,77 @@
       display: grid;
       gap: 14px;
     }
+    .learning-board {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(280px, 1.05fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .progress-card {
+      background: #101827;
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 18px 42px rgba(16, 24, 39, 0.18);
+    }
+    .progress-card h3 { margin: 0 0 12px; font-size: 22px; }
+    .progress-card p {
+      margin: 0 0 18px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.75;
+    }
+    .progress-track {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+      margin: 14px 0 10px;
+    }
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: #24c26a;
+      transition: width 0.25s ease;
+    }
+    .progress-text {
+      font-weight: 800;
+      color: #7af0ab;
+    }
+    .task-list {
+      display: grid;
+      gap: 10px;
+    }
+    .task {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 16px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid #e3e8f1;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      cursor: pointer;
+    }
+    .task input {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      accent-color: #24c26a;
+    }
+    .task strong { display: block; margin-bottom: 4px; }
+    .task span {
+      display: block;
+      color: #5b6577;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .task.done strong,
+    .task.done span {
+      color: #8a94a6;
+      text-decoration: line-through;
+    }
     .item {
       border-left: 3px solid #1f64d8;
       padding-left: 16px;
@@ -386,6 +457,7 @@
       h1 { font-size: 38px; }
       .mini-stats { grid-template-columns: 1fr; }
       .switcher { grid-template-columns: 1fr; }
+      .learning-board { grid-template-columns: 1fr; }
       .profile-card { transform: none; }
       .nav-inner { align-items: flex-start; }
       .nav-links { gap: 4px; }
@@ -402,6 +474,7 @@
           <a href="#about">关于我</a>
           <a href="#works">作品</a>
           <a href="#direction">方向</a>
+          <a href="#learning">学习</a>
           <a href="#timeline">记录</a>
           <a href="#contact">联系</a>
         </div>
@@ -416,6 +489,7 @@
           <p class="lead">我是一名食品质量与安全专业的准大二学生，有过 1 个月新媒体运营实习经历。现在我正在用 Codex 学习建站、做案例、记录成长，并尝试把 AI 能力变成真实作品和接单能力。</p>
           <div class="actions">
             <a class="button primary" href="#about">了解我的路线</a>
+            <a class="button secondary" href="#learning">今天学什么</a>
             <button class="button secondary" id="copyText" type="button">复制我的介绍</button>
           </div>
           <div class="mini-stats">
@@ -521,6 +595,43 @@
       </div>
     </section>
 
+    <section id="learning" class="container reveal">
+      <h2 class="section-title">今天学习什么</h2>
+      <p class="section-desc">今天的重点不是学很多概念，而是学会一个真实网站最常用的能力：导航跳转、作品入口、按钮交互、学习记录。你把这 5 个任务做完，今天就算扎扎实实前进了一步。</p>
+      <div class="learning-board">
+        <div class="progress-card">
+          <h3>第 3 天学习目标</h3>
+          <p>把个人主页从“能看”升级成“能展示、能跳转、能记录”的作品集入口。以后你接单时，别人打开这个页面就能看到你的项目和成长过程。</p>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="learningProgress"></div>
+          </div>
+          <div class="progress-text" id="learningProgressText">今日进度 0/5</div>
+        </div>
+        <div class="task-list" id="todayTasks">
+          <label class="task">
+            <input type="checkbox" data-task="link-test">
+            <span><strong>1. 测试网站链接</strong>用电脑和手机各打开一次，确认个人主页、接单主页、小羊工作台都能访问。</span>
+          </label>
+          <label class="task">
+            <input type="checkbox" data-task="anchor">
+            <span><strong>2. 学会页面跳转</strong>理解按钮里的 #works、#learning 是跳到页面某一块内容的意思。</span>
+          </label>
+          <label class="task">
+            <input type="checkbox" data-task="works">
+            <span><strong>3. 检查作品入口</strong>点击“已上线作品”里的每一个按钮，确认它们能打开对应作品。</span>
+          </label>
+          <label class="task">
+            <input type="checkbox" data-task="copy">
+            <span><strong>4. 测试复制按钮</strong>点击“复制我的介绍”，看看能不能把个人介绍复制出来。</span>
+          </label>
+          <label class="task">
+            <input type="checkbox" data-task="douyin">
+            <span><strong>5. 准备抖音素材</strong>录屏展示：主页、作品区、学习任务区、小羊工作台。</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
     <section id="timeline" class="container reveal">
       <h2 class="section-title">成长记录</h2>
       <p class="section-desc">这个模块会随着我的项目推进继续增加。现在先记录从注册工具到做出个人主页的过程。</p>
@@ -536,6 +647,10 @@
         <div class="card item">
           <strong>第 2 天 · 做出个人介绍页</strong>
           <p>加入头像、动态数字、切换标签和成长记录，让页面更像真正的个人主页。</p>
+        </div>
+        <div class="card item">
+          <strong>第 3 天 · 加入学习任务和作品入口</strong>
+          <p>把网站升级成能跳转、能展示、能记录学习进度的作品集入口，为后续接单和抖音记录做准备。</p>
         </div>
       </div>
     </section>
@@ -557,6 +672,9 @@
     const revealItems = document.querySelectorAll(".reveal");
     const toTop = document.getElementById("toTop");
     const toast = document.getElementById("toast");
+    const taskInputs = document.querySelectorAll("#todayTasks input");
+    const progressFill = document.getElementById("learningProgress");
+    const progressText = document.getElementById("learningProgressText");
 
     function animateCounter(element) {
       const target = Number(element.dataset.count);
@@ -612,6 +730,26 @@
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 1800);
     });
+
+    function updateLearningProgress() {
+      const total = taskInputs.length;
+      const done = Array.from(taskInputs).filter((input) => input.checked).length;
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      progressFill.style.width = `${percent}%`;
+      progressText.textContent = `今日进度 ${done}/${total}`;
+      taskInputs.forEach((input) => {
+        input.closest(".task").classList.toggle("done", input.checked);
+      });
+    }
+
+    taskInputs.forEach((input) => {
+      input.checked = localStorage.getItem(`jasper-day3-${input.dataset.task}`) === "true";
+      input.addEventListener("change", () => {
+        localStorage.setItem(`jasper-day3-${input.dataset.task}`, input.checked);
+        updateLearningProgress();
+      });
+    });
+    updateLearningProgress();
 
     window.addEventListener("scroll", () => {
       toTop.classList.toggle("visible", window.scrollY > 500);
