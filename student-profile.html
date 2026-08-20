@@ -378,6 +378,53 @@
       color: #8a94a6;
       text-decoration: line-through;
     }
+    .resume-workflow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      counter-reset: resume-step;
+    }
+    .resume-step {
+      position: relative;
+      min-height: 190px;
+      background: white;
+      border: 1px solid #e3e8f1;
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    }
+    .resume-step::before {
+      counter-increment: resume-step;
+      content: counter(resume-step);
+      display: inline-flex;
+      width: 30px;
+      height: 30px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #1f64d8;
+      color: white;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .resume-step h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+    }
+    .resume-step p {
+      margin: 0;
+      color: #5b6577;
+      line-height: 1.7;
+    }
+    .resume-note {
+      margin-top: 16px;
+      background: #fff8df;
+      border: 1px solid #f1d98b;
+      border-radius: 10px;
+      padding: 18px;
+      color: #604911;
+      line-height: 1.75;
+    }
     .item {
       border-left: 3px solid #1f64d8;
       padding-left: 16px;
@@ -475,6 +522,7 @@
           <a href="#works">作品</a>
           <a href="#direction">方向</a>
           <a href="#learning">学习</a>
+          <a href="#resume">简历</a>
           <a href="#timeline">记录</a>
           <a href="#contact">联系</a>
         </div>
@@ -573,6 +621,7 @@
           <button class="tab" type="button" data-tab="food">食品 + AI / 数据</button>
           <button class="tab" type="button" data-tab="media">抖音成长记录</button>
           <button class="tab" type="button" data-tab="intern">寒假实习准备</button>
+          <button class="tab" type="button" data-tab="resumePlan">简历工作流</button>
         </div>
         <div class="card">
           <div class="tab-panel active" id="ai">
@@ -591,17 +640,21 @@
             <h3>寒假实习准备</h3>
             <p>优先看 AIGC 运营、食品品牌运营、数据运营、食品品控和外企/日企相关实习，把专业、运营经历和 AI 项目串起来。</p>
           </div>
+          <div class="tab-panel" id="resumePlan">
+            <h3>简历工作流</h3>
+            <p>把“我会什么”整理成能投递的证据：专业背景、新媒体实习、AI 网站作品、工作台项目、抖音成长记录。以后每做一个项目，都同步沉淀到简历里。</p>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="learning" class="container reveal">
       <h2 class="section-title">今天学习什么</h2>
-      <p class="section-desc">今天的重点不是学很多概念，而是学会一个真实网站最常用的能力：导航跳转、作品入口、按钮交互、学习记录。你把这 5 个任务做完，今天就算扎扎实实前进了一步。</p>
+      <p class="section-desc">今天的主题是“让作品为简历服务”。你不只是做网页，而是开始把项目经历、实习经历和岗位方向整理成可以投实习的材料。</p>
       <div class="learning-board">
         <div class="progress-card">
-          <h3>第 3 天学习目标</h3>
-          <p>把个人主页从“能看”升级成“能展示、能跳转、能记录”的作品集入口。以后你接单时，别人打开这个页面就能看到你的项目和成长过程。</p>
+          <h3>第 4 天学习目标</h3>
+          <p>新增一个专门做简历的工作流，明确你未来投实习时要准备什么：目标岗位、经历素材、项目证据、简历版本和投递复盘。</p>
           <div class="progress-track" aria-hidden="true">
             <div class="progress-fill" id="learningProgress"></div>
           </div>
@@ -609,26 +662,56 @@
         </div>
         <div class="task-list" id="todayTasks">
           <label class="task">
-            <input type="checkbox" data-task="link-test">
-            <span><strong>1. 测试网站链接</strong>用电脑和手机各打开一次，确认个人主页、接单主页、小羊工作台都能访问。</span>
+            <input type="checkbox" data-task="resume-target">
+            <span><strong>1. 确定 3 个实习方向</strong>先选 AIGC 运营、食品品牌运营、食品/质量数据助理作为寒假实习候选方向。</span>
           </label>
           <label class="task">
-            <input type="checkbox" data-task="anchor">
-            <span><strong>2. 学会页面跳转</strong>理解按钮里的 #works、#learning 是跳到页面某一块内容的意思。</span>
+            <input type="checkbox" data-task="resume-material">
+            <span><strong>2. 整理经历素材</strong>把食品专业、1 个月新媒体运营实习、个人网站、小羊工作台都写成简历素材。</span>
           </label>
           <label class="task">
-            <input type="checkbox" data-task="works">
-            <span><strong>3. 检查作品入口</strong>点击“已上线作品”里的每一个按钮，确认它们能打开对应作品。</span>
+            <input type="checkbox" data-task="resume-proof">
+            <span><strong>3. 给作品配证据</strong>确认个人主页、接单主页、工作台链接都能打开，作为简历里的项目链接。</span>
           </label>
           <label class="task">
-            <input type="checkbox" data-task="copy">
-            <span><strong>4. 测试复制按钮</strong>点击“复制我的介绍”，看看能不能把个人介绍复制出来。</span>
+            <input type="checkbox" data-task="resume-version">
+            <span><strong>4. 设计简历版本</strong>先准备 2 个版本：AIGC/新媒体运营版、食品 + AI/数据方向版。</span>
           </label>
           <label class="task">
-            <input type="checkbox" data-task="douyin">
-            <span><strong>5. 准备抖音素材</strong>录屏展示：主页、作品区、学习任务区、小羊工作台。</span>
+            <input type="checkbox" data-task="resume-video">
+            <span><strong>5. 准备今日抖音素材</strong>录屏展示“我把 AI 项目开始整理进简历工作流了”。</span>
           </label>
         </div>
+      </div>
+    </section>
+
+    <section id="resume" class="container reveal">
+      <h2 class="section-title">简历工作流</h2>
+      <p class="section-desc">这个模块专门服务寒假实习和未来求职。它的作用是把你做过的事情整理成可投递的简历材料，而不是临时打开 Word 硬憋。后面每完成一个项目，都可以同步放进这个工作流。</p>
+      <div class="resume-workflow">
+        <div class="resume-step">
+          <h3>定位岗位</h3>
+          <p>先锁定 3 类岗位：AIGC/新媒体运营、食品品牌运营、食品 + AI/数据助理。不同岗位用不同简历重点。</p>
+        </div>
+        <div class="resume-step">
+          <h3>整理经历</h3>
+          <p>把食品专业课程、新媒体运营实习、AI 网站项目、小羊工作台、抖音成长记录拆成经历素材。</p>
+        </div>
+        <div class="resume-step">
+          <h3>生成版本</h3>
+          <p>先做两版简历：运营版突出内容、选题、发布和 AI 工具；数据版突出食品专业、表格、分析和项目链接。</p>
+        </div>
+        <div class="resume-step">
+          <h3>作品佐证</h3>
+          <p>简历里不只写“会 AI”，还放个人主页、接单主页、小羊工作台链接，让招聘方能直接点开看。</p>
+        </div>
+        <div class="resume-step">
+          <h3>投递复盘</h3>
+          <p>记录投了哪些岗位、有没有回复、简历哪里被问到，再反向优化项目和表达。</p>
+        </div>
+      </div>
+      <div class="resume-note">
+        今天先不急着写完整简历。先把“岗位方向 + 经历素材 + 项目链接”整理出来，明天就可以开始做第一版实习简历。
       </div>
     </section>
 
@@ -651,6 +734,10 @@
         <div class="card item">
           <strong>第 3 天 · 加入学习任务和作品入口</strong>
           <p>把网站升级成能跳转、能展示、能记录学习进度的作品集入口，为后续接单和抖音记录做准备。</p>
+        </div>
+        <div class="card item">
+          <strong>第 4 天 · 新增简历工作流</strong>
+          <p>开始把 AI 项目、专业背景和实习经历整理成求职材料，为寒假实习做准备。</p>
         </div>
       </div>
     </section>
@@ -743,9 +830,9 @@
     }
 
     taskInputs.forEach((input) => {
-      input.checked = localStorage.getItem(`jasper-day3-${input.dataset.task}`) === "true";
+      input.checked = localStorage.getItem(`jasper-day4-${input.dataset.task}`) === "true";
       input.addEventListener("change", () => {
-        localStorage.setItem(`jasper-day3-${input.dataset.task}`, input.checked);
+        localStorage.setItem(`jasper-day4-${input.dataset.task}`, input.checked);
         updateLearningProgress();
       });
     });
