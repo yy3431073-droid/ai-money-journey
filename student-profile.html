@@ -43,117 +43,202 @@
       position: fixed;
       inset: 0;
       z-index: 100;
-      display: grid;
-      place-items: center;
       overflow: hidden;
       color: #fff9ec;
-      background: #101713;
-      transition: opacity 1.15s cubic-bezier(.22,.72,.18,1), visibility 1.15s ease;
+      background: #07110c;
+      isolation: isolate;
+      transform: scale(1);
+      transition: opacity 1.2s cubic-bezier(.22,.72,.18,1), visibility 1.2s ease, transform 1.2s ease;
     }
-    .opening::before {
-      content: "";
+    .opening-landscape {
       position: absolute;
-      width: 70vmin;
-      height: 70vmin;
-      border: 1px solid rgba(216, 255, 99, .18);
-      border-radius: 50%;
-      box-shadow: 0 0 0 12vmin rgba(255, 255, 255, .015), 0 0 0 24vmin rgba(255, 255, 255, .012);
-      animation: orbit 13s linear infinite;
+      inset: -4%;
+      z-index: -3;
+      background: url("xiaoyang-workbench/assets/healing-meadow-hero-v1.webp") center / cover no-repeat;
+      clip-path: inset(0 50% 0 50%);
+      filter: brightness(.32) saturate(.72);
+      transform: scale(1.06);
+      animation: landscapeReveal 2.7s .72s cubic-bezier(.2,.76,.12,1) forwards,
+                 landscapeDrift 14s 3.5s ease-in-out infinite alternate;
     }
-    .opening::after {
+    .opening-landscape::after {
       content: "";
       position: absolute;
       inset: 0;
-      opacity: .2;
-      pointer-events: none;
-      background-image: radial-gradient(rgba(255,255,255,.4) .7px, transparent .7px);
-      background-size: 10px 10px;
+      background:
+        linear-gradient(90deg, rgba(5,15,10,.9) 0%, rgba(5,15,10,.56) 43%, rgba(5,15,10,.16) 72%, rgba(5,15,10,.42) 100%),
+        linear-gradient(0deg, rgba(4,13,9,.72), transparent 54%);
     }
-    .opening.is-gone { opacity: 0; visibility: hidden; pointer-events: none; }
+    .opening-glow {
+      position: absolute;
+      z-index: -2;
+      width: 48vw;
+      height: 48vw;
+      right: 5vw;
+      top: 44%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(216,255,99,.26), rgba(216,255,99,.06) 42%, transparent 70%);
+      filter: blur(18px);
+      opacity: 0;
+      animation: glowIn 2.2s 2.1s ease forwards, glowBreathe 5s 4.3s ease-in-out infinite alternate;
+    }
+    .opening-grain {
+      position: absolute;
+      inset: 0;
+      z-index: 7;
+      opacity: .16;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+      background-image: radial-gradient(rgba(255,255,255,.55) .55px, transparent .75px);
+      background-size: 7px 7px;
+    }
+    .opening-frame {
+      position: absolute;
+      inset: 18px;
+      z-index: 6;
+      border: 1px solid rgba(245,255,229,.19);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+    .opening.is-gone { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.015); }
     .skip-opening {
       position: absolute;
-      top: max(22px, env(safe-area-inset-top));
-      right: 24px;
-      z-index: 2;
-      border: 0;
-      padding: 10px;
-      color: rgba(255,255,255,.66);
-      background: transparent;
+      top: max(32px, env(safe-area-inset-top));
+      right: 36px;
+      z-index: 9;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 9px 14px;
+      color: rgba(255,255,255,.72);
+      background: rgba(6,17,11,.24);
+      backdrop-filter: blur(10px);
       cursor: pointer;
     }
+    .opening-meta {
+      position: absolute;
+      z-index: 5;
+      left: clamp(36px, 6vw, 96px);
+      top: clamp(35px, 6vh, 68px);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(247,255,236,.58);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: introUp .8s .45s ease forwards;
+    }
+    .opening-meta::before { content: ""; width: 34px; height: 1px; background: var(--lime); }
     .opening-inner {
-      position: relative;
-      z-index: 1;
-      width: min(820px, calc(100vw - 40px));
-      text-align: center;
+      position: absolute;
+      z-index: 5;
+      left: clamp(36px, 7.5vw, 120px);
+      bottom: clamp(64px, 12vh, 126px);
+      width: min(720px, 52vw);
+      text-align: left;
     }
     .opening-kicker {
-      margin: 0 0 24px;
-      font-size: 11px;
+      margin: 0 0 20px;
+      font-size: 10px;
       font-weight: 800;
-      letter-spacing: .32em;
+      letter-spacing: .28em;
       text-transform: uppercase;
       color: var(--lime);
       opacity: 0;
-      animation: introUp .85s .65s cubic-bezier(.22,.72,.18,1) forwards;
+      animation: introUp .8s 1.45s cubic-bezier(.22,.72,.18,1) forwards;
       will-change: transform, opacity;
     }
     .opening-title {
       margin: 0;
       font-family: var(--display);
-      font-size: clamp(52px, 9vw, 118px);
+      font-size: clamp(52px, 6.8vw, 104px);
       font-weight: 400;
-      line-height: .92;
-      letter-spacing: -.055em;
+      line-height: .98;
+      letter-spacing: -.045em;
+      text-shadow: 0 12px 40px rgba(0,0,0,.32);
     }
     .opening-title span { display: block; overflow: hidden; }
     .opening-title i {
       display: block;
       font-style: normal;
       transform: translate3d(0, 115%, 0);
-      animation: titleRise 1.2s 1.35s cubic-bezier(.22,.72,.18,1) forwards;
+      animation: openingLine 1.15s 2.05s cubic-bezier(.22,.72,.18,1) forwards;
       will-change: transform;
       backface-visibility: hidden;
     }
-    .opening-title span:nth-child(2) i { animation-delay: 3.15s; color: var(--lime); }
+    .opening-title span:nth-child(2) i { animation-delay: 3.5s; color: #e4ff89; }
     .opening-sub {
-      margin: 28px auto 0;
-      max-width: 560px;
-      line-height: 1.8;
-      color: rgba(255,255,255,.65);
+      margin: 24px 0 0;
+      max-width: 510px;
+      line-height: 1.75;
+      color: rgba(255,255,255,.7);
       opacity: 0;
       transform: translate3d(0, 16px, 0);
-      animation: introUp .9s 4.75s cubic-bezier(.22,.72,.18,1) forwards;
+      animation: introUp .85s 4.72s cubic-bezier(.22,.72,.18,1) forwards;
       will-change: transform, opacity;
     }
     .enter-world {
       position: relative;
-      margin-top: 34px;
-      border: 1px solid rgba(255,255,255,.34);
+      margin-top: 28px;
+      border: 1px solid rgba(224,255,133,.58);
       border-radius: 999px;
       padding: 14px 22px 14px 28px;
-      color: #fff;
-      background: rgba(255,255,255,.06);
+      color: #122014;
+      background: var(--lime);
+      box-shadow: 0 14px 38px rgba(0,0,0,.25);
       backdrop-filter: blur(12px);
       cursor: pointer;
       opacity: 0;
       transform: translate3d(0, 14px, 0);
-      animation: introUp .95s 5.55s cubic-bezier(.22,.72,.18,1) forwards;
+      animation: introUp .85s 5.35s cubic-bezier(.22,.72,.18,1) forwards;
       transition: background .25s ease, color .25s ease, transform .25s ease;
       will-change: transform, opacity;
     }
-    .enter-world:hover { color: #101713; background: var(--lime); transform: translateY(-2px); }
+    .enter-world:hover { color: #101713; background: #efffb8; transform: translateY(-3px); }
     .enter-world b { margin-left: 24px; font-size: 18px; }
     .opening-sound-note {
       display: block;
-      margin-top: 14px;
+      margin-top: 13px;
       color: rgba(243,255,235,.58);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .08em;
       opacity: 0;
       transform: translate3d(0, 8px, 0);
-      animation: introUp .8s 6.25s ease forwards;
+      animation: introUp .75s 5.9s ease forwards;
+    }
+    .opening-character {
+      position: absolute;
+      z-index: 4;
+      right: clamp(-40px, 1vw, 28px);
+      bottom: clamp(-25px, 1vh, 18px);
+      width: min(660px, 49vw);
+      opacity: 0;
+      transform: translate3d(60px, 22px, 0) scale(.92) rotate(2deg);
+      filter: drop-shadow(0 34px 34px rgba(0,0,0,.38));
+      animation: openingCharacter 1.8s 2.35s cubic-bezier(.2,.75,.14,1) forwards;
+      pointer-events: none;
+    }
+    .opening-progress {
+      position: absolute;
+      z-index: 8;
+      left: 50%;
+      bottom: 34px;
+      width: min(280px, 46vw);
+      height: 1px;
+      overflow: hidden;
+      background: rgba(255,255,255,.2);
+      transform: translateX(-50%);
+    }
+    .opening-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--lime);
+      transform: translateX(-100%);
+      animation: openingProgress 5.8s .4s cubic-bezier(.2,.65,.2,1) forwards;
     }
 
     .site-shell {
@@ -754,7 +839,18 @@
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
     @keyframes introUp { to { opacity: 1; transform: translate3d(0, 0, 0); } }
-    @keyframes titleRise { to { transform: translate3d(0, 0, 0); } }
+    @keyframes openingLine { to { transform: translate3d(0, 0, 0); } }
+    @keyframes landscapeReveal {
+      0% { clip-path: inset(0 50% 0 50%); filter: brightness(.2) saturate(.62); }
+      100% { clip-path: inset(0 0 0 0); filter: brightness(.58) saturate(.82); }
+    }
+    @keyframes landscapeDrift { to { transform: scale(1.1) translate3d(-.8%, -.5%, 0); } }
+    @keyframes glowIn { to { opacity: 1; } }
+    @keyframes glowBreathe { to { transform: scale(1.08); opacity: .8; } }
+    @keyframes openingCharacter {
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(-1deg); }
+    }
+    @keyframes openingProgress { to { transform: translateX(0); } }
     @keyframes revealCopy { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
     @keyframes revealVisual { from { opacity: 0; transform: translateX(40px) rotate(2deg); } to { opacity: 1; transform: none; } }
     @keyframes orbit { to { transform: rotate(360deg); } }
@@ -773,6 +869,9 @@
     .character.is-bouncing, .map-sheep.is-bouncing { animation: mascotBounce .82s cubic-bezier(.2,.85,.25,1); }
 
     @media (max-width: 900px) {
+      .opening-inner { width: min(620px, 66vw); left: 6vw; bottom: 12vh; }
+      .opening-title { font-size: clamp(48px, 8vw, 78px); }
+      .opening-character { width: 56vw; right: -8vw; bottom: 1vh; }
       .topbar { height: 68px; }
       .scene-inner { grid-template-columns: 1fr; align-content: start; padding-top: 98px; gap: 32px; }
       .scene h1, .scene h2 { font-size: clamp(48px, 12vw, 78px); }
@@ -786,6 +885,18 @@
     }
 
     @media (max-width: 560px) {
+      .opening-frame { inset: 9px; border-radius: 12px; }
+      .skip-opening { top: max(18px, env(safe-area-inset-top)); right: 18px; }
+      .opening-meta { left: 21px; top: max(26px, env(safe-area-inset-top)); max-width: 210px; line-height: 1.5; }
+      .opening-inner { left: 21px; right: 21px; top: 18vh; bottom: auto; width: auto; }
+      .opening-title { font-size: clamp(46px, 14vw, 64px); line-height: 1.02; }
+      .opening-sub { max-width: 86%; font-size: 14px; }
+      .opening-character { width: 118vw; right: -31vw; bottom: -1vh; opacity: 0; }
+      .opening-glow { width: 90vw; height: 90vw; right: -18vw; top: 57%; }
+      .opening-landscape::after {
+        background: linear-gradient(180deg, rgba(5,15,10,.84) 0%, rgba(5,15,10,.52) 54%, rgba(5,15,10,.3) 100%);
+      }
+      .opening-progress { bottom: 22px; }
       .brand-text { display: none; }
       .sound-toggle > span:last-child { display: none; }
       .scene-inner { padding: 88px 20px 110px; }
@@ -823,23 +934,35 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
-      .opening-kicker, .opening-sub, .enter-world { opacity: 1; transform: none; }
+      .opening-meta, .opening-kicker, .opening-sub, .enter-world, .opening-sound-note, .opening-character { opacity: 1; transform: none; }
       .opening-title i { transform: none; }
+      .opening-landscape { clip-path: none; filter: brightness(.58) saturate(.82); transform: none; }
       .character, .map-sheep { animation: none; }
     }
   </style>
 </head>
 <body>
   <div class="opening" id="opening" role="dialog" aria-label="网站开场动画" aria-modal="true">
+    <div class="opening-landscape" aria-hidden="true"></div>
+    <div class="opening-glow" aria-hidden="true"></div>
+    <div class="opening-grain" aria-hidden="true"></div>
+    <div class="opening-frame" aria-hidden="true"></div>
+    <div class="opening-meta" aria-hidden="true">Prologue · A field of ideas</div>
     <button class="skip-opening" id="skipOpening" type="button">跳过动画</button>
     <div class="opening-inner">
       <p class="opening-kicker">Jasper's Field Notes · 2026</p>
-      <h1 class="opening-title"><span><i>一只小羊，</i></span><span><i>正在把想法变成作品。</i></span></h1>
-      <p class="opening-sub">这里没有一眼望到底的简历。跟着小羊向导，走进一个正在生长的 AI 创作者世界。</p>
-      <button class="enter-world" id="enterWorld" type="button">进入我的世界 <b>→</b></button>
-      <span class="opening-sound-note">♬ 点击进入后自动播放原创纯音乐，可随时关闭</span>
+      <h1 class="opening-title"><span><i>沿着一束光，</i></span><span><i>走进正在生长的世界。</i></span></h1>
+      <p class="opening-sub">小羊向导已经在草地等你。这里收集着学习、作品，以及一个普通人和 AI 一起成长的痕迹。</p>
+      <button class="enter-world" id="enterWorld" type="button">开启这段旅程 <b>→</b></button>
+      <span class="opening-sound-note">♬ 点击进入后播放你选择的纯音乐，可随时关闭</span>
     </div>
+    <img class="opening-character" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="" aria-hidden="true" />
+    <div class="opening-progress" aria-hidden="true"><span></span></div>
   </div>
+
+  <audio id="siteMusic" preload="auto" loop playsinline>
+    <source src="xiaoyang-workbench/assets/jasper-meadow-theme-v1.m4a" type="audio/mp4" />
+  </audio>
 
   <div class="site-shell" id="siteShell">
     <div class="texture" aria-hidden="true"></div>
@@ -848,9 +971,9 @@
         <span class="brand-mark">羊</span>
         <span class="brand-text">JASPER / AI FIELD NOTES</span>
       </button>
-      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="开启或关闭沉浸声景">
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="开启或关闭背景音乐">
         <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>SOUNDSCAPE OFF</span>
+        <span>MUSIC OFF</span>
       </button>
       <div class="sound-invite" id="soundInvite">◌ 建议戴耳机开启声景</div>
     </header>
@@ -1009,17 +1132,12 @@
     const sceneArrow = document.getElementById('sceneArrow');
     const toast = document.getElementById('toast');
     const soundInvite = document.getElementById('soundInvite');
+    const soundToggle = document.getElementById('soundToggle');
+    const siteMusic = document.getElementById('siteMusic');
     let current = 0;
     let touchStartX = 0;
-    let audioContext;
-    let masterGain;
-    let toneFilter;
-    let ambienceTimer;
-    let musicTimer;
-    let musicStep = 0;
     let soundPlaying = false;
-    let droneOscillators = [];
-    let ambienceNodes = [];
+    let volumeFrame;
     let ambientPointerX = 0;
     let ambientPointerY = 0;
     const ambientCanvases = [...document.querySelectorAll('.ambient-canvas')];
@@ -1147,9 +1265,7 @@
       opening.classList.add('is-gone');
       window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 1200);
       if (!soundPlaying) {
-        startAmbience();
-        soundToggle.setAttribute('aria-pressed', 'true');
-        soundToggle.querySelector('span:last-child').textContent = 'SOUNDSCAPE ON';
+        startSoundtrack();
       }
       soundInvite.classList.remove('show');
     }
@@ -1172,10 +1288,6 @@
       document.documentElement.style.setProperty('--scene-ink', ink);
       sceneArrow.setAttribute('aria-label', current === scenes.length - 1 ? '回到序章' : '进入下一个场景');
       history.replaceState(null, '', `#scene-${current}`);
-      if (soundPlaying) {
-        updateAudioScene(current);
-        playChime(current, .58);
-      }
     }
 
     document.querySelectorAll('[data-scene-target]').forEach(button => {
@@ -1251,221 +1363,52 @@
       visual.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
 
-    const soundProfiles = [
-      { root: 146.83, cutoff: 760, notes: [0, 4, 7, 11] },
-      { root: 174.61, cutoff: 980, notes: [0, 2, 7, 9] },
-      { root: 130.81, cutoff: 680, notes: [0, 4, 7, 12] },
-      { root: 164.81, cutoff: 1120, notes: [0, 3, 7, 10] },
-      { root: 196, cutoff: 880, notes: [0, 4, 7, 9] },
-      { root: 123.47, cutoff: 620, notes: [0, 5, 7, 12] }
-    ];
-
-    const musicPattern = [
-      0, null, 4, null, 7, 4, 2, null,
-      0, null, 4, 7, 11, null, 7, null,
-      9, null, 7, 4, 5, null, 4, null,
-      2, null, 4, 2, 0, null, null, null
-    ];
-
-    function createSoftNoiseBuffer(context) {
-      const buffer = context.createBuffer(1, context.sampleRate * 4, context.sampleRate);
-      const data = buffer.getChannelData(0);
-      let last = 0;
-      for (let index = 0; index < data.length; index += 1) {
-        const white = Math.random() * 2 - 1;
-        last = last * .985 + white * .015;
-        data[index] = last * 3.2;
-      }
-      return buffer;
+    function updateSoundUi(playing) {
+      soundToggle.setAttribute('aria-pressed', String(playing));
+      soundToggle.querySelector('span:last-child').textContent = `MUSIC ${playing ? 'ON' : 'OFF'}`;
     }
 
-    function updateAudioScene(sceneIndex) {
-      if (!audioContext || !soundPlaying) return;
-      const profile = soundProfiles[sceneIndex];
-      const now = audioContext.currentTime;
-      droneOscillators.forEach((oscillator, index) => {
-        const ratios = [.5, 1, 1.5];
-        oscillator.frequency.cancelScheduledValues(now);
-        oscillator.frequency.setTargetAtTime(profile.root * ratios[index], now, 1.25);
-      });
-      if (toneFilter) toneFilter.frequency.setTargetAtTime(profile.cutoff, now, 1.4);
+    function fadeMusic(targetVolume, duration, onComplete) {
+      window.cancelAnimationFrame(volumeFrame);
+      const initialVolume = siteMusic.volume;
+      const startedAt = performance.now();
+      const tick = now => {
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        siteMusic.volume = initialVolume + (targetVolume - initialVolume) * eased;
+        if (progress < 1) volumeFrame = window.requestAnimationFrame(tick);
+        else if (onComplete) onComplete();
+      };
+      volumeFrame = window.requestAnimationFrame(tick);
     }
 
-    function playChime(sceneIndex = current, intensity = 1) {
-      if (!audioContext || !masterGain || !soundPlaying) return;
-      const profile = soundProfiles[sceneIndex];
-      const note = profile.notes[Math.floor(Math.random() * profile.notes.length)];
-      const frequency = profile.root * 2 * Math.pow(2, note / 12);
-      const now = audioContext.currentTime;
-      const envelope = audioContext.createGain();
-      const bellFilter = audioContext.createBiquadFilter();
-      const panner = audioContext.createStereoPanner ? audioContext.createStereoPanner() : null;
-      bellFilter.type = 'lowpass';
-      bellFilter.frequency.value = 2400;
-      envelope.gain.setValueAtTime(.0001, now);
-      envelope.gain.exponentialRampToValueAtTime(.12 * intensity, now + .035);
-      envelope.gain.exponentialRampToValueAtTime(.0001, now + 2.8);
-      if (panner) {
-        panner.pan.value = (Math.random() - .5) * .72;
-        envelope.connect(panner).connect(masterGain);
-      } else {
-        envelope.connect(masterGain);
-      }
-      bellFilter.connect(envelope);
-      [1, 2.01].forEach((ratio, index) => {
-        const oscillator = audioContext.createOscillator();
-        const harmonicGain = audioContext.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = frequency * ratio;
-        harmonicGain.gain.value = index === 0 ? 1 : .18;
-        oscillator.connect(harmonicGain).connect(bellFilter);
-        oscillator.start(now);
-        oscillator.stop(now + 2.9);
-      });
-    }
-
-    function scheduleChime() {
-      window.clearTimeout(ambienceTimer);
-      if (!soundPlaying) return;
-      ambienceTimer = window.setTimeout(() => {
-        playChime(current, .72);
-        scheduleChime();
-      }, 4200 + Math.random() * 4200);
-    }
-
-    function playMusicNote(semitone, duration = 3.1) {
-      if (!audioContext || !masterGain || !soundPlaying || semitone === null) return;
-      const now = audioContext.currentTime;
-      const frequency = soundProfiles[current].root * Math.pow(2, semitone / 12);
-      const noteGain = audioContext.createGain();
-      const noteFilter = audioContext.createBiquadFilter();
-      const panner = audioContext.createStereoPanner ? audioContext.createStereoPanner() : null;
-      noteFilter.type = 'lowpass';
-      noteFilter.frequency.value = 1650;
-      noteFilter.Q.value = .7;
-      noteGain.gain.setValueAtTime(.0001, now);
-      noteGain.gain.exponentialRampToValueAtTime(.052, now + .09);
-      noteGain.gain.exponentialRampToValueAtTime(.018, now + .72);
-      noteGain.gain.exponentialRampToValueAtTime(.0001, now + duration);
-      if (panner) {
-        panner.pan.value = Math.sin(musicStep * .72) * .24;
-        noteGain.connect(panner).connect(masterGain);
-      } else {
-        noteGain.connect(masterGain);
-      }
-      noteFilter.connect(noteGain);
-      [
-        { ratio: 1, type: 'sine', level: 1 },
-        { ratio: 2, type: 'triangle', level: .075 }
-      ].forEach(layer => {
-        const oscillator = audioContext.createOscillator();
-        const layerGain = audioContext.createGain();
-        oscillator.type = layer.type;
-        oscillator.frequency.value = frequency * layer.ratio;
-        oscillator.detune.value = layer.ratio === 1 ? -3 : 4;
-        layerGain.gain.value = layer.level;
-        oscillator.connect(layerGain).connect(noteFilter);
-        oscillator.start(now);
-        oscillator.stop(now + duration + .08);
-      });
-    }
-
-    function scheduleMusic() {
-      window.clearTimeout(musicTimer);
-      if (!soundPlaying) return;
-      const note = musicPattern[musicStep % musicPattern.length];
-      playMusicNote(note, note === null ? 2.8 : 3.3);
-      musicStep += 1;
-      musicTimer = window.setTimeout(scheduleMusic, 865);
-    }
-
-    function startAmbience() {
+    async function startSoundtrack() {
       if (soundPlaying) return;
-      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
-      audioContext.resume();
-      soundPlaying = true;
-      const now = audioContext.currentTime;
-      const profile = soundProfiles[current];
-      masterGain = audioContext.createGain();
-      masterGain.gain.setValueAtTime(.0001, now);
-      masterGain.gain.exponentialRampToValueAtTime(.055, now + 1.8);
-      masterGain.connect(audioContext.destination);
-
-      toneFilter = audioContext.createBiquadFilter();
-      toneFilter.type = 'lowpass';
-      toneFilter.frequency.value = profile.cutoff;
-      toneFilter.Q.value = .35;
-      toneFilter.connect(masterGain);
-
-      droneOscillators = [];
-      [
-        { ratio: .5, type: 'sine', gain: .64 },
-        { ratio: 1, type: 'sine', gain: .16 },
-        { ratio: 1.5, type: 'triangle', gain: .035 }
-      ].forEach(layer => {
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        oscillator.type = layer.type;
-        oscillator.frequency.value = profile.root * layer.ratio;
-        gain.gain.value = layer.gain;
-        oscillator.connect(gain).connect(toneFilter);
-        oscillator.start();
-        droneOscillators.push(oscillator);
-        ambienceNodes.push(oscillator);
-      });
-
-      const noise = audioContext.createBufferSource();
-      const noiseFilter = audioContext.createBiquadFilter();
-      const noiseGain = audioContext.createGain();
-      noise.buffer = createSoftNoiseBuffer(audioContext);
-      noise.loop = true;
-      noiseFilter.type = 'bandpass';
-      noiseFilter.frequency.value = 720;
-      noiseFilter.Q.value = .45;
-      noiseGain.gain.value = .17;
-      noise.connect(noiseFilter).connect(noiseGain).connect(masterGain);
-      noise.start();
-      ambienceNodes.push(noise);
-
-      const lfo = audioContext.createOscillator();
-      const lfoGain = audioContext.createGain();
-      lfo.type = 'sine';
-      lfo.frequency.value = .065;
-      lfoGain.gain.value = 120;
-      lfo.connect(lfoGain).connect(noiseFilter.frequency);
-      lfo.start();
-      ambienceNodes.push(lfo);
-      playChime(current, .78);
-      scheduleChime();
-      scheduleMusic();
+      window.cancelAnimationFrame(volumeFrame);
+      siteMusic.volume = 0;
+      try {
+        await siteMusic.play();
+        soundPlaying = true;
+        updateSoundUi(true);
+        fadeMusic(.68, 1800);
+        soundInvite.classList.remove('show');
+      } catch {
+        soundPlaying = false;
+        updateSoundUi(false);
+        soundInvite.textContent = '◌ 点击右上角开启音乐';
+        soundInvite.classList.add('show');
+      }
     }
 
-    function stopAmbience() {
+    function stopSoundtrack() {
       if (!soundPlaying) return;
       soundPlaying = false;
-      window.clearTimeout(ambienceTimer);
-      window.clearTimeout(musicTimer);
-      const nodesToStop = [...ambienceNodes];
-      const gainToFade = masterGain;
-      if (audioContext && gainToFade) {
-        const now = audioContext.currentTime;
-        gainToFade.gain.cancelScheduledValues(now);
-        gainToFade.gain.setTargetAtTime(.0001, now, .16);
-      }
-      window.setTimeout(() => {
-        nodesToStop.forEach(node => { try { node.stop(); } catch {} });
-        try { gainToFade.disconnect(); } catch {}
-      }, 700);
-      ambienceNodes = [];
-      droneOscillators = [];
+      updateSoundUi(false);
+      fadeMusic(0, 520, () => siteMusic.pause());
     }
 
-    const soundToggle = document.getElementById('soundToggle');
     soundToggle.addEventListener('click', () => {
-      const playing = soundToggle.getAttribute('aria-pressed') === 'true';
-      if (playing) stopAmbience(); else startAmbience();
-      soundToggle.setAttribute('aria-pressed', String(!playing));
-      soundToggle.querySelector('span:last-child').textContent = `SOUNDSCAPE ${playing ? 'OFF' : 'ON'}`;
+      if (soundPlaying) stopSoundtrack(); else startSoundtrack();
       soundInvite.classList.remove('show');
     });
 
@@ -1478,7 +1421,6 @@
         void mascot.offsetWidth;
         mascot.classList.add('is-bouncing');
         window.setTimeout(() => mascot.classList.remove('is-bouncing'), 850);
-        if (soundPlaying) playChime(current, .48);
         showToast('小羊：今天也慢慢来吧 ☁');
       };
       mascot.addEventListener('click', bounce);
