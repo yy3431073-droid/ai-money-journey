@@ -48,7 +48,7 @@
       overflow: hidden;
       color: #fff9ec;
       background: #101713;
-      transition: opacity .9s ease, visibility .9s ease;
+      transition: opacity 1.15s cubic-bezier(.22,.72,.18,1), visibility 1.15s ease;
     }
     .opening::before {
       content: "";
@@ -95,7 +95,8 @@
       text-transform: uppercase;
       color: var(--lime);
       opacity: 0;
-      animation: introUp .7s .2s ease forwards;
+      animation: introUp .9s .3s cubic-bezier(.22,.72,.18,1) forwards;
+      will-change: transform, opacity;
     }
     .opening-title {
       margin: 0;
@@ -109,17 +110,21 @@
     .opening-title i {
       display: block;
       font-style: normal;
-      transform: translateY(115%);
-      animation: titleRise 1.05s cubic-bezier(.22,.8,.2,1) forwards;
+      transform: translate3d(0, 115%, 0);
+      animation: titleRise 1.35s .48s cubic-bezier(.22,.72,.18,1) forwards;
+      will-change: transform;
+      backface-visibility: hidden;
     }
-    .opening-title span:nth-child(2) i { animation-delay: .16s; color: var(--lime); }
+    .opening-title span:nth-child(2) i { animation-delay: .86s; color: var(--lime); }
     .opening-sub {
       margin: 28px auto 0;
       max-width: 560px;
       line-height: 1.8;
       color: rgba(255,255,255,.65);
       opacity: 0;
-      animation: introUp .8s .9s ease forwards;
+      transform: translate3d(0, 16px, 0);
+      animation: introUp .95s 1.72s cubic-bezier(.22,.72,.18,1) forwards;
+      will-change: transform, opacity;
     }
     .enter-world {
       position: relative;
@@ -132,19 +137,31 @@
       backdrop-filter: blur(12px);
       cursor: pointer;
       opacity: 0;
-      transform: translateY(14px);
-      animation: introUp .8s 1.35s ease forwards;
+      transform: translate3d(0, 14px, 0);
+      animation: introUp 1s 2.28s cubic-bezier(.22,.72,.18,1) forwards;
       transition: background .25s ease, color .25s ease, transform .25s ease;
+      will-change: transform, opacity;
     }
     .enter-world:hover { color: #101713; background: var(--lime); transform: translateY(-2px); }
     .enter-world b { margin-left: 24px; font-size: 18px; }
+    .opening-sound-note {
+      display: block;
+      margin-top: 14px;
+      color: rgba(243,255,235,.58);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      opacity: 0;
+      transform: translate3d(0, 8px, 0);
+      animation: introUp .8s 2.92s ease forwards;
+    }
 
     .site-shell {
       position: relative;
       min-height: 100svh;
       background: var(--paper);
       opacity: 0;
-      transition: opacity .7s ease;
+      transition: opacity .95s ease;
     }
     body.ready .site-shell { opacity: 1; }
     .texture {
@@ -736,8 +753,8 @@
     }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-    @keyframes introUp { to { opacity: 1; transform: translateY(0); } }
-    @keyframes titleRise { to { transform: translateY(0); } }
+    @keyframes introUp { to { opacity: 1; transform: translate3d(0, 0, 0); } }
+    @keyframes titleRise { to { transform: translate3d(0, 0, 0); } }
     @keyframes revealCopy { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
     @keyframes revealVisual { from { opacity: 0; transform: translateX(40px) rotate(2deg); } to { opacity: 1; transform: none; } }
     @keyframes orbit { to { transform: rotate(360deg); } }
@@ -820,6 +837,7 @@
       <h1 class="opening-title"><span><i>一只小羊，</i></span><span><i>正在把想法变成作品。</i></span></h1>
       <p class="opening-sub">这里没有一眼望到底的简历。跟着小羊向导，走进一个正在生长的 AI 创作者世界。</p>
       <button class="enter-world" id="enterWorld" type="button">进入我的世界 <b>→</b></button>
+      <span class="opening-sound-note">♬ 点击进入后自动播放原创纯音乐，可随时关闭</span>
     </div>
   </div>
 
@@ -997,6 +1015,8 @@
     let masterGain;
     let toneFilter;
     let ambienceTimer;
+    let musicTimer;
+    let musicStep = 0;
     let soundPlaying = false;
     let droneOscillators = [];
     let ambienceNodes = [];
@@ -1125,11 +1145,13 @@
     function enterSite() {
       document.body.classList.add('ready');
       opening.classList.add('is-gone');
-      window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 900);
-      window.setTimeout(() => {
-        if (!soundPlaying) soundInvite.classList.add('show');
-      }, 1500);
-      window.setTimeout(() => soundInvite.classList.remove('show'), 7200);
+      window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 1200);
+      if (!soundPlaying) {
+        startAmbience();
+        soundToggle.setAttribute('aria-pressed', 'true');
+        soundToggle.querySelector('span:last-child').textContent = 'SOUNDSCAPE ON';
+      }
+      soundInvite.classList.remove('show');
     }
 
     enterWorld.addEventListener('click', enterSite);
@@ -1238,6 +1260,13 @@
       { root: 123.47, cutoff: 620, notes: [0, 5, 7, 12] }
     ];
 
+    const musicPattern = [
+      0, null, 4, null, 7, 4, 2, null,
+      0, null, 4, 7, 11, null, 7, null,
+      9, null, 7, 4, 5, null, 4, null,
+      2, null, 4, 2, 0, null, null, null
+    ];
+
     function createSoftNoiseBuffer(context) {
       const buffer = context.createBuffer(1, context.sampleRate * 4, context.sampleRate);
       const data = buffer.getChannelData(0);
@@ -1304,6 +1333,52 @@
       }, 4200 + Math.random() * 4200);
     }
 
+    function playMusicNote(semitone, duration = 3.1) {
+      if (!audioContext || !masterGain || !soundPlaying || semitone === null) return;
+      const now = audioContext.currentTime;
+      const frequency = soundProfiles[current].root * Math.pow(2, semitone / 12);
+      const noteGain = audioContext.createGain();
+      const noteFilter = audioContext.createBiquadFilter();
+      const panner = audioContext.createStereoPanner ? audioContext.createStereoPanner() : null;
+      noteFilter.type = 'lowpass';
+      noteFilter.frequency.value = 1650;
+      noteFilter.Q.value = .7;
+      noteGain.gain.setValueAtTime(.0001, now);
+      noteGain.gain.exponentialRampToValueAtTime(.052, now + .09);
+      noteGain.gain.exponentialRampToValueAtTime(.018, now + .72);
+      noteGain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+      if (panner) {
+        panner.pan.value = Math.sin(musicStep * .72) * .24;
+        noteGain.connect(panner).connect(masterGain);
+      } else {
+        noteGain.connect(masterGain);
+      }
+      noteFilter.connect(noteGain);
+      [
+        { ratio: 1, type: 'sine', level: 1 },
+        { ratio: 2, type: 'triangle', level: .075 }
+      ].forEach(layer => {
+        const oscillator = audioContext.createOscillator();
+        const layerGain = audioContext.createGain();
+        oscillator.type = layer.type;
+        oscillator.frequency.value = frequency * layer.ratio;
+        oscillator.detune.value = layer.ratio === 1 ? -3 : 4;
+        layerGain.gain.value = layer.level;
+        oscillator.connect(layerGain).connect(noteFilter);
+        oscillator.start(now);
+        oscillator.stop(now + duration + .08);
+      });
+    }
+
+    function scheduleMusic() {
+      window.clearTimeout(musicTimer);
+      if (!soundPlaying) return;
+      const note = musicPattern[musicStep % musicPattern.length];
+      playMusicNote(note, note === null ? 2.8 : 3.3);
+      musicStep += 1;
+      musicTimer = window.setTimeout(scheduleMusic, 865);
+    }
+
     function startAmbience() {
       if (soundPlaying) return;
       audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
@@ -1362,12 +1437,14 @@
       ambienceNodes.push(lfo);
       playChime(current, .78);
       scheduleChime();
+      scheduleMusic();
     }
 
     function stopAmbience() {
       if (!soundPlaying) return;
       soundPlaying = false;
       window.clearTimeout(ambienceTimer);
+      window.clearTimeout(musicTimer);
       const nodesToStop = [...ambienceNodes];
       const gainToFade = masterGain;
       if (audioContext && gainToFade) {
