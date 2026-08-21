@@ -19,6 +19,10 @@
       --shadow: 0 28px 80px rgba(11, 20, 14, .18);
       --display: Georgia, "Noto Serif SC", "Songti SC", serif;
       --sans: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      --motion-float: 18px;
+      --motion-tilt: 2.4deg;
+      --motion-duration: 4.8s;
+      --motion-parallax: 1;
     }
 
     * { box-sizing: border-box; }
@@ -210,6 +214,25 @@
     .sound-bars i:nth-child(2) { height: 11px; animation-delay: -.4s; }
     .sound-bars i:nth-child(3) { height: 8px; animation-delay: -.7s; }
     .sound-toggle[aria-pressed="false"] .sound-bars i { animation: none; height: 3px; }
+    .sound-invite {
+      position: absolute;
+      right: clamp(18px, 4vw, 60px);
+      top: 68px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: #f7ffe7;
+      background: rgba(13,27,20,.82);
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+      backdrop-filter: blur(14px);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .sound-invite.show { opacity: 1; transform: translateY(0); }
 
     .scene-nav {
       position: fixed;
@@ -383,6 +406,8 @@
       object-fit: contain;
       filter: drop-shadow(0 30px 25px rgba(20,30,22,.18));
       transition: transform .4s ease;
+      animation: mascotFloat var(--motion-duration) ease-in-out infinite;
+      cursor: pointer;
     }
     .character:hover { transform: translateY(-8px) rotate(-2deg); }
     .speech {
@@ -425,16 +450,16 @@
       opacity: .8;
     }
 
-    .scene-home { color: var(--ink); background: #d8d4ca; }
+    .scene-home { color: var(--ink); background: #dbe9a8; }
     .scene-home::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 76% 39%, rgba(222,255,115,.82) 0 14%, transparent 14.2%),
-        radial-gradient(ellipse at 72% 48%, rgba(255,255,255,.72) 0 20%, transparent 49%),
-        radial-gradient(ellipse at 12% 95%, rgba(49,92,255,.14), transparent 42%),
-        linear-gradient(112deg, #e7e1d4 0 53%, #cbc8c2 53% 72%, #e9e2d5 72%);
+        linear-gradient(90deg, rgba(249,248,224,.78) 0%, rgba(246,247,213,.6) 34%, rgba(237,247,180,.12) 58%, rgba(39,78,38,.08) 100%),
+        linear-gradient(0deg, rgba(36,73,34,.15), transparent 42%),
+        url("xiaoyang-workbench/assets/healing-meadow-hero-v1.webp") center / cover no-repeat;
+      filter: saturate(.92) contrast(.98);
     }
     .home-label {
       display: inline-block;
@@ -664,7 +689,7 @@
     .m2 { left: 58%; top: 12%; background: #fff; }
     .m3 { right: 11%; top: 52%; background: #ff755b; }
     .m4 { left: 37%; bottom: 12%; background: #6f8cff; }
-    .map-sheep { position: absolute; z-index: 4; left: 4%; bottom: 0; width: 230px; filter: drop-shadow(0 12px 12px rgba(0,0,0,.14)); animation: drift 3s ease-in-out infinite alternate; }
+    .map-sheep { position: absolute; z-index: 4; left: 4%; bottom: 0; width: 230px; filter: drop-shadow(0 12px 12px rgba(0,0,0,.14)); animation: mascotFloat var(--motion-duration) ease-in-out infinite; cursor: pointer; }
     .map-stamp { position: absolute; right: 7%; bottom: 5%; padding: 14px; border: 2px solid #315b44; border-radius: 50%; color: #315b44; font-size: 10px; font-weight: 900; letter-spacing: .12em; transform: rotate(-12deg); }
 
     .scene.active .scene-copy > * { animation: revealCopy .72s both; }
@@ -718,6 +743,17 @@
     @keyframes orbit { to { transform: rotate(360deg); } }
     @keyframes drift { to { transform: translateY(-10px) rotate(2deg); } }
     @keyframes sound { to { height: 11px; } }
+    @keyframes mascotFloat {
+      0%, 100% { translate: 0 calc(var(--motion-float) * -.32); rotate: calc(var(--motion-tilt) * -.42); }
+      50% { translate: 0 var(--motion-float); rotate: var(--motion-tilt); }
+    }
+    @keyframes mascotBounce {
+      0%, 100% { translate: 0 0; rotate: 0deg; scale: 1; }
+      36% { translate: 0 -42px; rotate: -6deg; scale: 1.08; }
+      64% { translate: 0 8px; rotate: 3deg; scale: .98; }
+      82% { translate: 0 -8px; rotate: -1deg; scale: 1.02; }
+    }
+    .character.is-bouncing, .map-sheep.is-bouncing { animation: mascotBounce .82s cubic-bezier(.2,.85,.25,1); }
 
     @media (max-width: 900px) {
       .topbar { height: 68px; }
@@ -765,12 +801,14 @@
       .scene-nav { gap: 3px; padding: 5px; }
       .nav-button { width: 39px; height: 39px; }
       .scene-arrow { display: none; }
+      .sound-invite { top: 59px; right: 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
       .opening-kicker, .opening-sub, .enter-world { opacity: 1; transform: none; }
       .opening-title i { transform: none; }
+      .character, .map-sheep { animation: none; }
     }
   </style>
 </head>
@@ -792,10 +830,11 @@
         <span class="brand-mark">羊</span>
         <span class="brand-text">JASPER / AI FIELD NOTES</span>
       </button>
-      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="切换环境音效">
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="开启或关闭沉浸声景">
         <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>AMBIENCE OFF</span>
+        <span>SOUNDSCAPE OFF</span>
       </button>
+      <div class="sound-invite" id="soundInvite">◌ 建议戴耳机开启声景</div>
     </header>
 
     <main class="stage" id="stage" aria-live="polite">
@@ -951,9 +990,15 @@
     const sceneCurrent = document.getElementById('sceneCurrent');
     const sceneArrow = document.getElementById('sceneArrow');
     const toast = document.getElementById('toast');
+    const soundInvite = document.getElementById('soundInvite');
     let current = 0;
     let touchStartX = 0;
     let audioContext;
+    let masterGain;
+    let toneFilter;
+    let ambienceTimer;
+    let soundPlaying = false;
+    let droneOscillators = [];
     let ambienceNodes = [];
     let ambientPointerX = 0;
     let ambientPointerY = 0;
@@ -1081,6 +1126,10 @@
       document.body.classList.add('ready');
       opening.classList.add('is-gone');
       window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 900);
+      window.setTimeout(() => {
+        if (!soundPlaying) soundInvite.classList.add('show');
+      }, 1500);
+      window.setTimeout(() => soundInvite.classList.remove('show'), 7200);
     }
 
     enterWorld.addEventListener('click', enterSite);
@@ -1101,6 +1150,10 @@
       document.documentElement.style.setProperty('--scene-ink', ink);
       sceneArrow.setAttribute('aria-label', current === scenes.length - 1 ? '回到序章' : '进入下一个场景');
       history.replaceState(null, '', `#scene-${current}`);
+      if (soundPlaying) {
+        updateAudioScene(current);
+        playChime(current, .58);
+      }
     }
 
     document.querySelectorAll('[data-scene-target]').forEach(button => {
@@ -1170,31 +1223,164 @@
       ambientPointerY = event.clientY / window.innerHeight - .5;
       const visual = scenes[current].querySelector('[data-parallax]');
       if (!visual) return;
-      const x = (event.clientX / window.innerWidth - .5) * 10;
-      const y = (event.clientY / window.innerHeight - .5) * 8;
+      const motionScale = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--motion-parallax')) || 1;
+      const x = (event.clientX / window.innerWidth - .5) * 26 * motionScale;
+      const y = (event.clientY / window.innerHeight - .5) * 18 * motionScale;
       visual.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
 
-    function startAmbience() {
-      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
-      const master = audioContext.createGain();
-      master.gain.value = 0.025;
-      master.connect(audioContext.destination);
-      [174, 261.6, 392].forEach((frequency, index) => {
+    const soundProfiles = [
+      { root: 146.83, cutoff: 760, notes: [0, 4, 7, 11] },
+      { root: 174.61, cutoff: 980, notes: [0, 2, 7, 9] },
+      { root: 130.81, cutoff: 680, notes: [0, 4, 7, 12] },
+      { root: 164.81, cutoff: 1120, notes: [0, 3, 7, 10] },
+      { root: 196, cutoff: 880, notes: [0, 4, 7, 9] },
+      { root: 123.47, cutoff: 620, notes: [0, 5, 7, 12] }
+    ];
+
+    function createSoftNoiseBuffer(context) {
+      const buffer = context.createBuffer(1, context.sampleRate * 4, context.sampleRate);
+      const data = buffer.getChannelData(0);
+      let last = 0;
+      for (let index = 0; index < data.length; index += 1) {
+        const white = Math.random() * 2 - 1;
+        last = last * .985 + white * .015;
+        data[index] = last * 3.2;
+      }
+      return buffer;
+    }
+
+    function updateAudioScene(sceneIndex) {
+      if (!audioContext || !soundPlaying) return;
+      const profile = soundProfiles[sceneIndex];
+      const now = audioContext.currentTime;
+      droneOscillators.forEach((oscillator, index) => {
+        const ratios = [.5, 1, 1.5];
+        oscillator.frequency.cancelScheduledValues(now);
+        oscillator.frequency.setTargetAtTime(profile.root * ratios[index], now, 1.25);
+      });
+      if (toneFilter) toneFilter.frequency.setTargetAtTime(profile.cutoff, now, 1.4);
+    }
+
+    function playChime(sceneIndex = current, intensity = 1) {
+      if (!audioContext || !masterGain || !soundPlaying) return;
+      const profile = soundProfiles[sceneIndex];
+      const note = profile.notes[Math.floor(Math.random() * profile.notes.length)];
+      const frequency = profile.root * 2 * Math.pow(2, note / 12);
+      const now = audioContext.currentTime;
+      const envelope = audioContext.createGain();
+      const bellFilter = audioContext.createBiquadFilter();
+      const panner = audioContext.createStereoPanner ? audioContext.createStereoPanner() : null;
+      bellFilter.type = 'lowpass';
+      bellFilter.frequency.value = 2400;
+      envelope.gain.setValueAtTime(.0001, now);
+      envelope.gain.exponentialRampToValueAtTime(.12 * intensity, now + .035);
+      envelope.gain.exponentialRampToValueAtTime(.0001, now + 2.8);
+      if (panner) {
+        panner.pan.value = (Math.random() - .5) * .72;
+        envelope.connect(panner).connect(masterGain);
+      } else {
+        envelope.connect(masterGain);
+      }
+      bellFilter.connect(envelope);
+      [1, 2.01].forEach((ratio, index) => {
         const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        oscillator.type = index === 0 ? 'sine' : 'triangle';
-        oscillator.frequency.value = frequency;
-        gain.gain.value = index === 0 ? .6 : .16;
-        oscillator.connect(gain).connect(master);
-        oscillator.start();
-        ambienceNodes.push(oscillator, gain, master);
+        const harmonicGain = audioContext.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.value = frequency * ratio;
+        harmonicGain.gain.value = index === 0 ? 1 : .18;
+        oscillator.connect(harmonicGain).connect(bellFilter);
+        oscillator.start(now);
+        oscillator.stop(now + 2.9);
       });
     }
 
+    function scheduleChime() {
+      window.clearTimeout(ambienceTimer);
+      if (!soundPlaying) return;
+      ambienceTimer = window.setTimeout(() => {
+        playChime(current, .72);
+        scheduleChime();
+      }, 4200 + Math.random() * 4200);
+    }
+
+    function startAmbience() {
+      if (soundPlaying) return;
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      audioContext.resume();
+      soundPlaying = true;
+      const now = audioContext.currentTime;
+      const profile = soundProfiles[current];
+      masterGain = audioContext.createGain();
+      masterGain.gain.setValueAtTime(.0001, now);
+      masterGain.gain.exponentialRampToValueAtTime(.055, now + 1.8);
+      masterGain.connect(audioContext.destination);
+
+      toneFilter = audioContext.createBiquadFilter();
+      toneFilter.type = 'lowpass';
+      toneFilter.frequency.value = profile.cutoff;
+      toneFilter.Q.value = .35;
+      toneFilter.connect(masterGain);
+
+      droneOscillators = [];
+      [
+        { ratio: .5, type: 'sine', gain: .64 },
+        { ratio: 1, type: 'sine', gain: .16 },
+        { ratio: 1.5, type: 'triangle', gain: .035 }
+      ].forEach(layer => {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = layer.type;
+        oscillator.frequency.value = profile.root * layer.ratio;
+        gain.gain.value = layer.gain;
+        oscillator.connect(gain).connect(toneFilter);
+        oscillator.start();
+        droneOscillators.push(oscillator);
+        ambienceNodes.push(oscillator);
+      });
+
+      const noise = audioContext.createBufferSource();
+      const noiseFilter = audioContext.createBiquadFilter();
+      const noiseGain = audioContext.createGain();
+      noise.buffer = createSoftNoiseBuffer(audioContext);
+      noise.loop = true;
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.value = 720;
+      noiseFilter.Q.value = .45;
+      noiseGain.gain.value = .17;
+      noise.connect(noiseFilter).connect(noiseGain).connect(masterGain);
+      noise.start();
+      ambienceNodes.push(noise);
+
+      const lfo = audioContext.createOscillator();
+      const lfoGain = audioContext.createGain();
+      lfo.type = 'sine';
+      lfo.frequency.value = .065;
+      lfoGain.gain.value = 120;
+      lfo.connect(lfoGain).connect(noiseFilter.frequency);
+      lfo.start();
+      ambienceNodes.push(lfo);
+      playChime(current, .78);
+      scheduleChime();
+    }
+
     function stopAmbience() {
-      ambienceNodes.filter(node => typeof node.stop === 'function').forEach(node => { try { node.stop(); } catch {} });
+      if (!soundPlaying) return;
+      soundPlaying = false;
+      window.clearTimeout(ambienceTimer);
+      const nodesToStop = [...ambienceNodes];
+      const gainToFade = masterGain;
+      if (audioContext && gainToFade) {
+        const now = audioContext.currentTime;
+        gainToFade.gain.cancelScheduledValues(now);
+        gainToFade.gain.setTargetAtTime(.0001, now, .16);
+      }
+      window.setTimeout(() => {
+        nodesToStop.forEach(node => { try { node.stop(); } catch {} });
+        try { gainToFade.disconnect(); } catch {}
+      }, 700);
       ambienceNodes = [];
+      droneOscillators = [];
     }
 
     const soundToggle = document.getElementById('soundToggle');
@@ -1202,7 +1388,29 @@
       const playing = soundToggle.getAttribute('aria-pressed') === 'true';
       if (playing) stopAmbience(); else startAmbience();
       soundToggle.setAttribute('aria-pressed', String(!playing));
-      soundToggle.querySelector('span:last-child').textContent = `AMBIENCE ${playing ? 'OFF' : 'ON'}`;
+      soundToggle.querySelector('span:last-child').textContent = `SOUNDSCAPE ${playing ? 'OFF' : 'ON'}`;
+      soundInvite.classList.remove('show');
+    });
+
+    document.querySelectorAll('.character, .map-sheep').forEach(mascot => {
+      mascot.setAttribute('role', 'button');
+      mascot.setAttribute('tabindex', '0');
+      mascot.setAttribute('aria-label', '和小羊互动');
+      const bounce = () => {
+        mascot.classList.remove('is-bouncing');
+        void mascot.offsetWidth;
+        mascot.classList.add('is-bouncing');
+        window.setTimeout(() => mascot.classList.remove('is-bouncing'), 850);
+        if (soundPlaying) playChime(current, .48);
+        showToast('小羊：今天也慢慢来吧 ☁');
+      };
+      mascot.addEventListener('click', bounce);
+      mascot.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          bounce();
+        }
+      });
     });
 
     const hashMatch = location.hash.match(/scene-(\d)/);
