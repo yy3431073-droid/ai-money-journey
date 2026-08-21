@@ -294,6 +294,21 @@
       scrollbar-width: thin;
     }
     .scene.active { visibility: visible; opacity: 1; pointer-events: auto; transform: scale(1); }
+    .ambient-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: .72;
+      mix-blend-mode: screen;
+    }
+    .scene-home .ambient-canvas, .scene-workshop .ambient-canvas, .scene-map .ambient-canvas {
+      opacity: .42;
+      mix-blend-mode: soft-light;
+    }
+    .scene-shop .ambient-canvas { opacity: .58; }
     .scene-inner {
       position: relative;
       z-index: 2;
@@ -785,6 +800,7 @@
 
     <main class="stage" id="stage" aria-live="polite">
       <section class="scene scene-home active" data-scene="0" aria-label="序章">
+        <canvas class="ambient-canvas" data-ambient="0" aria-hidden="true"></canvas>
         <div class="scene-inner">
           <div class="scene-copy">
             <div class="eyebrow">00 / Meet Jasper</div>
@@ -805,6 +821,7 @@
       </section>
 
       <section class="scene scene-forest" data-scene="1" aria-label="学习森林">
+        <canvas class="ambient-canvas" data-ambient="1" aria-hidden="true"></canvas>
         <div class="scene-inner">
           <div class="scene-copy">
             <div class="eyebrow">01 / Learning Forest</div>
@@ -828,6 +845,7 @@
       </section>
 
       <section class="scene scene-workshop" data-scene="2" aria-label="作品工坊">
+        <canvas class="ambient-canvas" data-ambient="2" aria-hidden="true"></canvas>
         <div class="scene-inner workshop-grid">
           <div class="scene-copy">
             <div class="eyebrow">02 / Works Workshop</div>
@@ -844,6 +862,7 @@
       </section>
 
       <section class="scene scene-lab" data-scene="3" aria-label="简历实验室">
+        <canvas class="ambient-canvas" data-ambient="3" aria-hidden="true"></canvas>
         <div class="scene-inner">
           <div class="scene-copy">
             <div class="eyebrow">03 / Resume Lab</div>
@@ -862,6 +881,7 @@
       </section>
 
       <section class="scene scene-shop" data-scene="4" aria-label="接单小店">
+        <canvas class="ambient-canvas" data-ambient="4" aria-hidden="true"></canvas>
         <div class="scene-inner">
           <div class="scene-copy">
             <div class="eyebrow">04 / Tiny Service Shop</div>
@@ -883,6 +903,7 @@
       </section>
 
       <section class="scene scene-map" data-scene="5" aria-label="成长地图">
+        <canvas class="ambient-canvas" data-ambient="5" aria-hidden="true"></canvas>
         <div class="scene-inner">
           <div class="scene-copy">
             <div class="eyebrow">05 / Growth Map</div>
@@ -934,6 +955,127 @@
     let touchStartX = 0;
     let audioContext;
     let ambienceNodes = [];
+    let ambientPointerX = 0;
+    let ambientPointerY = 0;
+    const ambientCanvases = [...document.querySelectorAll('.ambient-canvas')];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const ambientPalettes = [
+      ['#315cff', '#d8ff63', '#ff8a70'],
+      ['#77dca0', '#d8ff63', '#4fb9a4'],
+      ['#ffe0a0', '#d86a52', '#7b3350'],
+      ['#72dfff', '#7a6cff', '#d899ff'],
+      ['#ffb37d', '#ff776b', '#e5bd62'],
+      ['#fff0bd', '#78967a', '#c58d58']
+    ];
+    const ambientStates = ambientCanvases.map((canvas, sceneIndex) => ({
+      canvas,
+      sceneIndex,
+      particles: Array.from({ length: window.innerWidth < 600 ? 20 : 38 }, (_, index) => ({
+        x: ((index * 47 + sceneIndex * 19) % 101) / 100,
+        y: ((index * 71 + sceneIndex * 13) % 103) / 102,
+        size: 1.2 + ((index * 17) % 18) / 10,
+        speed: .018 + ((index * 11) % 12) / 1000,
+        sway: .008 + ((index * 7) % 11) / 1000,
+        phase: index * 1.71 + sceneIndex
+      }))
+    }));
+
+    function rgba(hex, alpha) {
+      const value = Number.parseInt(hex.slice(1), 16);
+      return `rgba(${value >> 16}, ${(value >> 8) & 255}, ${value & 255}, ${alpha})`;
+    }
+
+    function resizeAmbient() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      ambientStates.forEach(({ canvas }) => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.dataset.dpr = dpr;
+      });
+      if (reducedMotion.matches) ambientStates.forEach(state => drawAmbient(state, 0));
+    }
+
+    function drawAmbient(state, time) {
+      const { canvas, sceneIndex, particles } = state;
+      const ctx = canvas.getContext('2d');
+      const dpr = Number(canvas.dataset.dpr || 1);
+      const width = canvas.width / dpr;
+      const height = canvas.height / dpr;
+      const palette = ambientPalettes[sceneIndex];
+      const slowTime = time * .00016;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.save();
+      ctx.filter = `blur(${width < 600 ? 26 : 48}px)`;
+      ctx.globalCompositeOperation = 'screen';
+      const orbs = [
+        [.15, .78, .34, 0],
+        [.72, .22, .27, 2.1],
+        [.88, .72, .3, 4.2]
+      ];
+      orbs.forEach((orb, index) => {
+        const [baseX, baseY, scale, phase] = orb;
+        const x = (baseX + Math.sin(slowTime + phase) * .045 + ambientPointerX * .018 * (index + 1)) * width;
+        const y = (baseY + Math.cos(slowTime * .8 + phase) * .055 + ambientPointerY * .014 * (index + 1)) * height;
+        const radius = Math.max(width, height) * scale;
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        glow.addColorStop(0, rgba(palette[index], sceneIndex === 0 || sceneIndex === 2 || sceneIndex === 5 ? .2 : .25));
+        glow.addColorStop(.45, rgba(palette[index], .09));
+        glow.addColorStop(1, rgba(palette[index], 0));
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, width, height);
+      });
+      ctx.restore();
+
+      ctx.save();
+      ctx.globalCompositeOperation = sceneIndex === 0 || sceneIndex === 2 || sceneIndex === 5 ? 'multiply' : 'screen';
+      particles.forEach((particle, index) => {
+        const progress = (particle.y - slowTime * particle.speed * 20 + 2) % 1;
+        const x = (particle.x + Math.sin(slowTime * 4 + particle.phase) * particle.sway + ambientPointerX * .006) * width;
+        const y = progress * height;
+        const breathe = .48 + Math.sin(slowTime * 7 + particle.phase) * .24;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(Math.sin(slowTime * 3 + particle.phase) * .7);
+        ctx.globalAlpha = Math.max(.12, breathe);
+        ctx.fillStyle = rgba(palette[index % palette.length], .58);
+        if (index % 4 === 0) {
+          ctx.beginPath();
+          ctx.ellipse(0, 0, particle.size * 2.2, particle.size, 0, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      });
+      ctx.restore();
+
+      const ribbon = ctx.createLinearGradient(0, 0, width, height);
+      ribbon.addColorStop(0, rgba(palette[0], 0));
+      ribbon.addColorStop(.5, rgba(palette[1], sceneIndex === 0 || sceneIndex === 2 || sceneIndex === 5 ? .055 : .085));
+      ribbon.addColorStop(1, rgba(palette[2], 0));
+      ctx.strokeStyle = ribbon;
+      ctx.lineWidth = Math.max(32, width * .035);
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(-width * .05, height * (.7 + Math.sin(slowTime) * .03));
+      ctx.bezierCurveTo(width * .28, height * .5, width * .63, height * .82, width * 1.05, height * (.42 + Math.cos(slowTime) * .04));
+      ctx.stroke();
+    }
+
+    function animateAmbient(time) {
+      if (!document.hidden) drawAmbient(ambientStates[current], time);
+      requestAnimationFrame(animateAmbient);
+    }
+
+    resizeAmbient();
+    window.addEventListener('resize', resizeAmbient, { passive: true });
+    if (!reducedMotion.matches) requestAnimationFrame(animateAmbient);
 
     function enterSite() {
       document.body.classList.add('ready');
@@ -1024,6 +1166,8 @@
 
     document.addEventListener('pointermove', event => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      ambientPointerX = event.clientX / window.innerWidth - .5;
+      ambientPointerY = event.clientY / window.innerHeight - .5;
       const visual = scenes[current].querySelector('[data-parallax]');
       if (!visual) return;
       const x = (event.clientX / window.innerWidth - .5) * 10;
