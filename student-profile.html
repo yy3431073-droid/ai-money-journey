@@ -290,11 +290,12 @@
     .brand-mark {
       width: 32px;
       height: 32px;
-      display: grid;
-      place-items: center;
+      display: block;
+      object-fit: cover;
+      object-position: center;
       border-radius: 50%;
-      color: #101713;
-      background: var(--lime);
+      border: 2px solid rgba(255,255,255,.78);
+      background: #ffc928;
       box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 9%, transparent);
     }
     .sound-toggle {
@@ -968,7 +969,7 @@
     <div class="texture" aria-hidden="true"></div>
     <header class="topbar">
       <button class="brand" type="button" data-scene-target="0" aria-label="返回序章">
-        <span class="brand-mark">羊</span>
+        <img class="brand-mark" src="xiaoyang-workbench/assets/jasper-brand-avatar-v1.webp" alt="" aria-hidden="true" />
         <span class="brand-text">JASPER / AI FIELD NOTES</span>
       </button>
       <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="开启或关闭背景音乐">
