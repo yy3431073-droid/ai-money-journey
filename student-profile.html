@@ -285,6 +285,7 @@
       position: absolute;
       inset: 0;
       overflow: hidden auto;
+      isolation: isolate;
       visibility: hidden;
       opacity: 0;
       pointer-events: none;
@@ -296,12 +297,12 @@
     .scene-inner {
       position: relative;
       z-index: 2;
-      width: min(1280px, 100%);
+      width: min(1600px, 100%);
       min-height: 100svh;
       margin: 0 auto;
-      padding: 116px clamp(22px, 7vw, 104px) 114px;
+      padding: 116px clamp(22px, 5vw, 84px) 114px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(340px, .86fr);
+      grid-template-columns: minmax(0, 1.06fr) minmax(340px, .94fr);
       align-items: center;
       gap: clamp(32px, 6vw, 90px);
     }
@@ -325,8 +326,11 @@
       font-size: clamp(54px, 7.4vw, 108px);
       line-height: .94;
       letter-spacing: -.055em;
+      text-wrap: balance;
     }
+    .scene h2 { font-size: clamp(54px, 6vw, 96px); }
     .scene h2 em { font-style: italic; }
+    .title-line { display: block; }
     .scene-lead {
       max-width: 620px;
       margin: 28px 0 0;
@@ -359,10 +363,9 @@
     .character {
       position: absolute;
       z-index: 5;
-      width: min(390px, 78%);
+      width: min(500px, 94%);
       aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 48% 48% 45% 45%;
+      object-fit: contain;
       filter: drop-shadow(0 30px 25px rgba(20,30,22,.18));
       transition: transform .4s ease;
     }
@@ -395,14 +398,28 @@
       animation: drift 3.6s ease-in-out infinite alternate;
     }
 
-    .scene-home { color: var(--ink); background: #f1eadb; }
+    .scene::before, .scene::after { z-index: 0; pointer-events: none; }
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(5,10,7,.13), transparent 23%, transparent 76%, rgba(5,10,7,.18)),
+        linear-gradient(0deg, rgba(5,10,7,.18), transparent 24%, transparent 72%, rgba(255,255,255,.06));
+      box-shadow: inset 0 0 150px rgba(5,12,8,.22);
+      opacity: .8;
+    }
+
+    .scene-home { color: var(--ink); background: #d8d4ca; }
     .scene-home::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 75% 38%, rgba(216,255,99,.76) 0 16%, transparent 16.2%),
-        linear-gradient(110deg, transparent 0 64%, rgba(255,255,255,.38) 64% 65%, transparent 65%);
+        radial-gradient(circle at 76% 39%, rgba(222,255,115,.82) 0 14%, transparent 14.2%),
+        radial-gradient(ellipse at 72% 48%, rgba(255,255,255,.72) 0 20%, transparent 49%),
+        radial-gradient(ellipse at 12% 95%, rgba(49,92,255,.14), transparent 42%),
+        linear-gradient(112deg, #e7e1d4 0 53%, #cbc8c2 53% 72%, #e9e2d5 72%);
     }
     .home-label {
       display: inline-block;
@@ -411,7 +428,7 @@
       background: var(--blue);
       transform: rotate(-2deg);
     }
-    .home-visual .character { right: 8%; bottom: 1%; width: min(440px, 90%); }
+    .home-visual .character { right: -2%; bottom: -4%; width: min(560px, 106%); }
     .home-visual .speech { left: -3%; top: 12%; }
     .home-visual .float-note { right: 0; top: 5%; background: var(--coral); transform: rotate(7deg); }
     .orbit-copy {
@@ -425,19 +442,30 @@
     .orbit-copy::before { left: 9%; top: 19%; }
     .orbit-copy::after { right: 7%; bottom: 22%; width: 11px; height: 11px; background: var(--coral); }
 
-    .scene-forest { color: #eaffe7; background: #173c2d; }
+    .scene-forest { color: #edf8e9; background: #071b15; }
     .scene-forest::before {
       content: "";
       position: absolute;
       inset: 0;
-      opacity: .55;
+      opacity: 1;
       background:
-        radial-gradient(ellipse at 20% 100%, #29583a 0 24%, transparent 24.5%),
-        radial-gradient(ellipse at 84% 8%, rgba(216,255,99,.3), transparent 25%),
-        linear-gradient(100deg, transparent 70%, rgba(255,255,255,.09) 70.2%, transparent 70.5%);
+        radial-gradient(ellipse at 68% 40%, rgba(123,191,140,.38), transparent 24%),
+        radial-gradient(ellipse at 14% 100%, rgba(63,114,74,.64) 0 22%, transparent 48%),
+        radial-gradient(ellipse at 91% 8%, rgba(211,255,157,.18), transparent 30%),
+        linear-gradient(113deg, transparent 0 60%, rgba(219,255,229,.09) 60.2% 60.45%, transparent 60.7%),
+        linear-gradient(135deg, #0d2b20 0%, #061711 54%, #123c2d 100%);
     }
+    .scene-forest::after {
+      background:
+        radial-gradient(ellipse at 68% 45%, transparent 0 14%, rgba(3,12,8,.34) 48%, rgba(1,7,4,.62) 100%),
+        linear-gradient(104deg, transparent 0 71%, rgba(205,255,213,.08) 71.2% 71.5%, transparent 71.8%);
+      box-shadow: inset 0 0 180px rgba(0,6,3,.56);
+    }
+    .scene-forest h2 { max-width: 780px; font-size: clamp(56px, 5vw, 82px); letter-spacing: -.045em; }
+    .scene-forest .title-line { white-space: nowrap; }
+    .mobile-break { display: none; }
     .forest-visual { min-height: 560px; }
-    .forest-visual .character { left: 11%; bottom: 0; width: min(350px, 78%); }
+    .forest-visual .character { left: -2%; bottom: -4%; width: min(520px, 98%); }
     .forest-visual .speech { right: -2%; top: 16%; color: var(--ink); }
     .forest-visual .float-note { left: -4%; top: 8%; color: var(--ink); background: var(--lime); }
     .tree { position: absolute; bottom: -120px; width: 160px; height: 600px; border-radius: 60% 60% 10px 10px; background: #0f2c22; transform-origin: bottom; }
@@ -475,16 +503,23 @@
     .task input:checked + .task-dot::after { content: "✓"; font-weight: 900; }
     .task:has(input:checked) .task-text { opacity: .52; text-decoration: line-through; }
 
-    .scene-workshop { color: #2b180c; background: #f4b95f; }
+    .scene-workshop { color: #28170e; background: #a96232; }
     .scene-workshop::before {
       content: "";
       position: absolute;
       inset: 0;
-      opacity: .22;
-      background-image: linear-gradient(#2b180c 1px, transparent 1px), linear-gradient(90deg, #2b180c 1px, transparent 1px);
-      background-size: 42px 42px;
+      opacity: 1;
+      background:
+        radial-gradient(ellipse at 78% 26%, rgba(255,222,156,.64), transparent 35%),
+        radial-gradient(ellipse at 12% 84%, rgba(95,28,25,.4), transparent 42%),
+        linear-gradient(rgba(49,24,13,.13) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(49,24,13,.13) 1px, transparent 1px),
+        linear-gradient(125deg, #d7944c, #b76e37 54%, #7f3f2c);
+      background-size: auto, auto, 42px 42px, 42px 42px, auto;
     }
+    .scene-workshop::after { box-shadow: inset 0 0 180px rgba(50,21,10,.32); opacity: .5; }
     .workshop-grid { grid-template-columns: .78fr 1.22fr; }
+    .scene-workshop h2 { font-size: clamp(58px, 5vw, 84px); }
     .project-board {
       position: relative;
       display: grid;
@@ -503,24 +538,28 @@
       text-decoration: none;
       transition: transform .25s ease, box-shadow .25s ease;
     }
-    .project:nth-child(2) { background: #d8ff63; transform: translateY(22px) rotate(-2deg); }
-    .project:nth-child(3) { background: #fe795f; transform: rotate(-1deg); }
-    .project:nth-child(4) { background: #6f8cff; transform: translateY(22px) rotate(1deg); }
+    .project:nth-child(2) { background: #c7d783; transform: translateY(22px) rotate(-2deg); }
+    .project:nth-child(3) { background: #cf6d58; transform: rotate(-1deg); }
+    .project:nth-child(4) { background: #7f88b7; transform: translateY(22px) rotate(1deg); }
     .project:hover { transform: translate(-4px,-5px) rotate(-1deg); box-shadow: 13px 15px 0 #2b180c; }
     .project-no { font-size: 10px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
     .project h3 { margin: 48px 0 8px; font-family: var(--display); font-size: 24px; line-height: 1.05; }
     .project p { margin: 0; font-size: 12px; line-height: 1.6; opacity: .72; }
     .project-arrow { position: absolute; right: 17px; top: 16px; font-size: 22px; }
 
-    .scene-lab { color: #eef3ff; background: #24388f; }
+    .scene-lab { color: #f1f4ff; background: #0d1737; }
     .scene-lab::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 78% 42%, rgba(116,231,255,.18) 0 18%, transparent 18.5%),
-        linear-gradient(118deg, transparent 0 57%, rgba(255,255,255,.08) 57.2% 57.4%, transparent 57.6%);
+        radial-gradient(circle at 76% 42%, rgba(102,218,255,.24) 0 16%, transparent 42%),
+        radial-gradient(ellipse at 12% 92%, rgba(101,80,255,.34), transparent 44%),
+        radial-gradient(ellipse at 94% 6%, rgba(185,117,255,.2), transparent 34%),
+        linear-gradient(118deg, transparent 0 57%, rgba(255,255,255,.1) 57.2% 57.4%, transparent 57.6%),
+        linear-gradient(135deg, #172758, #090f27 56%, #1b2250);
     }
+    .scene-lab::after { box-shadow: inset 0 0 190px rgba(2,5,19,.62); }
     .lab-visual { min-height: 570px; }
     .lab-console {
       position: absolute;
@@ -533,7 +572,7 @@
     .lab-console::before, .lab-console::after { content: ""; position: absolute; left: 50%; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; transform: translateX(-50%); }
     .lab-console::before { top: 13%; width: 70%; aspect-ratio: 1; }
     .lab-console::after { top: 24%; width: 46%; aspect-ratio: 1; border-style: dashed; animation: orbit 14s linear infinite reverse; }
-    .lab-visual .character { left: 50%; bottom: 5%; width: min(310px, 62%); transform: translateX(-50%); }
+    .lab-visual .character { left: 50%; bottom: 0; width: min(500px, 92%); transform: translateX(-50%); }
     .lab-visual .character:hover { transform: translateX(-50%) translateY(-8px) rotate(-2deg); }
     .lab-visual .speech { right: -3%; top: 5%; color: var(--ink); }
     .skill-chip { position: absolute; z-index: 8; padding: 9px 12px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; background: rgba(20,35,105,.66); font-size: 11px; font-weight: 800; backdrop-filter: blur(10px); animation: drift 3s ease-in-out infinite alternate; }
@@ -544,15 +583,20 @@
     .workflow b { padding: 9px 11px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; }
     .workflow i { font-style: normal; opacity: .45; }
 
-    .scene-shop { color: #2c1a14; background: #ff8c71; }
+    .scene-shop { color: #fff1dc; background: #65271f; }
     .scene-shop::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent 50%, rgba(255,249,236,.15) 50%);
-      background-size: 130px 100%;
-      opacity: .35;
+      background:
+        radial-gradient(ellipse at 76% 42%, rgba(255,184,128,.46), transparent 37%),
+        radial-gradient(ellipse at 14% 88%, rgba(95,23,37,.64), transparent 48%),
+        linear-gradient(90deg, transparent 50%, rgba(255,238,211,.055) 50%),
+        linear-gradient(135deg, #8f392e, #5b201d 58%, #361823);
+      background-size: auto, auto, 130px 100%, auto;
+      opacity: 1;
     }
+    .scene-shop::after { box-shadow: inset 0 0 180px rgba(32,7,13,.52); }
     .shop-window {
       position: relative;
       min-height: 530px;
@@ -561,11 +605,12 @@
       background: #fff2d6;
       box-shadow: 15px 16px 0 #2c1a14;
       overflow: hidden;
+      color: #2c1a14;
     }
     .awning { position: absolute; left: 0; right: 0; top: 23%; height: 62px; display: flex; border-top: 3px solid #2c1a14; border-bottom: 3px solid #2c1a14; }
     .awning i { flex: 1; background: #d8ff63; border-right: 2px solid #2c1a14; }
     .awning i:nth-child(even) { background: #ff755b; }
-    .shop-window .character { left: 50%; bottom: -4%; width: min(330px, 68%); transform: translateX(-50%); }
+    .shop-window .character { left: 50%; bottom: -8%; width: min(500px, 94%); transform: translateX(-50%); }
     .shop-window .character:hover { transform: translateX(-50%) translateY(-8px) rotate(2deg); }
     .open-sign { position: absolute; z-index: 7; top: 38%; right: 6%; padding: 10px 14px; border: 2px solid #2c1a14; color: #2c1a14; background: var(--lime); box-shadow: 5px 5px 0 #2c1a14; font-size: 11px; font-weight: 950; letter-spacing: .14em; transform: rotate(5deg); }
     .price-list { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-top: 28px; }
@@ -573,16 +618,20 @@
     .price-item strong { display: block; font-family: var(--display); font-size: 23px; font-weight: 400; }
     .price-item span { font-size: 11px; opacity: .7; }
 
-    .scene-map { color: #162119; background: #dce6c9; }
+    .scene-map { color: #182119; background: #aeb7a0; }
     .scene-map::before {
       content: "";
       position: absolute;
       inset: 0;
-      opacity: .32;
+      opacity: 1;
       background:
-        radial-gradient(circle at 18% 20%, transparent 0 8%, #96aa85 8.2% 8.5%, transparent 8.7%),
-        radial-gradient(circle at 83% 76%, transparent 0 12%, #96aa85 12.2% 12.5%, transparent 12.7%);
+        radial-gradient(circle at 18% 20%, transparent 0 8%, rgba(58,76,57,.3) 8.2% 8.5%, transparent 8.7%),
+        radial-gradient(circle at 83% 76%, transparent 0 12%, rgba(58,76,57,.28) 12.2% 12.5%, transparent 12.7%),
+        radial-gradient(ellipse at 72% 30%, rgba(255,244,207,.7), transparent 38%),
+        radial-gradient(ellipse at 12% 90%, rgba(70,93,73,.32), transparent 45%),
+        linear-gradient(135deg, #cdd2bc, #9eaa94 58%, #d1c7aa);
     }
+    .scene-map::after { box-shadow: inset 0 0 170px rgba(31,45,32,.26); opacity: .7; }
     .map-paper {
       position: relative;
       min-height: 520px;
@@ -600,7 +649,7 @@
     .m2 { left: 58%; top: 12%; background: #fff; }
     .m3 { right: 11%; top: 52%; background: #ff755b; }
     .m4 { left: 37%; bottom: 12%; background: #6f8cff; }
-    .map-sheep { position: absolute; z-index: 4; left: 11%; bottom: 6%; width: 150px; border-radius: 50%; filter: drop-shadow(0 12px 12px rgba(0,0,0,.14)); animation: drift 3s ease-in-out infinite alternate; }
+    .map-sheep { position: absolute; z-index: 4; left: 4%; bottom: 0; width: 230px; filter: drop-shadow(0 12px 12px rgba(0,0,0,.14)); animation: drift 3s ease-in-out infinite alternate; }
     .map-stamp { position: absolute; right: 7%; bottom: 5%; padding: 14px; border: 2px solid #315b44; border-radius: 50%; color: #315b44; font-size: 10px; font-weight: 900; letter-spacing: .12em; transform: rotate(-12deg); }
 
     .scene.active .scene-copy > * { animation: revealCopy .72s both; }
@@ -673,13 +722,16 @@
       .sound-toggle > span:last-child { display: none; }
       .scene-inner { padding: 88px 20px 110px; }
       .scene h1, .scene h2 { font-size: clamp(44px, 14vw, 66px); }
+      .scene-forest h2 { font-size: clamp(42px, 12vw, 50px); }
+      .scene-forest .title-line { white-space: normal; }
+      .mobile-break { display: block; }
       .scene-lead { margin-top: 20px; line-height: 1.75; }
       .visual { min-height: 390px; }
-      .home-visual .character { right: 2%; width: 86%; }
+      .home-visual .character { right: -4%; width: 108%; }
       .home-visual .speech { left: 0; top: 1%; max-width: 190px; }
       .home-visual .float-note { top: -8%; }
       .forest-visual { min-height: 500px; }
-      .forest-visual .character { left: 2%; width: 72%; }
+      .forest-visual .character { left: -8%; width: 108%; }
       .forest-visual .speech { top: 2%; right: 0; max-width: 180px; }
       .learning-path { width: 72%; }
       .project-board { gap: 9px; }
@@ -745,7 +797,7 @@
           </div>
           <div class="visual home-visual" data-parallax>
             <div class="orbit-copy" aria-hidden="true"></div>
-            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="小羊 AI 创作者伙伴" />
+            <img class="character" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="戴羊帽的创作者伙伴和大白羊" />
             <div class="speech">嗨！我是这趟旅程的向导。准备好去看看我们做过什么了吗？</div>
             <div class="float-note">Non-tech × AI Creator</div>
           </div>
@@ -756,13 +808,13 @@
         <div class="scene-inner">
           <div class="scene-copy">
             <div class="eyebrow">01 / Learning Forest</div>
-            <h2>在学习森林，<br>每天种下一个<em>新技能</em>。</h2>
+            <h2><span class="title-line">在学习森林，</span><span class="title-line">每天种下一个<br class="mobile-break"><em>新技能</em>。</span></h2>
             <p class="scene-lead">我的路线不是先学完再开始，而是用真实项目反推学习：页面结构、视觉表达、GitHub 上线、AI 协作，以及怎样把项目讲清楚。</p>
             <div class="scene-actions"><a class="pill accent" href="xiaoyang-workbench/index.html">打开小羊 AI 工作台 <span>↗</span></a></div>
           </div>
           <div class="visual forest-visual" data-parallax>
             <div class="tree one" aria-hidden="true"></div><div class="tree two" aria-hidden="true"></div>
-            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="在森林里学习的小羊" />
+            <img class="character" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="在森林里休息的创作者伙伴和大白羊" />
             <div class="speech">成长不靠突然开窍，靠今天真的完成一点点。</div>
             <div class="float-note">Today's tiny wins</div>
             <div class="learning-path" aria-label="今日学习清单">
@@ -802,7 +854,7 @@
           </div>
           <div class="visual lab-visual" data-parallax>
             <div class="lab-console" aria-hidden="true"></div>
-            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="在简历实验室工作的小羊" />
+            <img class="character" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="简历实验室里的创作者伙伴和大白羊" />
             <div class="speech">正在把“我做过”翻译成“我能解决”。</div>
             <span class="skill-chip c1">AI 协作</span><span class="skill-chip c2">内容运营</span><span class="skill-chip c3">产品表达</span>
           </div>
@@ -825,7 +877,7 @@
           <div class="visual shop-window" data-parallax>
             <div class="awning" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
             <div class="open-sign">OPEN FOR IDEAS</div>
-            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="在接单小店等候的小羊" />
+            <img class="character" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="接单小店里的创作者伙伴和大白羊" />
           </div>
         </div>
       </section>
@@ -847,7 +899,7 @@
             <div class="milestone m2" data-label="主页上线">2</div>
             <div class="milestone m3" data-label="4 个作品">4</div>
             <div class="milestone m4" data-label="下一站：真实订单">?</div>
-            <img class="map-sheep" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="沿成长地图前进的小羊" />
+            <img class="map-sheep" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="成长地图上的创作者伙伴和大白羊" />
             <div class="map-stamp">KEEP<br>GROWING</div>
           </div>
         </div>
