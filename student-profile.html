@@ -2,855 +2,1014 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jasper 的个人介绍页</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#101713" />
+  <meta name="description" content="Jasper 的沉浸式 AI 创作世界：学习、作品、简历、接单与成长记录。" />
+  <title>Jasper's Field Notes｜AI 创作者成长世界</title>
   <style>
+    :root {
+      --ink: #132018;
+      --paper: #f2ead9;
+      --cream: #fff9ec;
+      --lime: #d8ff63;
+      --coral: #ff755b;
+      --blue: #315cff;
+      --line: rgba(22, 35, 27, .16);
+      --shadow: 0 28px 80px rgba(11, 20, 14, .18);
+      --display: Georgia, "Noto Serif SC", "Songti SC", serif;
+      --sans: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html, body { margin: 0; min-height: 100%; }
+    html { background: #101713; }
     body {
-      margin: 0;
-      font-family: Arial, "Microsoft YaHei", sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-    }
-    a { color: inherit; }
-    .page {
-      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--sans);
       overflow: hidden;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(255, 207, 48, 0.28), transparent 28%),
-        radial-gradient(circle at 92% 8%, rgba(43, 201, 184, 0.22), transparent 26%),
-        #f5f7fb;
+      -webkit-font-smoothing: antialiased;
     }
-    .nav {
-      position: sticky;
-      top: 0;
+    button, a { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--lime); outline-offset: 4px; }
+
+    .opening {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #fff9ec;
+      background: #101713;
+      transition: opacity .9s ease, visibility .9s ease;
+    }
+    .opening::before {
+      content: "";
+      position: absolute;
+      width: 70vmin;
+      height: 70vmin;
+      border: 1px solid rgba(216, 255, 99, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 12vmin rgba(255, 255, 255, .015), 0 0 0 24vmin rgba(255, 255, 255, .012);
+      animation: orbit 13s linear infinite;
+    }
+    .opening::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .2;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.4) .7px, transparent .7px);
+      background-size: 10px 10px;
+    }
+    .opening.is-gone { opacity: 0; visibility: hidden; pointer-events: none; }
+    .skip-opening {
+      position: absolute;
+      top: max(22px, env(safe-area-inset-top));
+      right: 24px;
+      z-index: 2;
+      border: 0;
+      padding: 10px;
+      color: rgba(255,255,255,.66);
+      background: transparent;
+      cursor: pointer;
+    }
+    .opening-inner {
+      position: relative;
+      z-index: 1;
+      width: min(820px, calc(100vw - 40px));
+      text-align: center;
+    }
+    .opening-kicker {
+      margin: 0 0 24px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--lime);
+      opacity: 0;
+      animation: introUp .7s .2s ease forwards;
+    }
+    .opening-title {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(52px, 9vw, 118px);
+      font-weight: 400;
+      line-height: .92;
+      letter-spacing: -.055em;
+    }
+    .opening-title span { display: block; overflow: hidden; }
+    .opening-title i {
+      display: block;
+      font-style: normal;
+      transform: translateY(115%);
+      animation: titleRise 1.05s cubic-bezier(.22,.8,.2,1) forwards;
+    }
+    .opening-title span:nth-child(2) i { animation-delay: .16s; color: var(--lime); }
+    .opening-sub {
+      margin: 28px auto 0;
+      max-width: 560px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.65);
+      opacity: 0;
+      animation: introUp .8s .9s ease forwards;
+    }
+    .enter-world {
+      position: relative;
+      margin-top: 34px;
+      border: 1px solid rgba(255,255,255,.34);
+      border-radius: 999px;
+      padding: 14px 22px 14px 28px;
+      color: #fff;
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: introUp .8s 1.35s ease forwards;
+      transition: background .25s ease, color .25s ease, transform .25s ease;
+    }
+    .enter-world:hover { color: #101713; background: var(--lime); transform: translateY(-2px); }
+    .enter-world b { margin-left: 24px; font-size: 18px; }
+
+    .site-shell {
+      position: relative;
+      min-height: 100svh;
+      background: var(--paper);
+      opacity: 0;
+      transition: opacity .7s ease;
+    }
+    body.ready .site-shell { opacity: 1; }
+    .texture {
+      position: fixed;
+      inset: 0;
       z-index: 20;
-      backdrop-filter: blur(18px);
-      background: rgba(245, 247, 251, 0.78);
-      border-bottom: 1px solid rgba(210, 218, 231, 0.7);
+      pointer-events: none;
+      opacity: .12;
+      mix-blend-mode: multiply;
+      background-image: radial-gradient(#23352a .55px, transparent .75px);
+      background-size: 7px 7px;
     }
-    .nav-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 14px 20px;
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
+      gap: 24px;
+      height: 82px;
+      padding: 0 clamp(18px, 4vw, 60px);
+      color: var(--scene-ink, var(--ink));
+      transition: color .6s ease;
     }
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 800;
+      gap: 12px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
     }
-    .brand-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #24c26a;
-      box-shadow: 0 0 0 8px rgba(36, 194, 106, 0.12);
-    }
-    .nav-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .nav-links a {
-      text-decoration: none;
-      font-size: 14px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      color: #344156;
-    }
-    .nav-links a:hover { background: white; }
-    .container {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    .hero {
-      min-height: calc(100vh - 62px);
-      padding: 58px 0 46px;
+    .brand-mark {
+      width: 32px;
+      height: 32px;
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
-      gap: 38px;
-      align-items: center;
+      place-items: center;
+      border-radius: 50%;
+      color: #101713;
+      background: var(--lime);
+      box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 9%, transparent);
     }
-    .tag {
+    .sound-toggle {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 14px;
+      border: 1px solid currentColor;
       border-radius: 999px;
-      background: white;
-      border: 1px solid #e2e8f3;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-      color: #3a465a;
-      margin-bottom: 18px;
-    }
-    h1 {
-      font-size: 54px;
-      line-height: 1.12;
-      margin: 0 0 20px;
-      letter-spacing: 0;
-    }
-    .highlight { color: #1f64d8; }
-    .lead {
-      max-width: 680px;
-      font-size: 18px;
-      line-height: 1.85;
-      color: #546176;
-      margin: 0 0 28px;
-    }
-    .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-    .button {
-      border: 0;
+      padding: 8px 12px;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      opacity: .74;
       cursor: pointer;
+    }
+    .sound-bars { display: flex; align-items: center; gap: 2px; height: 12px; }
+    .sound-bars i { width: 2px; height: 5px; background: currentColor; animation: sound 1s ease-in-out infinite alternate; }
+    .sound-bars i:nth-child(2) { height: 11px; animation-delay: -.4s; }
+    .sound-bars i:nth-child(3) { height: 8px; animation-delay: -.7s; }
+    .sound-toggle[aria-pressed="false"] .sound-bars i { animation: none; height: 3px; }
+
+    .scene-nav {
+      position: fixed;
+      z-index: 55;
+      left: clamp(18px, 4vw, 60px);
+      bottom: max(24px, env(safe-area-inset-bottom));
+      display: flex;
+      gap: 8px;
+      padding: 7px;
+      border: 1px solid rgba(255,255,255,.26);
+      border-radius: 999px;
+      background: rgba(16,23,19,.76);
+      box-shadow: 0 16px 50px rgba(0,0,0,.2);
+      backdrop-filter: blur(18px);
+    }
+    .nav-button {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      color: rgba(255,255,255,.66);
+      background: transparent;
+      cursor: pointer;
+      transition: color .25s ease, background .25s ease, transform .25s ease;
+    }
+    .nav-button:hover { color: #fff; transform: translateY(-2px); }
+    .nav-button.active { color: #101713; background: var(--lime); }
+    .nav-button span { font-size: 17px; }
+    .nav-button small {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 13px);
+      padding: 7px 9px;
+      border-radius: 6px;
+      color: #fff;
+      background: #101713;
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate(-50%, 5px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .nav-button:hover small, .nav-button:focus-visible small { opacity: 1; transform: translate(-50%, 0); }
+
+    .counter {
+      position: fixed;
+      z-index: 50;
+      right: clamp(18px, 4vw, 60px);
+      bottom: max(34px, calc(env(safe-area-inset-bottom) + 10px));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--scene-ink, var(--ink));
+      font-size: 12px;
+      font-weight: 800;
+      transition: color .6s ease;
+    }
+    .counter-line { width: 72px; height: 1px; background: currentColor; opacity: .3; }
+    .counter-current { font-family: var(--display); font-size: 28px; font-weight: 400; }
+
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      overflow: hidden;
+      --scene-ink: var(--ink);
+    }
+    .scene {
+      position: absolute;
+      inset: 0;
+      overflow: hidden auto;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.04);
+      transition: opacity .7s ease, transform .8s cubic-bezier(.22,.72,.2,1), visibility .7s;
+      scrollbar-width: thin;
+    }
+    .scene.active { visibility: visible; opacity: 1; pointer-events: auto; transform: scale(1); }
+    .scene-inner {
+      position: relative;
+      z-index: 2;
+      width: min(1280px, 100%);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: 116px clamp(22px, 7vw, 104px) 114px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, .86fr);
+      align-items: center;
+      gap: clamp(32px, 6vw, 90px);
+    }
+    .scene-copy { position: relative; z-index: 3; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 36px; height: 2px; background: currentColor; }
+    .scene h1, .scene h2 {
+      margin: 0;
+      max-width: 760px;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(54px, 7.4vw, 108px);
+      line-height: .94;
+      letter-spacing: -.055em;
+    }
+    .scene h2 em { font-style: italic; }
+    .scene-lead {
+      max-width: 620px;
+      margin: 28px 0 0;
+      font-size: clamp(15px, 1.3vw, 18px);
+      line-height: 1.9;
+      opacity: .75;
+    }
+    .scene-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+    .pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 46px;
-      padding: 13px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 15px;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-    .button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
-    }
-    .primary { background: #24c26a; color: white; }
-    .secondary {
-      background: white;
-      color: #172033;
-      border: 1px solid #dfe6f1;
-    }
-    .mini-stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      max-width: 620px;
-    }
-    .stat {
-      display: block;
+      min-height: 48px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 12px 18px;
       text-decoration: none;
-      background: white;
-      border: 1px solid #e2e8f3;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      font-size: 13px;
+      font-weight: 850;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      background: transparent;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, color .22s ease;
     }
-    .stat:hover {
-      transform: translateY(-4px);
-      border-color: #9db9ef;
-      box-shadow: 0 18px 36px rgba(31, 100, 216, 0.14);
+    .pill:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.14); }
+    .pill.solid { color: #fff; border-color: var(--ink); background: var(--ink); }
+    .pill.accent { color: #101713; border-color: var(--lime); background: var(--lime); }
+
+    .visual { position: relative; min-height: 510px; }
+    .character {
+      position: absolute;
+      z-index: 5;
+      width: min(390px, 78%);
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 48% 48% 45% 45%;
+      filter: drop-shadow(0 30px 25px rgba(20,30,22,.18));
+      transition: transform .4s ease;
     }
-    .stat strong {
-      display: block;
-      font-size: 30px;
-      color: #1f64d8;
-      margin-bottom: 4px;
+    .character:hover { transform: translateY(-8px) rotate(-2deg); }
+    .speech {
+      position: absolute;
+      z-index: 7;
+      max-width: 220px;
+      padding: 14px 17px;
+      border: 1px solid currentColor;
+      border-radius: 18px 18px 18px 4px;
+      font-size: 13px;
+      line-height: 1.55;
+      background: rgba(255,249,236,.84);
+      backdrop-filter: blur(12px);
+      box-shadow: 8px 10px 0 rgba(19,32,24,.08);
     }
-    .stat span { color: #5b6577; font-size: 14px; }
-    .profile-card {
-      position: relative;
-      background: #101827;
-      color: white;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 24px 60px rgba(16, 24, 39, 0.22);
-      transform: rotate(1.4deg);
+    .float-note {
+      position: absolute;
+      z-index: 6;
+      padding: 9px 12px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      background: rgba(255,249,236,.82);
+      backdrop-filter: blur(10px);
+      animation: drift 3.6s ease-in-out infinite alternate;
     }
-    .profile-card::before {
+
+    .scene-home { color: var(--ink); background: #f1eadb; }
+    .scene-home::before {
       content: "";
       position: absolute;
-      inset: -12px;
-      border: 1px dashed rgba(31, 100, 216, 0.35);
-      border-radius: 24px;
-      pointer-events: none;
+      inset: 0;
+      background:
+        radial-gradient(circle at 75% 38%, rgba(216,255,99,.76) 0 16%, transparent 16.2%),
+        linear-gradient(110deg, transparent 0 64%, rgba(255,255,255,.38) 64% 65%, transparent 65%);
     }
-    .avatar-wrap {
-      overflow: hidden;
-      border-radius: 14px;
-      background: #ffd22f;
-      border: 4px solid white;
+    .home-label {
+      display: inline-block;
+      padding: 0 .08em;
+      color: #fff;
+      background: var(--blue);
+      transform: rotate(-2deg);
     }
-    .avatar-wrap img {
-      width: 100%;
-      display: block;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-    }
-    .profile-meta {
-      padding: 18px 6px 4px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: end;
-    }
-    .profile-meta h2 { margin: 0 0 6px; font-size: 26px; }
-    .profile-meta p { margin: 0; color: rgba(255, 255, 255, 0.76); }
-    .status {
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(36, 194, 106, 0.14);
-      color: #7af0ab;
-      font-size: 13px;
-      font-weight: 800;
-    }
-    .pulse {
-      width: 8px;
-      height: 8px;
+    .home-visual .character { right: 8%; bottom: 1%; width: min(440px, 90%); }
+    .home-visual .speech { left: -3%; top: 12%; }
+    .home-visual .float-note { right: 0; top: 5%; background: var(--coral); transform: rotate(7deg); }
+    .orbit-copy {
+      position: absolute;
+      inset: 3% 0 0;
+      border: 1px solid rgba(19,32,24,.18);
       border-radius: 50%;
-      background: #24c26a;
-      animation: pulse 1.4s infinite;
+      animation: orbit 18s linear infinite;
     }
-    section { padding: 64px 0; }
-    .section-title {
-      font-size: 34px;
-      margin: 0 0 12px;
+    .orbit-copy::before, .orbit-copy::after { content: ""; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--blue); }
+    .orbit-copy::before { left: 9%; top: 19%; }
+    .orbit-copy::after { right: 7%; bottom: 22%; width: 11px; height: 11px; background: var(--coral); }
+
+    .scene-forest { color: #eaffe7; background: #173c2d; }
+    .scene-forest::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .55;
+      background:
+        radial-gradient(ellipse at 20% 100%, #29583a 0 24%, transparent 24.5%),
+        radial-gradient(ellipse at 84% 8%, rgba(216,255,99,.3), transparent 25%),
+        linear-gradient(100deg, transparent 70%, rgba(255,255,255,.09) 70.2%, transparent 70.5%);
     }
-    .section-desc {
-      max-width: 760px;
-      color: #5b6577;
-      line-height: 1.85;
-      margin: 0 0 28px;
-    }
-    .grid {
+    .forest-visual { min-height: 560px; }
+    .forest-visual .character { left: 11%; bottom: 0; width: min(350px, 78%); }
+    .forest-visual .speech { right: -2%; top: 16%; color: var(--ink); }
+    .forest-visual .float-note { left: -4%; top: 8%; color: var(--ink); background: var(--lime); }
+    .tree { position: absolute; bottom: -120px; width: 160px; height: 600px; border-radius: 60% 60% 10px 10px; background: #0f2c22; transform-origin: bottom; }
+    .tree::before, .tree::after { content: ""; position: absolute; border-radius: 50%; background: #285843; }
+    .tree::before { width: 210px; height: 250px; left: -78px; top: -60px; }
+    .tree::after { width: 180px; height: 220px; right: -78px; top: 40px; }
+    .tree.one { right: -30px; transform: rotate(7deg) scale(.9); }
+    .tree.two { left: -40px; transform: rotate(-9deg) scale(.68); opacity: .72; }
+    .learning-path {
+      position: absolute;
+      z-index: 8;
+      right: 0;
+      bottom: 20px;
+      width: min(310px, 64%);
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-    .card {
-      background: white;
-      border: 1px solid #e3e8f1;
-      border-radius: 10px;
-      padding: 22px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
-    }
-    .card h3 { margin: 0 0 10px; font-size: 20px; }
-    .card p, li {
-      color: #5b6577;
-      line-height: 1.75;
-      margin: 0;
-    }
-    .work-card {
-      display: flex;
-      flex-direction: column;
-      min-height: 220px;
-    }
-    .work-tag {
-      align-self: flex-start;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eef4ff;
-      color: #1f64d8;
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 14px;
-    }
-    .work-card .button {
-      margin-top: auto;
-      align-self: flex-start;
-    }
-    ul { padding-left: 20px; margin: 10px 0 0; }
-    .switcher {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 18px;
-      align-items: start;
-    }
-    .tabs {
-      display: grid;
-      gap: 10px;
-    }
-    .tab {
-      border: 1px solid #dfe6f1;
-      background: white;
-      color: #344156;
-      text-align: left;
-      cursor: pointer;
-      padding: 15px 16px;
-      border-radius: 10px;
-      font-weight: 800;
-    }
-    .tab.active {
-      background: #1f64d8;
-      border-color: #1f64d8;
-      color: white;
-    }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: fadeUp 0.28s ease both; }
-    .timeline {
-      display: grid;
-      gap: 14px;
-    }
-    .learning-board {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(280px, 1.05fr);
-      gap: 18px;
-      align-items: start;
-    }
-    .progress-card {
-      background: #101827;
-      color: white;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 18px 42px rgba(16, 24, 39, 0.18);
-    }
-    .progress-card h3 { margin: 0 0 12px; font-size: 22px; }
-    .progress-card p {
-      margin: 0 0 18px;
-      color: rgba(255, 255, 255, 0.78);
-      line-height: 1.75;
-    }
-    .progress-track {
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      overflow: hidden;
-      margin: 14px 0 10px;
-    }
-    .progress-fill {
-      width: 0;
-      height: 100%;
-      border-radius: inherit;
-      background: #24c26a;
-      transition: width 0.25s ease;
-    }
-    .progress-text {
-      font-weight: 800;
-      color: #7af0ab;
-    }
-    .task-list {
-      display: grid;
-      gap: 10px;
+      gap: 9px;
     }
     .task {
       display: grid;
       grid-template-columns: 24px 1fr;
-      gap: 12px;
-      align-items: start;
-      padding: 16px;
-      border-radius: 10px;
-      background: white;
-      border: 1px solid #e3e8f1;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      gap: 10px;
+      align-items: center;
+      padding: 11px 13px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 12px;
+      color: #eaffe7;
+      background: rgba(8,34,23,.76);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
       cursor: pointer;
     }
-    .task input {
-      width: 18px;
-      height: 18px;
-      margin-top: 3px;
-      accent-color: #24c26a;
+    .task input { position: absolute; opacity: 0; }
+    .task-dot { width: 19px; height: 19px; border: 1px solid currentColor; border-radius: 50%; display: grid; place-items: center; }
+    .task input:checked + .task-dot { color: #173c2d; background: var(--lime); border-color: var(--lime); }
+    .task input:checked + .task-dot::after { content: "✓"; font-weight: 900; }
+    .task:has(input:checked) .task-text { opacity: .52; text-decoration: line-through; }
+
+    .scene-workshop { color: #2b180c; background: #f4b95f; }
+    .scene-workshop::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .22;
+      background-image: linear-gradient(#2b180c 1px, transparent 1px), linear-gradient(90deg, #2b180c 1px, transparent 1px);
+      background-size: 42px 42px;
     }
-    .task strong { display: block; margin-bottom: 4px; }
-    .task span {
-      display: block;
-      color: #5b6577;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-    .task.done strong,
-    .task.done span {
-      color: #8a94a6;
-      text-decoration: line-through;
-    }
-    .resume-workflow {
+    .workshop-grid { grid-template-columns: .78fr 1.22fr; }
+    .project-board {
+      position: relative;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
-      counter-reset: resume-step;
+      transform: rotate(1deg);
     }
-    .resume-step {
+    .project {
       position: relative;
       min-height: 190px;
-      background: white;
-      border: 1px solid #e3e8f1;
-      border-radius: 10px;
-      padding: 22px;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+      padding: 20px;
+      border: 1.5px solid #2b180c;
+      color: #2b180c;
+      background: #fff6df;
+      box-shadow: 8px 9px 0 #2b180c;
+      text-decoration: none;
+      transition: transform .25s ease, box-shadow .25s ease;
     }
-    .resume-step::before {
-      counter-increment: resume-step;
-      content: counter(resume-step);
-      display: inline-flex;
-      width: 30px;
-      height: 30px;
-      align-items: center;
-      justify-content: center;
+    .project:nth-child(2) { background: #d8ff63; transform: translateY(22px) rotate(-2deg); }
+    .project:nth-child(3) { background: #fe795f; transform: rotate(-1deg); }
+    .project:nth-child(4) { background: #6f8cff; transform: translateY(22px) rotate(1deg); }
+    .project:hover { transform: translate(-4px,-5px) rotate(-1deg); box-shadow: 13px 15px 0 #2b180c; }
+    .project-no { font-size: 10px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+    .project h3 { margin: 48px 0 8px; font-family: var(--display); font-size: 24px; line-height: 1.05; }
+    .project p { margin: 0; font-size: 12px; line-height: 1.6; opacity: .72; }
+    .project-arrow { position: absolute; right: 17px; top: 16px; font-size: 22px; }
+
+    .scene-lab { color: #eef3ff; background: #24388f; }
+    .scene-lab::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 78% 42%, rgba(116,231,255,.18) 0 18%, transparent 18.5%),
+        linear-gradient(118deg, transparent 0 57%, rgba(255,255,255,.08) 57.2% 57.4%, transparent 57.6%);
+    }
+    .lab-visual { min-height: 570px; }
+    .lab-console {
+      position: absolute;
+      inset: 2% 0 10%;
+      border: 1px solid rgba(255,255,255,.34);
+      border-radius: 50% 50% 18px 18px;
+      background: rgba(8,17,58,.34);
+      box-shadow: inset 0 0 80px rgba(129,236,255,.12), 0 30px 90px rgba(4,9,31,.28);
+    }
+    .lab-console::before, .lab-console::after { content: ""; position: absolute; left: 50%; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; transform: translateX(-50%); }
+    .lab-console::before { top: 13%; width: 70%; aspect-ratio: 1; }
+    .lab-console::after { top: 24%; width: 46%; aspect-ratio: 1; border-style: dashed; animation: orbit 14s linear infinite reverse; }
+    .lab-visual .character { left: 50%; bottom: 5%; width: min(310px, 62%); transform: translateX(-50%); }
+    .lab-visual .character:hover { transform: translateX(-50%) translateY(-8px) rotate(-2deg); }
+    .lab-visual .speech { right: -3%; top: 5%; color: var(--ink); }
+    .skill-chip { position: absolute; z-index: 8; padding: 9px 12px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; background: rgba(20,35,105,.66); font-size: 11px; font-weight: 800; backdrop-filter: blur(10px); animation: drift 3s ease-in-out infinite alternate; }
+    .skill-chip.c1 { left: 0; top: 30%; }
+    .skill-chip.c2 { right: 2%; top: 43%; animation-delay: -.7s; }
+    .skill-chip.c3 { left: 8%; bottom: 12%; animation-delay: -1.4s; }
+    .workflow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 30px; font-size: 11px; font-weight: 800; letter-spacing: .05em; }
+    .workflow b { padding: 9px 11px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; }
+    .workflow i { font-style: normal; opacity: .45; }
+
+    .scene-shop { color: #2c1a14; background: #ff8c71; }
+    .scene-shop::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 50%, rgba(255,249,236,.15) 50%);
+      background-size: 130px 100%;
+      opacity: .35;
+    }
+    .shop-window {
+      position: relative;
+      min-height: 530px;
+      border: 3px solid #2c1a14;
+      border-radius: 240px 240px 14px 14px;
+      background: #fff2d6;
+      box-shadow: 15px 16px 0 #2c1a14;
+      overflow: hidden;
+    }
+    .awning { position: absolute; left: 0; right: 0; top: 23%; height: 62px; display: flex; border-top: 3px solid #2c1a14; border-bottom: 3px solid #2c1a14; }
+    .awning i { flex: 1; background: #d8ff63; border-right: 2px solid #2c1a14; }
+    .awning i:nth-child(even) { background: #ff755b; }
+    .shop-window .character { left: 50%; bottom: -4%; width: min(330px, 68%); transform: translateX(-50%); }
+    .shop-window .character:hover { transform: translateX(-50%) translateY(-8px) rotate(2deg); }
+    .open-sign { position: absolute; z-index: 7; top: 38%; right: 6%; padding: 10px 14px; border: 2px solid #2c1a14; color: #2c1a14; background: var(--lime); box-shadow: 5px 5px 0 #2c1a14; font-size: 11px; font-weight: 950; letter-spacing: .14em; transform: rotate(5deg); }
+    .price-list { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-top: 28px; }
+    .price-item { padding: 13px; border-top: 1px solid currentColor; }
+    .price-item strong { display: block; font-family: var(--display); font-size: 23px; font-weight: 400; }
+    .price-item span { font-size: 11px; opacity: .7; }
+
+    .scene-map { color: #162119; background: #dce6c9; }
+    .scene-map::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .32;
+      background:
+        radial-gradient(circle at 18% 20%, transparent 0 8%, #96aa85 8.2% 8.5%, transparent 8.7%),
+        radial-gradient(circle at 83% 76%, transparent 0 12%, #96aa85 12.2% 12.5%, transparent 12.7%);
+    }
+    .map-paper {
+      position: relative;
+      min-height: 520px;
+      padding: 42px;
+      border: 1px solid rgba(22,33,25,.28);
+      background: #f5f0df;
+      box-shadow: 14px 18px 0 rgba(22,33,25,.13);
+      transform: rotate(1.6deg);
+    }
+    .map-paper::before { content: ""; position: absolute; inset: 18px; border: 1px dashed rgba(22,33,25,.25); pointer-events: none; }
+    .route { position: absolute; z-index: 1; left: 26%; top: 12%; width: 48%; height: 76%; border: 3px dashed #637857; border-radius: 48% 52% 44% 56%; transform: rotate(18deg); }
+    .milestone { position: absolute; z-index: 3; display: grid; place-items: center; width: 52px; height: 52px; border: 2px solid #162119; border-radius: 50%; background: var(--lime); box-shadow: 5px 6px 0 #162119; font-family: var(--display); font-size: 20px; }
+    .milestone::after { content: attr(data-label); position: absolute; top: calc(100% + 9px); left: 50%; width: 120px; font-family: var(--sans); font-size: 10px; font-weight: 850; text-align: center; letter-spacing: .05em; transform: translateX(-50%); }
+    .m1 { left: 13%; top: 22%; }
+    .m2 { left: 58%; top: 12%; background: #fff; }
+    .m3 { right: 11%; top: 52%; background: #ff755b; }
+    .m4 { left: 37%; bottom: 12%; background: #6f8cff; }
+    .map-sheep { position: absolute; z-index: 4; left: 11%; bottom: 6%; width: 150px; border-radius: 50%; filter: drop-shadow(0 12px 12px rgba(0,0,0,.14)); animation: drift 3s ease-in-out infinite alternate; }
+    .map-stamp { position: absolute; right: 7%; bottom: 5%; padding: 14px; border: 2px solid #315b44; border-radius: 50%; color: #315b44; font-size: 10px; font-weight: 900; letter-spacing: .12em; transform: rotate(-12deg); }
+
+    .scene.active .scene-copy > * { animation: revealCopy .72s both; }
+    .scene.active .scene-copy > :nth-child(2) { animation-delay: .08s; }
+    .scene.active .scene-copy > :nth-child(3) { animation-delay: .16s; }
+    .scene.active .scene-copy > :nth-child(4), .scene.active .scene-copy > :nth-child(5) { animation-delay: .24s; }
+    .scene.active .visual { animation: revealVisual .9s .12s cubic-bezier(.22,.72,.2,1) both; }
+
+    .scene-arrow {
+      position: fixed;
+      z-index: 56;
+      right: clamp(18px, 4vw, 60px);
+      top: 50%;
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 1px solid currentColor;
       border-radius: 50%;
-      background: #1f64d8;
-      color: white;
-      font-weight: 800;
-      margin-bottom: 14px;
+      color: var(--scene-ink, var(--ink));
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: transform .25s ease, background .25s ease, color .6s ease;
     }
-    .resume-step h3 {
-      margin: 0 0 10px;
-      font-size: 19px;
-    }
-    .resume-step p {
-      margin: 0;
-      color: #5b6577;
-      line-height: 1.7;
-    }
-    .resume-note {
-      margin-top: 16px;
-      background: #fff8df;
-      border: 1px solid #f1d98b;
-      border-radius: 10px;
-      padding: 18px;
-      color: #604911;
-      line-height: 1.75;
-    }
-    .item {
-      border-left: 3px solid #1f64d8;
-      padding-left: 16px;
-    }
-    .item strong { display: block; margin-bottom: 6px; }
-    .contact {
-      background: #101827;
-      color: white;
-      text-align: center;
-      border-radius: 18px 18px 0 0;
-    }
-    .contact p {
-      max-width: 760px;
-      margin: 0 auto 22px;
-      color: rgba(255, 255, 255, 0.82);
-      line-height: 1.8;
-    }
+    .scene-arrow:hover { transform: translateY(-50%) translateX(4px); background: var(--lime); color: var(--ink); }
+
     .toast {
       position: fixed;
+      z-index: 70;
       left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%) translateY(120px);
-      background: #101827;
-      color: white;
-      padding: 13px 16px;
-      border-radius: 10px;
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.24);
-      transition: transform 0.25s ease;
-      z-index: 50;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .to-top {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      width: 44px;
-      height: 44px;
-      border: 0;
-      border-radius: 50%;
-      background: #1f64d8;
-      color: white;
-      cursor: pointer;
-      font-size: 20px;
-      box-shadow: 0 12px 28px rgba(31, 100, 216, 0.28);
+      top: 98px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      color: #fff;
+      background: #101713;
+      box-shadow: var(--shadow);
+      font-size: 12px;
       opacity: 0;
+      transform: translate(-50%, -12px);
       pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: .25s ease;
     }
-    .to-top.visible {
-      opacity: 1;
-      pointer-events: auto;
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @keyframes introUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes titleRise { to { transform: translateY(0); } }
+    @keyframes revealCopy { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+    @keyframes revealVisual { from { opacity: 0; transform: translateX(40px) rotate(2deg); } to { opacity: 1; transform: none; } }
+    @keyframes orbit { to { transform: rotate(360deg); } }
+    @keyframes drift { to { transform: translateY(-10px) rotate(2deg); } }
+    @keyframes sound { to { height: 11px; } }
+
+    @media (max-width: 900px) {
+      .topbar { height: 68px; }
+      .scene-inner { grid-template-columns: 1fr; align-content: start; padding-top: 98px; gap: 32px; }
+      .scene h1, .scene h2 { font-size: clamp(48px, 12vw, 78px); }
+      .visual { min-height: 480px; }
+      .scene-nav { left: 50%; transform: translateX(-50%); }
+      .counter { display: none; }
+      .scene-arrow { top: auto; right: 18px; bottom: 26px; }
+      .workshop-grid { grid-template-columns: 1fr; }
+      .project-board { margin-bottom: 36px; }
+      .forest-visual { min-height: 510px; }
     }
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
+
+    @media (max-width: 560px) {
+      .brand-text { display: none; }
+      .sound-toggle > span:last-child { display: none; }
+      .scene-inner { padding: 88px 20px 110px; }
+      .scene h1, .scene h2 { font-size: clamp(44px, 14vw, 66px); }
+      .scene-lead { margin-top: 20px; line-height: 1.75; }
+      .visual { min-height: 390px; }
+      .home-visual .character { right: 2%; width: 86%; }
+      .home-visual .speech { left: 0; top: 1%; max-width: 190px; }
+      .home-visual .float-note { top: -8%; }
+      .forest-visual { min-height: 500px; }
+      .forest-visual .character { left: 2%; width: 72%; }
+      .forest-visual .speech { top: 2%; right: 0; max-width: 180px; }
+      .learning-path { width: 72%; }
+      .project-board { gap: 9px; }
+      .project { min-height: 170px; padding: 15px; box-shadow: 5px 6px 0 #2b180c; }
+      .project h3 { margin-top: 42px; font-size: 19px; }
+      .project p { font-size: 11px; }
+      .lab-visual { min-height: 450px; }
+      .lab-visual .speech { right: 0; max-width: 170px; }
+      .skill-chip.c3 { display: none; }
+      .shop-window { min-height: 430px; box-shadow: 8px 9px 0 #2c1a14; }
+      .price-list { grid-template-columns: 1fr; }
+      .price-item { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; }
+      .map-paper { min-height: 430px; padding: 25px; }
+      .milestone { width: 44px; height: 44px; }
+      .map-sheep { width: 110px; }
+      .scene-nav { gap: 3px; padding: 5px; }
+      .nav-button { width: 39px; height: 39px; }
+      .scene-arrow { display: none; }
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(36, 194, 106, 0.55); }
-      70% { box-shadow: 0 0 0 10px rgba(36, 194, 106, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(36, 194, 106, 0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 820px) {
-      .hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        padding-top: 36px;
-      }
-      h1 { font-size: 38px; }
-      .mini-stats { grid-template-columns: 1fr; }
-      .switcher { grid-template-columns: 1fr; }
-      .learning-board { grid-template-columns: 1fr; }
-      .profile-card { transform: none; }
-      .nav-inner { align-items: flex-start; }
-      .nav-links { gap: 4px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+      .opening-kicker, .opening-sub, .enter-world { opacity: 1; transform: none; }
+      .opening-title i { transform: none; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <nav class="nav">
-      <div class="nav-inner">
-        <div class="brand"><span class="brand-dot"></span>Jasper · AI 成长主页</div>
-        <div class="nav-links">
-          <a href="index.html">返回主页</a>
-          <a href="#about">关于我</a>
-          <a href="#works">作品</a>
-          <a href="#direction">方向</a>
-          <a href="#learning">学习</a>
-          <a href="#resume">简历</a>
-          <a href="#timeline">记录</a>
-          <a href="#contact">联系</a>
-        </div>
-      </div>
-    </nav>
-
-    <main class="container">
-      <header class="hero">
-        <div class="hero-copy reveal">
-          <div class="tag">非计算机专业 · Codex Learner · AI Creator</div>
-          <h1>你好，我是 Jasper，正在用 <span class="highlight">AI</span> 从小白开始做项目。</h1>
-          <p class="lead">我是一名食品质量与安全专业的准大二学生，有过 1 个月新媒体运营实习经历。现在我正在用 Codex 学习建站、做案例、记录成长，并尝试把 AI 能力变成真实作品和接单能力。</p>
-          <div class="actions">
-            <a class="button primary" href="#about">了解我的路线</a>
-            <a class="button secondary" href="#learning">今天学什么</a>
-            <button class="button secondary" id="copyText" type="button">复制我的介绍</button>
-          </div>
-          <div class="mini-stats">
-            <a class="stat" href="#timeline"><strong data-count="30">0</strong><span>天 AI 建站挑战</span></a>
-            <a class="stat" href="#works"><strong data-count="4">0</strong><span>计划完成案例</span></a>
-            <a class="stat" href="#works"><strong data-count="4">0</strong><span>已上线作品</span></a>
-          </div>
-        </div>
-
-        <aside class="profile-card reveal">
-          <div class="avatar-wrap">
-            <img src="avatar.png" alt="Jasper 的 AI 创作者头像" />
-          </div>
-          <div class="profile-meta">
-            <div>
-              <h2>Jasper</h2>
-              <p>食品安全专业 / AI 建站学习者</p>
-            </div>
-            <div class="status"><span class="pulse"></span>持续更新</div>
-          </div>
-        </aside>
-      </header>
-    </main>
-
-    <section id="about" class="container reveal">
-      <h2 class="section-title">这个页面是用来介绍我自己的</h2>
-      <p class="section-desc">它不是一张普通的静态名片，而是我的 AI 成长主页。以后我可以继续往里面加项目、案例、实习经历、学习记录和联系方式，让别人一打开就知道我是谁、会什么、正在做什么。</p>
-      <div class="grid">
-        <div class="card">
-          <h3>当前身份</h3>
-          <p>准大二学生，专业是食品质量与安全，正在把食品专业、AI 工具、数据分析和内容运营结合起来。</p>
-        </div>
-        <div class="card">
-          <h3>已有经历</h3>
-          <p>暑假做过 1 个月新媒体运营，接触过选题、文案、发布和内容反馈，这能帮助我做抖音成长账号。</p>
-        </div>
-        <div class="card">
-          <h3>正在做的事</h3>
-          <p>用 Codex 从 0 学建站，做个人介绍页、作品集页、商家宣传页，并记录 30 天 AI 项目挑战。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="works" class="container reveal">
-      <h2 class="section-title">已上线作品</h2>
-      <p class="section-desc">这里会持续放我用 AI 做出来并上线的网页。现在已经有 4 个作品：接单主页、动态个人介绍页、“小羊加油呀”AI 工作台，以及今天完成初版的大学生实习简历与岗位匹配网站。后面还会继续补作品集页和商家宣传页。</p>
-      <div class="grid">
-        <div class="card work-card">
-          <span class="work-tag">作品 01 · 接单主页</span>
-          <h3>AI 建站接单展示页</h3>
-          <p>用于展示我可以提供的服务，包括个人介绍页、作品集展示页和商家宣传落地页，也放了体验价和联系入口。</p>
-          <a class="button secondary" href="index.html">打开作品</a>
-        </div>
-        <div class="card work-card">
-          <span class="work-tag">作品 02 · 个人主页</span>
-          <h3>Jasper 的动态个人介绍页</h3>
-          <p>加入头像、动态数字、方向切换、成长记录和复制介绍按钮，用来介绍我是谁、正在学什么、未来想走什么方向。</p>
-          <a class="button secondary" href="student-profile.html">打开作品</a>
-        </div>
-        <div class="card work-card">
-          <span class="work-tag">作品 03 · AI 工作台</span>
-          <h3>小羊加油呀 AI 工作台</h3>
-          <p>一个偏陪伴式的个人工作台，可以用来整理今日计划、学习任务、视频选题、文案润色和日常复盘。</p>
-          <a class="button secondary" href="xiaoyang-workbench/index.html">打开工作台</a>
-        </div>
-        <div class="card work-card">
-          <span class="work-tag">作品 04 · 简历自动化</span>
-          <h3>大学生实习简历与岗位匹配网站</h3>
-          <p>面向大学生的实习求职工作台：先根据专业、实习/兼职/校园经历推荐岗位方向，再围绕目标岗位生成更适合投递的中文简历。当前是初版，支持岗位匹配、投递建议、DeepSeek 定制简历、多种 PDF 模板和导出 PDF，后续还会继续优化。</p>
-          <a class="button secondary" href="https://student-intern-resume-ai.eager-sugar-4589.chatgpt.site" target="_blank" rel="noopener">打开作品</a>
-        </div>
-        <div class="card work-card">
-          <span class="work-tag">计划中 · 作品 05</span>
-          <h3>大学生作品集展示页</h3>
-          <p>下一步准备做一个适合摄影、剪辑、设计、家教或内容创作者使用的作品集页面。</p>
-          <a class="button secondary" href="#contact">我想做这个</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="direction" class="container reveal">
-      <h2 class="section-title">我的发展方向</h2>
-      <p class="section-desc">点击下面的标签，可以切换查看我的几个方向。这个地方就是“动态”的：以后还可以继续加更多模块，比如作品列表、实习投递记录、学习进度。</p>
-      <div class="switcher">
-        <div class="tabs" role="tablist" aria-label="发展方向">
-          <button class="tab active" type="button" data-tab="ai">AI 建站与接单</button>
-          <button class="tab" type="button" data-tab="food">食品 + AI / 数据</button>
-          <button class="tab" type="button" data-tab="media">抖音成长记录</button>
-          <button class="tab" type="button" data-tab="intern">寒假实习准备</button>
-          <button class="tab" type="button" data-tab="resumePlan">简历工作流</button>
-        </div>
-        <div class="card">
-          <div class="tab-panel active" id="ai">
-            <h3>AI 建站与接单</h3>
-            <p>先做简单但能交付的网页：个人介绍页、作品集页、商家宣传页。目标是把“我会用 AI”变成别人能看见、能付费的作品。</p>
-          </div>
-          <div class="tab-panel" id="food">
-            <h3>食品 + AI / 数据</h3>
-            <p>长期方向不是硬转纯计算机，而是把食品安全专业和 AI 工具、Excel、数据分析结合，未来去做食品企业数字化、质量数据分析或智能检测相关方向。</p>
-          </div>
-          <div class="tab-panel" id="media">
-            <h3>抖音成长记录</h3>
-            <p>我会记录自己从小白开始学 Codex、做网站、踩坑、上线、找客户的过程，希望认识一群同样在学 AI、做项目的人。</p>
-          </div>
-          <div class="tab-panel" id="intern">
-            <h3>寒假实习准备</h3>
-            <p>优先看 AIGC 运营、食品品牌运营、数据运营、食品品控和外企/日企相关实习，把专业、运营经历和 AI 项目串起来。</p>
-          </div>
-          <div class="tab-panel" id="resumePlan">
-            <h3>简历工作流</h3>
-            <p>把“我会什么”整理成能投递的证据：专业背景、新媒体实习、AI 网站作品、工作台项目、抖音成长记录。以后每做一个项目，都同步沉淀到简历里。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="learning" class="container reveal">
-      <h2 class="section-title">今天学习什么</h2>
-      <p class="section-desc">今天的主题是“让作品为简历服务”。你不只是做网页，而是开始把项目经历、实习经历和岗位方向整理成可以投实习的材料。</p>
-      <div class="learning-board">
-        <div class="progress-card">
-          <h3>第 4 天学习目标</h3>
-          <p>新增一个专门做简历的工作流，明确你未来投实习时要准备什么：目标岗位、经历素材、项目证据、简历版本和投递复盘。</p>
-          <div class="progress-track" aria-hidden="true">
-            <div class="progress-fill" id="learningProgress"></div>
-          </div>
-          <div class="progress-text" id="learningProgressText">今日进度 0/5</div>
-        </div>
-        <div class="task-list" id="todayTasks">
-          <label class="task">
-            <input type="checkbox" data-task="resume-target">
-            <span><strong>1. 确定 3 个实习方向</strong>先选 AIGC 运营、食品品牌运营、食品/质量数据助理作为寒假实习候选方向。</span>
-          </label>
-          <label class="task">
-            <input type="checkbox" data-task="resume-material">
-            <span><strong>2. 整理经历素材</strong>把食品专业、1 个月新媒体运营实习、个人网站、小羊工作台都写成简历素材。</span>
-          </label>
-          <label class="task">
-            <input type="checkbox" data-task="resume-proof">
-            <span><strong>3. 给作品配证据</strong>确认个人主页、接单主页、工作台链接都能打开，作为简历里的项目链接。</span>
-          </label>
-          <label class="task">
-            <input type="checkbox" data-task="resume-version">
-            <span><strong>4. 设计简历版本</strong>先准备 2 个版本：AIGC/新媒体运营版、食品 + AI/数据方向版。</span>
-          </label>
-          <label class="task">
-            <input type="checkbox" data-task="resume-video">
-            <span><strong>5. 准备今日抖音素材</strong>录屏展示“我把 AI 项目开始整理进简历工作流了”。</span>
-          </label>
-        </div>
-      </div>
-    </section>
-
-    <section id="resume" class="container reveal">
-      <h2 class="section-title">简历工作流</h2>
-      <p class="section-desc">这个模块专门服务寒假实习和未来求职。它的作用是把你做过的事情整理成可投递的简历材料，而不是临时打开 Word 硬憋。后面每完成一个项目，都可以同步放进这个工作流。</p>
-      <div class="resume-workflow">
-        <div class="resume-step">
-          <h3>定位岗位</h3>
-          <p>先锁定 3 类岗位：AIGC/新媒体运营、食品品牌运营、食品 + AI/数据助理。不同岗位用不同简历重点。</p>
-        </div>
-        <div class="resume-step">
-          <h3>整理经历</h3>
-          <p>把食品专业课程、新媒体运营实习、AI 网站项目、小羊工作台、抖音成长记录拆成经历素材。</p>
-        </div>
-        <div class="resume-step">
-          <h3>生成版本</h3>
-          <p>先做两版简历：运营版突出内容、选题、发布和 AI 工具；数据版突出食品专业、表格、分析和项目链接。</p>
-        </div>
-        <div class="resume-step">
-          <h3>作品佐证</h3>
-          <p>简历里不只写“会 AI”，还放个人主页、接单主页、小羊工作台链接，让招聘方能直接点开看。</p>
-        </div>
-        <div class="resume-step">
-          <h3>投递复盘</h3>
-          <p>记录投了哪些岗位、有没有回复、简历哪里被问到，再反向优化项目和表达。</p>
-        </div>
-      </div>
-      <div class="resume-note">
-        今天先不急着写完整简历。先把“岗位方向 + 经历素材 + 项目链接”整理出来，明天就可以开始做第一版实习简历。
-      </div>
-    </section>
-
-    <section id="timeline" class="container reveal">
-      <h2 class="section-title">成长记录</h2>
-      <p class="section-desc">这个模块会随着我的项目推进继续增加。现在先记录从注册工具到做出个人主页的过程。</p>
-      <div class="timeline">
-        <div class="card item">
-          <strong>暑假 · 新媒体运营实习</strong>
-          <p>做过一个月左右新媒体运营，开始理解内容、流量和反馈。</p>
-        </div>
-        <div class="card item">
-          <strong>第 1 天 · 注册 GitHub 和 Vercel</strong>
-          <p>完成账号注册，学会把网页变成别人能打开的链接。</p>
-        </div>
-        <div class="card item">
-          <strong>第 2 天 · 做出个人介绍页</strong>
-          <p>加入头像、动态数字、切换标签和成长记录，让页面更像真正的个人主页。</p>
-        </div>
-        <div class="card item">
-          <strong>第 3 天 · 加入学习任务和作品入口</strong>
-          <p>把网站升级成能跳转、能展示、能记录学习进度的作品集入口，为后续接单和抖音记录做准备。</p>
-        </div>
-        <div class="card item">
-          <strong>第 4 天 · 新增简历工作流</strong>
-          <p>完成大学生实习简历与岗位匹配网站初版，并把它加入个人作品集。这个项目会先帮学生判断适合投什么岗位，再围绕目标岗位整理已有经历生成中文简历。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="contact">
-      <div class="container">
-        <h2 class="section-title">如果你也在学 AI，可以来交流</h2>
-        <p>我现在正在从小白开始，用 Codex 做网站、做案例、发抖音记录成长。如果你也想学 AI 建站，或者想要一个类似的个人介绍页，可以抖音私信我：发送“个人介绍页”。</p>
-        <a class="button primary" href="index.html">查看我的接单主页</a>
-      </div>
-    </section>
+  <div class="opening" id="opening" role="dialog" aria-label="网站开场动画" aria-modal="true">
+    <button class="skip-opening" id="skipOpening" type="button">跳过动画</button>
+    <div class="opening-inner">
+      <p class="opening-kicker">Jasper's Field Notes · 2026</p>
+      <h1 class="opening-title"><span><i>一只小羊，</i></span><span><i>正在把想法变成作品。</i></span></h1>
+      <p class="opening-sub">这里没有一眼望到底的简历。跟着小羊向导，走进一个正在生长的 AI 创作者世界。</p>
+      <button class="enter-world" id="enterWorld" type="button">进入我的世界 <b>→</b></button>
+    </div>
   </div>
 
-  <div class="toast" id="toast">已复制介绍，可以粘贴到抖音或简历里</div>
-  <button class="to-top" id="toTop" type="button" aria-label="返回顶部">↑</button>
+  <div class="site-shell" id="siteShell">
+    <div class="texture" aria-hidden="true"></div>
+    <header class="topbar">
+      <button class="brand" type="button" data-scene-target="0" aria-label="返回序章">
+        <span class="brand-mark">羊</span>
+        <span class="brand-text">JASPER / AI FIELD NOTES</span>
+      </button>
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="切换环境音效">
+        <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>AMBIENCE OFF</span>
+      </button>
+    </header>
+
+    <main class="stage" id="stage" aria-live="polite">
+      <section class="scene scene-home active" data-scene="0" aria-label="序章">
+        <div class="scene-inner">
+          <div class="scene-copy">
+            <div class="eyebrow">00 / Meet Jasper</div>
+            <h1>从小白出发，<br>和 <span class="home-label">AI</span> 一起长大。</h1>
+            <p class="scene-lead">你好，我是 Jasper，一名食品质量与安全专业的大学生。我把 AI 当作创作伙伴：学建站、做产品、记录过程，也认真尝试把能力变成真实的作品与服务。</p>
+            <div class="scene-actions">
+              <button class="pill solid" type="button" data-next>开始探索 <span>→</span></button>
+              <button class="pill" id="copyIntro" type="button">复制我的介绍</button>
+            </div>
+          </div>
+          <div class="visual home-visual" data-parallax>
+            <div class="orbit-copy" aria-hidden="true"></div>
+            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="小羊 AI 创作者伙伴" />
+            <div class="speech">嗨！我是这趟旅程的向导。准备好去看看我们做过什么了吗？</div>
+            <div class="float-note">Non-tech × AI Creator</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene-forest" data-scene="1" aria-label="学习森林">
+        <div class="scene-inner">
+          <div class="scene-copy">
+            <div class="eyebrow">01 / Learning Forest</div>
+            <h2>在学习森林，<br>每天种下一个<em>新技能</em>。</h2>
+            <p class="scene-lead">我的路线不是先学完再开始，而是用真实项目反推学习：页面结构、视觉表达、GitHub 上线、AI 协作，以及怎样把项目讲清楚。</p>
+            <div class="scene-actions"><a class="pill accent" href="xiaoyang-workbench/index.html">打开小羊 AI 工作台 <span>↗</span></a></div>
+          </div>
+          <div class="visual forest-visual" data-parallax>
+            <div class="tree one" aria-hidden="true"></div><div class="tree two" aria-hidden="true"></div>
+            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="在森林里学习的小羊" />
+            <div class="speech">成长不靠突然开窍，靠今天真的完成一点点。</div>
+            <div class="float-note">Today's tiny wins</div>
+            <div class="learning-path" aria-label="今日学习清单">
+              <label class="task"><input type="checkbox" /><span class="task-dot"></span><span class="task-text">把一个想法说清楚</span></label>
+              <label class="task"><input type="checkbox" /><span class="task-dot"></span><span class="task-text">完成一个可见的页面改动</span></label>
+              <label class="task"><input type="checkbox" /><span class="task-dot"></span><span class="task-text">为项目补一条简历描述</span></label>
+              <label class="task"><input type="checkbox" /><span class="task-dot"></span><span class="task-text">记录今天的新发现</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene-workshop" data-scene="2" aria-label="作品工坊">
+        <div class="scene-inner workshop-grid">
+          <div class="scene-copy">
+            <div class="eyebrow">02 / Works Workshop</div>
+            <h2>作品不是作业，<br>是我留下的<em>脚印</em>。</h2>
+            <p class="scene-lead">四个已经上线的项目，分别验证展示、效率、产品与求职场景。点击一张工作票，直接进入作品现场。</p>
+          </div>
+          <div class="visual project-board">
+            <a class="project" href="index.html"><span class="project-no">Work 01 / Web</span><span class="project-arrow">↗</span><h3>AI 建站<br>接单主页</h3><p>服务展示、报价与交付路径。</p></a>
+            <a class="project" href="student-profile.html"><span class="project-no">Work 02 / Story</span><span class="project-arrow">↗</span><h3>沉浸式<br>个人主页</h3><p>你现在正在探索的这个世界。</p></a>
+            <a class="project" href="xiaoyang-workbench/index.html"><span class="project-no">Work 03 / Tool</span><span class="project-arrow">↗</span><h3>小羊 AI<br>工作台</h3><p>把日常 AI 任务整理成入口。</p></a>
+            <a class="project" href="https://student-intern-resume-ai.eager-sugar-4589.chatgpt.site" target="_blank" rel="noopener"><span class="project-no">Work 04 / Career</span><span class="project-arrow">↗</span><h3>实习简历<br>匹配器</h3><p>简历诊断与岗位匹配实验。</p></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene-lab" data-scene="3" aria-label="简历实验室">
+        <div class="scene-inner">
+          <div class="scene-copy">
+            <div class="eyebrow">03 / Resume Lab</div>
+            <h2>把做过的事，<br>提炼成能被看见的<em>能力</em>。</h2>
+            <p class="scene-lead">每完成一个项目，就同步提取背景、行动、结果和证据。目标不是临时“憋”一份简历，而是持续积累可投递、可验证的个人能力档案。</p>
+            <div class="workflow"><b>项目事实</b><i>→</i><b>能力证据</b><i>→</i><b>岗位语言</b><i>→</i><b>持续迭代</b></div>
+            <div class="scene-actions"><a class="pill accent" href="https://student-intern-resume-ai.eager-sugar-4589.chatgpt.site" target="_blank" rel="noopener">进入简历实验 <span>↗</span></a></div>
+          </div>
+          <div class="visual lab-visual" data-parallax>
+            <div class="lab-console" aria-hidden="true"></div>
+            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="在简历实验室工作的小羊" />
+            <div class="speech">正在把“我做过”翻译成“我能解决”。</div>
+            <span class="skill-chip c1">AI 协作</span><span class="skill-chip c2">内容运营</span><span class="skill-chip c3">产品表达</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene-shop" data-scene="4" aria-label="接单小店">
+        <div class="scene-inner">
+          <div class="scene-copy">
+            <div class="eyebrow">04 / Tiny Service Shop</div>
+            <h2>小店不大，<br>认真解决一个<em>真实问题</em>。</h2>
+            <p class="scene-lead">现阶段我专注简单、清晰、能上线的网页：个人介绍、作品展示与小商家宣传。先明确你希望别人看到什么，再一起把页面做出来。</p>
+            <div class="price-list">
+              <div class="price-item"><strong>¥99</strong><span>个人介绍页</span></div>
+              <div class="price-item"><strong>¥199</strong><span>作品集展示页</span></div>
+              <div class="price-item"><strong>¥399</strong><span>商家宣传页</span></div>
+            </div>
+            <div class="scene-actions"><a class="pill solid" href="index.html">看看服务详情 <span>→</span></a></div>
+          </div>
+          <div class="visual shop-window" data-parallax>
+            <div class="awning" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="open-sign">OPEN FOR IDEAS</div>
+            <img class="character" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="在接单小店等候的小羊" />
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene-map" data-scene="5" aria-label="成长地图">
+        <div class="scene-inner">
+          <div class="scene-copy">
+            <div class="eyebrow">05 / Growth Map</div>
+            <h2>现在只是地图的<em>第一小段</em>。</h2>
+            <p class="scene-lead">从注册工具、做出第一张网页，到上线 AI 工作台与简历产品。下一站：继续完成案例、记录成长、争取第一笔真实订单，也探索“食品专业 × AI”的长期可能。</p>
+            <div class="scene-actions">
+              <button class="pill solid" id="restartJourney" type="button">再走一遍 <span>↺</span></button>
+              <button class="pill" id="copyContact" type="button">复制联系暗号</button>
+            </div>
+          </div>
+          <div class="visual map-paper">
+            <div class="route" aria-hidden="true"></div>
+            <div class="milestone m1" data-label="开始用 AI">1</div>
+            <div class="milestone m2" data-label="主页上线">2</div>
+            <div class="milestone m3" data-label="4 个作品">4</div>
+            <div class="milestone m4" data-label="下一站：真实订单">?</div>
+            <img class="map-sheep" src="xiaoyang-workbench/assets/sheep-avatar.png" alt="沿成长地图前进的小羊" />
+            <div class="map-stamp">KEEP<br>GROWING</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="scene-nav" aria-label="场景导航">
+      <button class="nav-button active" type="button" data-scene-target="0" aria-label="序章"><span>⌂</span><small>序章</small></button>
+      <button class="nav-button" type="button" data-scene-target="1" aria-label="学习森林"><span>♧</span><small>学习森林</small></button>
+      <button class="nav-button" type="button" data-scene-target="2" aria-label="作品工坊"><span>✦</span><small>作品工坊</small></button>
+      <button class="nav-button" type="button" data-scene-target="3" aria-label="简历实验室"><span>⌁</span><small>简历实验室</small></button>
+      <button class="nav-button" type="button" data-scene-target="4" aria-label="接单小店"><span>▱</span><small>接单小店</small></button>
+      <button class="nav-button" type="button" data-scene-target="5" aria-label="成长地图"><span>⌖</span><small>成长地图</small></button>
+    </nav>
+
+    <div class="counter" aria-hidden="true"><span class="counter-current" id="sceneCurrent">01</span><span class="counter-line"></span><span>06</span></div>
+    <button class="scene-arrow" id="sceneArrow" type="button" aria-label="进入下一个场景">→</button>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
 
   <script>
-    const counters = document.querySelectorAll("[data-count]");
-    const revealItems = document.querySelectorAll(".reveal");
-    const toTop = document.getElementById("toTop");
-    const toast = document.getElementById("toast");
-    const taskInputs = document.querySelectorAll("#todayTasks input");
-    const progressFill = document.getElementById("learningProgress");
-    const progressText = document.getElementById("learningProgressText");
+    const opening = document.getElementById('opening');
+    const enterWorld = document.getElementById('enterWorld');
+    const skipOpening = document.getElementById('skipOpening');
+    const scenes = [...document.querySelectorAll('.scene')];
+    const navButtons = [...document.querySelectorAll('.nav-button')];
+    const stage = document.getElementById('stage');
+    const sceneCurrent = document.getElementById('sceneCurrent');
+    const sceneArrow = document.getElementById('sceneArrow');
+    const toast = document.getElementById('toast');
+    let current = 0;
+    let touchStartX = 0;
+    let audioContext;
+    let ambienceNodes = [];
 
-    function animateCounter(element) {
-      const target = Number(element.dataset.count);
-      let current = 0;
-      const step = Math.max(1, Math.ceil(target / 36));
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
-        element.textContent = current;
-      }, 28);
+    function enterSite() {
+      document.body.classList.add('ready');
+      opening.classList.add('is-gone');
+      window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 900);
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          entry.target.querySelectorAll("[data-count]").forEach((counter) => {
-            if (!counter.dataset.done) {
-              counter.dataset.done = "true";
-              animateCounter(counter);
-            }
-          });
-        }
-      });
-    }, { threshold: 0.16 });
+    enterWorld.addEventListener('click', enterSite);
+    skipOpening.addEventListener('click', enterSite);
 
-    revealItems.forEach((item) => observer.observe(item));
+    function showScene(index) {
+      const next = (index + scenes.length) % scenes.length;
+      scenes[current].classList.remove('active');
+      navButtons[current].classList.remove('active');
+      navButtons[current].removeAttribute('aria-current');
+      current = next;
+      scenes[current].scrollTop = 0;
+      scenes[current].classList.add('active');
+      navButtons[current].classList.add('active');
+      navButtons[current].setAttribute('aria-current', 'page');
+      sceneCurrent.textContent = String(current + 1).padStart(2, '0');
+      const ink = current === 1 || current === 3 ? '#f4fff1' : '#132018';
+      document.documentElement.style.setProperty('--scene-ink', ink);
+      sceneArrow.setAttribute('aria-label', current === scenes.length - 1 ? '回到序章' : '进入下一个场景');
+      history.replaceState(null, '', `#scene-${current}`);
+    }
 
-    document.querySelectorAll(".tab").forEach((button) => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
-        document.querySelectorAll(".tab-panel").forEach((panel) => panel.classList.remove("active"));
-        button.classList.add("active");
-        document.getElementById(button.dataset.tab).classList.add("active");
-      });
+    document.querySelectorAll('[data-scene-target]').forEach(button => {
+      button.addEventListener('click', () => showScene(Number(button.dataset.sceneTarget)));
+    });
+    document.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', () => showScene(current + 1)));
+    sceneArrow.addEventListener('click', () => showScene(current + 1));
+    document.getElementById('restartJourney').addEventListener('click', () => showScene(0));
+
+    window.addEventListener('keydown', event => {
+      if (!opening.classList.contains('is-gone')) {
+        if (event.key === 'Enter' || event.key === 'Escape') enterSite();
+        return;
+      }
+      if (event.key === 'ArrowRight') showScene(current + 1);
+      if (event.key === 'ArrowLeft') showScene(current - 1);
     });
 
-    document.getElementById("copyText").addEventListener("click", async () => {
-      const text = "你好，我是 Jasper，食品质量与安全专业准大二学生。正在用 Codex 从 0 学习 AI 建站，记录 30 天做项目、做案例、尝试接单的过程。";
+    stage.addEventListener('touchstart', event => { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
+    stage.addEventListener('touchend', event => {
+      const distance = event.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(distance) > 70) showScene(distance < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    async function copyText(text, success) {
       try {
         await navigator.clipboard.writeText(text);
-      } catch (error) {
-        const input = document.createElement("textarea");
+        showToast(success);
+      } catch {
+        const input = document.createElement('textarea');
         input.value = text;
         document.body.appendChild(input);
         input.select();
-        document.execCommand("copy");
+        document.execCommand('copy');
         input.remove();
+        showToast(success);
       }
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    document.getElementById('copyIntro').addEventListener('click', () => copyText(
+      '你好，我是 Jasper，一名食品质量与安全专业的大学生。我正在用 AI 学习建站、做产品、记录成长，并尝试把能力变成真实作品和服务。',
+      '介绍已复制，带走这张数字名片吧'
+    ));
+    document.getElementById('copyContact').addEventListener('click', () => copyText(
+      '抖音私信 Jasper，发送“网站”，一起聊聊你的页面想法。',
+      '联系暗号已复制：网站'
+    ));
+
+    document.querySelectorAll('.task input').forEach((input, index) => {
+      input.checked = localStorage.getItem(`jasper-task-${index}`) === '1';
+      input.addEventListener('change', () => {
+        localStorage.setItem(`jasper-task-${index}`, input.checked ? '1' : '0');
+        if ([...document.querySelectorAll('.task input')].every(item => item.checked)) showToast('今天的四颗种子都发芽了 🌱');
+      });
     });
 
-    function updateLearningProgress() {
-      const total = taskInputs.length;
-      const done = Array.from(taskInputs).filter((input) => input.checked).length;
-      const percent = total ? Math.round((done / total) * 100) : 0;
-      progressFill.style.width = `${percent}%`;
-      progressText.textContent = `今日进度 ${done}/${total}`;
-      taskInputs.forEach((input) => {
-        input.closest(".task").classList.toggle("done", input.checked);
+    document.addEventListener('pointermove', event => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const visual = scenes[current].querySelector('[data-parallax]');
+      if (!visual) return;
+      const x = (event.clientX / window.innerWidth - .5) * 10;
+      const y = (event.clientY / window.innerHeight - .5) * 8;
+      visual.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+
+    function startAmbience() {
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      const master = audioContext.createGain();
+      master.gain.value = 0.025;
+      master.connect(audioContext.destination);
+      [174, 261.6, 392].forEach((frequency, index) => {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = index === 0 ? 'sine' : 'triangle';
+        oscillator.frequency.value = frequency;
+        gain.gain.value = index === 0 ? .6 : .16;
+        oscillator.connect(gain).connect(master);
+        oscillator.start();
+        ambienceNodes.push(oscillator, gain, master);
       });
     }
 
-    taskInputs.forEach((input) => {
-      input.checked = localStorage.getItem(`jasper-day4-${input.dataset.task}`) === "true";
-      input.addEventListener("change", () => {
-        localStorage.setItem(`jasper-day4-${input.dataset.task}`, input.checked);
-        updateLearningProgress();
-      });
-    });
-    updateLearningProgress();
+    function stopAmbience() {
+      ambienceNodes.filter(node => typeof node.stop === 'function').forEach(node => { try { node.stop(); } catch {} });
+      ambienceNodes = [];
+    }
 
-    window.addEventListener("scroll", () => {
-      toTop.classList.toggle("visible", window.scrollY > 500);
+    const soundToggle = document.getElementById('soundToggle');
+    soundToggle.addEventListener('click', () => {
+      const playing = soundToggle.getAttribute('aria-pressed') === 'true';
+      if (playing) stopAmbience(); else startAmbience();
+      soundToggle.setAttribute('aria-pressed', String(!playing));
+      soundToggle.querySelector('span:last-child').textContent = `AMBIENCE ${playing ? 'OFF' : 'ON'}`;
     });
 
-    toTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    const hashMatch = location.hash.match(/scene-(\d)/);
+    if (hashMatch) showScene(Math.min(Number(hashMatch[1]), scenes.length - 1));
   </script>
 </body>
 </html>
