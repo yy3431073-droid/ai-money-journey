@@ -54,12 +54,20 @@
       position: absolute;
       inset: -4%;
       z-index: -3;
-      background: url("xiaoyang-workbench/assets/healing-meadow-hero-v1.webp") center / cover no-repeat;
+      background: url("xiaoyang-workbench/assets/jasper-opening-meadow-poster-v1.webp") center / cover no-repeat;
       clip-path: inset(0 50% 0 50%);
       filter: brightness(.32) saturate(.72);
       transform: scale(1.06);
       animation: landscapeReveal 2.7s .72s cubic-bezier(.2,.76,.12,1) forwards,
                  landscapeDrift 14s 3.5s ease-in-out infinite alternate;
+    }
+    .opening-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
     .opening-landscape::after {
       content: "";
@@ -208,18 +216,6 @@
       opacity: 0;
       transform: translate3d(0, 8px, 0);
       animation: introUp .75s 5.9s ease forwards;
-    }
-    .opening-character {
-      position: absolute;
-      z-index: 4;
-      right: clamp(-40px, 1vw, 28px);
-      bottom: clamp(-25px, 1vh, 18px);
-      width: min(660px, 49vw);
-      opacity: 0;
-      transform: translate3d(60px, 22px, 0) scale(.92) rotate(2deg);
-      filter: drop-shadow(0 34px 34px rgba(0,0,0,.38));
-      animation: openingCharacter 1.8s 2.35s cubic-bezier(.2,.75,.14,1) forwards;
-      pointer-events: none;
     }
     .opening-progress {
       position: absolute;
@@ -848,9 +844,6 @@
     @keyframes landscapeDrift { to { transform: scale(1.1) translate3d(-.8%, -.5%, 0); } }
     @keyframes glowIn { to { opacity: 1; } }
     @keyframes glowBreathe { to { transform: scale(1.08); opacity: .8; } }
-    @keyframes openingCharacter {
-      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(-1deg); }
-    }
     @keyframes openingProgress { to { transform: translateX(0); } }
     @keyframes revealCopy { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
     @keyframes revealVisual { from { opacity: 0; transform: translateX(40px) rotate(2deg); } to { opacity: 1; transform: none; } }
@@ -872,7 +865,6 @@
     @media (max-width: 900px) {
       .opening-inner { width: min(620px, 66vw); left: 6vw; bottom: 12vh; }
       .opening-title { font-size: clamp(48px, 8vw, 78px); }
-      .opening-character { width: 56vw; right: -8vw; bottom: 1vh; }
       .topbar { height: 68px; }
       .scene-inner { grid-template-columns: 1fr; align-content: start; padding-top: 98px; gap: 32px; }
       .scene h1, .scene h2 { font-size: clamp(48px, 12vw, 78px); }
@@ -892,7 +884,7 @@
       .opening-inner { left: 21px; right: 21px; top: 18vh; bottom: auto; width: auto; }
       .opening-title { font-size: clamp(46px, 14vw, 64px); line-height: 1.02; }
       .opening-sub { max-width: 86%; font-size: 14px; }
-      .opening-character { width: 118vw; right: -31vw; bottom: -1vh; opacity: 0; }
+      .opening-video { object-position: 72% center; }
       .opening-glow { width: 90vw; height: 90vw; right: -18vw; top: 57%; }
       .opening-landscape::after {
         background: linear-gradient(180deg, rgba(5,15,10,.84) 0%, rgba(5,15,10,.52) 54%, rgba(5,15,10,.3) 100%);
@@ -935,16 +927,21 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
-      .opening-meta, .opening-kicker, .opening-sub, .enter-world, .opening-sound-note, .opening-character { opacity: 1; transform: none; }
+      .opening-meta, .opening-kicker, .opening-sub, .enter-world, .opening-sound-note { opacity: 1; transform: none; }
       .opening-title i { transform: none; }
       .opening-landscape { clip-path: none; filter: brightness(.58) saturate(.82); transform: none; }
+      .opening-video { display: none; }
       .character, .map-sheep { animation: none; }
     }
   </style>
 </head>
 <body>
   <div class="opening" id="opening" role="dialog" aria-label="网站开场动画" aria-modal="true">
-    <div class="opening-landscape" aria-hidden="true"></div>
+    <div class="opening-landscape" aria-hidden="true">
+      <video class="opening-video" id="openingVideo" autoplay muted playsinline preload="auto" poster="xiaoyang-workbench/assets/jasper-opening-meadow-poster-v1.webp" disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
+        <source src="xiaoyang-workbench/assets/jasper-opening-meadow-v1.mp4" type="video/mp4" />
+      </video>
+    </div>
     <div class="opening-glow" aria-hidden="true"></div>
     <div class="opening-grain" aria-hidden="true"></div>
     <div class="opening-frame" aria-hidden="true"></div>
@@ -957,7 +954,6 @@
       <button class="enter-world" id="enterWorld" type="button">开启这段旅程 <b>→</b></button>
       <span class="opening-sound-note">♬ 点击进入后播放你选择的纯音乐，可随时关闭</span>
     </div>
-    <img class="opening-character" src="xiaoyang-workbench/assets/sleepy-sheep-character-v2.png" alt="" aria-hidden="true" />
     <div class="opening-progress" aria-hidden="true"><span></span></div>
   </div>
 
@@ -1124,6 +1120,7 @@
 
   <script>
     const opening = document.getElementById('opening');
+    const openingVideo = document.getElementById('openingVideo');
     const enterWorld = document.getElementById('enterWorld');
     const skipOpening = document.getElementById('skipOpening');
     const scenes = [...document.querySelectorAll('.scene')];
@@ -1264,7 +1261,10 @@
     function enterSite() {
       document.body.classList.add('ready');
       opening.classList.add('is-gone');
-      window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 1200);
+      window.setTimeout(() => {
+        opening.setAttribute('aria-hidden', 'true');
+        openingVideo.pause();
+      }, 1200);
       if (!soundPlaying) {
         startSoundtrack();
       }
@@ -1374,7 +1374,7 @@
       const initialVolume = siteMusic.volume;
       const startedAt = performance.now();
       const tick = now => {
-        const progress = Math.min(1, (now - startedAt) / duration);
+        const progress = Math.max(0, Math.min(1, (now - startedAt) / duration));
         const eased = 1 - Math.pow(1 - progress, 3);
         siteMusic.volume = initialVolume + (targetVolume - initialVolume) * eased;
         if (progress < 1) volumeFrame = window.requestAnimationFrame(tick);
