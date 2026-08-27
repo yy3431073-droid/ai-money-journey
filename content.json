@@ -1,0 +1,72 @@
+{
+  "updatedAt": "2026-08-27T22:30:00+08:00",
+  "github": {
+    "owner": "yy3431073-droid",
+    "repository": "ai-money-journey"
+  },
+  "projects": [
+    {
+      "id": "service-home",
+      "number": "01",
+      "type": "WEB / SERVICE",
+      "title": "AI 建站接单主页",
+      "description": "服务展示、报价与交付路径，帮助访客快速理解我能提供什么。",
+      "href": "index.html",
+      "target": "_self",
+      "status": "已上线"
+    },
+    {
+      "id": "field-notes",
+      "number": "02",
+      "type": "STORY / PORTFOLIO",
+      "title": "沉浸式个人主页",
+      "description": "动物角色、动态场景、开场影像与音乐共同组成的探索式作品集。",
+      "href": "student-profile.html",
+      "target": "_self",
+      "status": "持续更新"
+    },
+    {
+      "id": "sheep-workbench",
+      "number": "03",
+      "type": "TOOL / AI",
+      "title": "小羊 AI 工作台",
+      "description": "把常用 AI 任务、提示与工作流程整理成一个清晰的创作入口。",
+      "href": "xiaoyang-workbench/index.html",
+      "target": "_self",
+      "status": "已上线"
+    },
+    {
+      "id": "resume-matcher",
+      "number": "04",
+      "type": "CAREER / PRODUCT",
+      "title": "实习简历匹配器",
+      "description": "围绕大学生求职场景制作的简历诊断与岗位匹配实验。",
+      "href": "https://student-intern-resume-ai.eager-sugar-4589.chatgpt.site",
+      "target": "_blank",
+      "status": "可体验"
+    },
+    {
+      "id": "fund-signal-lab",
+      "number": "05",
+      "type": "DATA / FINTECH",
+      "title": "基金信号台",
+      "description": "风险优先的中国公募基金趋势、回撤、盈亏与滚动回测信号分析。",
+      "href": "https://fund-signal-lab.eager-sugar-4589.chatgpt.site",
+      "target": "_blank",
+      "status": "NEW · 08/23"
+    }
+  ],
+  "videos": [
+    {
+      "id": "meadow-opening",
+      "number": "FILM 01",
+      "category": "动态视觉 / 网页开场",
+      "title": "走进小羊的治愈草地",
+      "description": "为个人网站制作的沉浸式开场实验：用缓慢镜头、留白节奏和自然色彩，把访客带进 Jasper 的创作世界。",
+      "source": "xiaoyang-workbench/assets/jasper-opening-meadow-v1.mp4",
+      "poster": "xiaoyang-workbench/assets/jasper-opening-meadow-poster-v1.webp",
+      "duration": "00:10",
+      "year": "2026"
+    }
+  ]
+}
