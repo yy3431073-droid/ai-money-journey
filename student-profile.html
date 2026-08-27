@@ -702,15 +702,18 @@
       background-size: auto, auto, 82px 100%, auto;
     }
     .scene-cinema::after { box-shadow: inset 0 0 190px rgba(0,0,0,.74); }
-    .cinema-grid { grid-template-columns: .72fr 1.28fr; }
-    .scene-cinema h2 { font-size: clamp(54px, 5vw, 82px); }
-    .film-meta-line { display: flex; gap: 18px; align-items: center; margin-top: 28px; font-size: 10px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    .cinema-grid { grid-template-columns: .62fr 1.38fr; gap: clamp(34px, 5vw, 86px); }
+    .scene-cinema h2 { font-size: clamp(50px, 4.55vw, 76px); }
+    .film-meta-line { display: flex; gap: 16px; align-items: center; margin-top: 24px; font-size: 9px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
     .film-meta-line::before { content: ""; width: 44px; height: 1px; background: currentColor; opacity: .42; }
-    .screening-room { position: relative; min-height: 520px; display: grid; align-content: center; }
+    .film-filters { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 24px; }
+    .film-filter { padding: 8px 11px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; color: inherit; background: transparent; font-size: 9px; font-weight: 850; letter-spacing: .08em; cursor: pointer; opacity: .62; transition: background .25s ease, color .25s ease, opacity .25s ease; }
+    .film-filter.active, .film-filter:hover { color: #111813; background: var(--lime); border-color: var(--lime); opacity: 1; }
+    .screening-room { position: relative; min-height: 570px; display: flex; flex-direction: column; justify-content: center; gap: 14px; min-width: 0; }
+    .feature-slot { min-height: 0; }
     .film-frame {
       position: relative;
-      width: min(700px, 100%);
-      margin-left: auto;
+      width: 100%;
       padding: 0;
       border: 1px solid rgba(255,255,255,.32);
       color: inherit;
@@ -719,11 +722,11 @@
       box-shadow: 0 36px 100px rgba(0,0,0,.5), 13px 15px 0 rgba(216,255,99,.15);
       overflow: hidden;
       cursor: pointer;
-      transform: rotate(.7deg);
+      transform: rotate(.35deg);
       transition: transform .45s cubic-bezier(.2,.76,.12,1), box-shadow .45s ease;
     }
     .film-frame:hover { transform: translateY(-7px) rotate(-.35deg); box-shadow: 0 44px 120px rgba(0,0,0,.58), 17px 19px 0 rgba(216,255,99,.22); }
-    .film-frame img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; opacity: .82; filter: saturate(.86) contrast(1.04); transition: transform .7s ease, opacity .45s ease; }
+    .film-frame img { display: block; width: 100%; max-height: 330px; aspect-ratio: 16 / 8.4; object-fit: cover; opacity: .82; filter: saturate(.86) contrast(1.04); transition: transform .7s ease, opacity .45s ease; }
     .film-frame:hover img { transform: scale(1.035); opacity: .95; }
     .film-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(4,6,7,.88), transparent 58%); pointer-events: none; }
     .film-topline { position: absolute; z-index: 3; left: 18px; right: 18px; top: 15px; display: flex; justify-content: space-between; font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
@@ -731,10 +734,22 @@
     .film-caption h3 { margin: 0 0 7px; font-family: var(--display); font-size: clamp(24px, 2.3vw, 38px); font-weight: 400; }
     .film-caption p { margin: 0; max-width: 520px; font-size: 11px; line-height: 1.65; opacity: .72; }
     .film-play { position: absolute; z-index: 4; right: 24px; bottom: 24px; width: 54px; height: 54px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.7); border-radius: 50%; color: #101713; background: var(--lime); font-size: 16px; box-shadow: 0 0 0 10px rgba(216,255,99,.08); transition: transform .25s ease; }
+    .film-frame.is-concept { cursor: default; }
+    .film-frame.is-concept .film-play { width: auto; height: 30px; padding: 0 12px; border-radius: 999px; color: #f7f1e4; background: rgba(10,13,14,.7); box-shadow: none; font-size: 9px; font-weight: 900; letter-spacing: .12em; }
     .film-frame:hover .film-play { transform: scale(1.08); }
-    .film-strip { display: flex; gap: 7px; margin-top: 17px; opacity: .5; }
-    .film-strip i { flex: 1; height: 7px; border: 1px solid rgba(255,255,255,.42); }
-    .film-note { margin-top: 16px; text-align: right; font-size: 10px; letter-spacing: .08em; opacity: .58; }
+    .film-library-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 2px; }
+    .film-library-head span { font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; opacity: .58; }
+    .film-library-controls { display: flex; gap: 6px; }
+    .film-library-controls button { width: 31px; height: 31px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; color: inherit; background: transparent; cursor: pointer; }
+    .film-library { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 9px; scrollbar-width: none; scroll-snap-type: x proximity; }
+    .film-library::-webkit-scrollbar { display: none; }
+    .film-card { position: relative; flex: 0 0 calc(25% - 8px); min-width: 145px; padding: 0; border: 1px solid rgba(255,255,255,.17); color: inherit; background: rgba(255,255,255,.035); text-align: left; cursor: pointer; overflow: hidden; scroll-snap-align: start; opacity: .68; transition: opacity .25s ease, border-color .25s ease, transform .25s ease; }
+    .film-card:hover, .film-card.active { opacity: 1; border-color: var(--lime); transform: translateY(-2px); }
+    .film-card img { display: block; width: 100%; aspect-ratio: 16 / 8.7; object-fit: cover; filter: saturate(.78); }
+    .film-card-copy { display: block; padding: 9px 10px 10px; }
+    .film-card-copy small { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 5px; font-size: 7px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; opacity: .58; }
+    .film-card-copy strong { display: block; overflow: hidden; font-family: var(--display); font-size: 13px; font-weight: 400; white-space: nowrap; text-overflow: ellipsis; }
+    .film-card-badge { position: absolute; left: 8px; top: 8px; padding: 4px 6px; color: #111813; background: var(--lime); font-size: 7px; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
 
     .video-dialog { width: min(1000px, calc(100vw - 32px)); padding: 0; border: 1px solid rgba(255,255,255,.24); color: #f7f1e4; background: #090b0f; box-shadow: 0 40px 130px rgba(0,0,0,.78); }
     .video-dialog::backdrop { background: rgba(4,7,6,.84); backdrop-filter: blur(12px); }
@@ -931,7 +946,7 @@
       .scene-arrow { top: auto; right: 18px; bottom: 26px; }
       .workshop-grid, .cinema-grid { grid-template-columns: 1fr; }
       .project-board { margin-bottom: 36px; }
-      .screening-room { min-height: 450px; margin-bottom: 30px; }
+      .screening-room { min-height: 560px; margin-bottom: 30px; }
       .forest-visual { min-height: 510px; }
     }
 
@@ -970,12 +985,15 @@
       .project h3 { margin-top: 32px; font-size: 19px; }
       .project p { font-size: 11px; }
       .project-status { position: static; display: block; margin-top: 13px; }
-      .screening-room { min-height: 330px; }
+      .screening-room { min-height: 510px; }
+      .film-filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
       .film-frame { transform: none; }
+      .film-frame img { max-height: none; aspect-ratio: 16 / 9; }
       .film-caption { right: 76px; bottom: 15px; }
       .film-caption p { display: none; }
       .film-play { width: 46px; height: 46px; right: 17px; bottom: 17px; }
-      .film-note { text-align: left; }
+      .film-card { flex-basis: 66%; min-width: 210px; }
+      .film-library-head { margin-top: 3px; }
       .lab-visual { min-height: 450px; }
       .lab-visual .speech { right: 0; max-width: 170px; }
       .skill-chip.c3 { display: none; }
@@ -1107,7 +1125,8 @@
             <div class="eyebrow">03 / Motion Cinema</div>
             <h2>把片刻剪成<br>会呼吸的<em>故事</em>。</h2>
             <p class="scene-lead">这里收藏我的剪辑、动态视觉与叙事实验。画面不只是播放，更要和节奏、声音与情绪一起抵达观众。</p>
-            <div class="film-meta-line"><span id="videoCount">01 film on view</span><span>Headphones welcome</span></div>
+            <div class="film-meta-line"><span id="videoCount">01 playable · 03 developing</span></div>
+            <div class="film-filters" id="videoFilters" aria-label="影像分类"></div>
           </div>
           <div class="visual screening-room" id="videoGallery"></div>
         </div>
@@ -1261,6 +1280,7 @@
     }
 
     function openVideo(item) {
+      if (!item.source) return;
       videoDialogTitle.textContent = item.title;
       portfolioVideo.poster = item.poster;
       portfolioVideo.src = item.source;
@@ -1268,44 +1288,136 @@
       portfolioVideo.play().catch(() => {});
     }
 
-    function renderVideos(videos) {
-      document.getElementById('videoCount').textContent = `${String(videos.length).padStart(2, '0')} film${videos.length === 1 ? '' : 's'} on view`;
-      videoGallery.replaceChildren(...videos.map(item => {
-        const wrap = document.createElement('div');
-        const frame = document.createElement('button');
-        frame.type = 'button';
-        frame.className = 'film-frame';
-        frame.setAttribute('aria-label', `播放《${item.title}》`);
+    let cinemaItems = [];
+    let activeFilmId = '';
+    let activeFilmFilter = 'all';
 
-        const poster = document.createElement('img');
-        poster.src = item.poster;
-        poster.alt = `${item.title} 视频封面`;
-        const top = document.createElement('span');
-        top.className = 'film-topline';
-        top.innerHTML = `<span>${item.number} · ${item.category}</span><span>${item.year} · ${item.duration}</span>`;
-        const caption = document.createElement('span');
-        caption.className = 'film-caption';
-        const title = document.createElement('h3');
-        title.textContent = item.title;
-        const description = document.createElement('p');
-        description.textContent = item.description;
-        caption.append(title, description);
-        const play = document.createElement('span');
-        play.className = 'film-play';
-        play.textContent = '▶';
-        frame.append(poster, top, caption, play);
-        frame.addEventListener('click', () => openVideo(item));
+    function createFeatureFrame(item) {
+      const frame = document.createElement('button');
+      frame.type = 'button';
+      frame.className = `film-frame${item.source ? '' : ' is-concept'}`;
+      frame.setAttribute('aria-label', item.source ? `播放《${item.title}》` : `《${item.title}》正在筹备`);
+      if (!item.source) frame.setAttribute('aria-disabled', 'true');
 
-        const strip = document.createElement('div');
-        strip.className = 'film-strip';
-        strip.setAttribute('aria-hidden', 'true');
-        for (let index = 0; index < 8; index += 1) strip.append(document.createElement('i'));
-        const note = document.createElement('div');
-        note.className = 'film-note';
-        note.textContent = '点击画面进入放映 · 播放时背景音乐会自动降低';
-        wrap.append(frame, strip, note);
-        return wrap;
+      const poster = document.createElement('img');
+      poster.src = item.poster;
+      poster.alt = `${item.title} 影像封面`;
+      const top = document.createElement('span');
+      top.className = 'film-topline';
+      const topLeft = document.createElement('span');
+      topLeft.textContent = `${item.number} · ${item.category}`;
+      const topRight = document.createElement('span');
+      topRight.textContent = `${item.year} · ${item.duration}`;
+      top.append(topLeft, topRight);
+      const caption = document.createElement('span');
+      caption.className = 'film-caption';
+      const title = document.createElement('h3');
+      title.textContent = item.title;
+      const description = document.createElement('p');
+      description.textContent = item.description;
+      caption.append(title, description);
+      const play = document.createElement('span');
+      play.className = 'film-play';
+      play.textContent = item.source ? '▶' : 'COMING SOON';
+      frame.append(poster, top, caption, play);
+      if (item.source) frame.addEventListener('click', () => openVideo(item));
+      return frame;
+    }
+
+    function renderFilmStage(items) {
+      if (!items.length) {
+        videoGallery.innerHTML = '<p class="scene-lead">这个分类的影像正在筹备。</p>';
+        return;
+      }
+      if (!items.some(item => item.id === activeFilmId)) activeFilmId = items[0].id;
+      const activeItem = items.find(item => item.id === activeFilmId) || items[0];
+      const featureSlot = document.createElement('div');
+      featureSlot.className = 'feature-slot';
+      featureSlot.append(createFeatureFrame(activeItem));
+
+      const libraryHead = document.createElement('div');
+      libraryHead.className = 'film-library-head';
+      const libraryTitle = document.createElement('span');
+      libraryTitle.textContent = `影像索引 · ${String(items.length).padStart(2, '0')}`;
+      const controls = document.createElement('div');
+      controls.className = 'film-library-controls';
+      const previous = document.createElement('button');
+      previous.type = 'button';
+      previous.setAttribute('aria-label', '向前浏览影像');
+      previous.textContent = '←';
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.setAttribute('aria-label', '向后浏览影像');
+      next.textContent = '→';
+      controls.append(previous, next);
+      libraryHead.append(libraryTitle, controls);
+
+      const library = document.createElement('div');
+      library.className = 'film-library';
+      items.forEach(item => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = `film-card${item.id === activeFilmId ? ' active' : ''}`;
+        card.setAttribute('aria-label', `查看《${item.title}》`);
+        const image = document.createElement('img');
+        image.src = item.poster;
+        image.alt = '';
+        const badge = document.createElement('span');
+        badge.className = 'film-card-badge';
+        badge.textContent = item.source ? 'PLAY' : 'CONCEPT';
+        const copy = document.createElement('span');
+        copy.className = 'film-card-copy';
+        const meta = document.createElement('small');
+        const number = document.createElement('span');
+        number.textContent = item.number;
+        const duration = document.createElement('span');
+        duration.textContent = item.duration;
+        meta.append(number, duration);
+        const name = document.createElement('strong');
+        name.textContent = item.title;
+        copy.append(meta, name);
+        card.append(image, badge, copy);
+        card.addEventListener('click', () => {
+          activeFilmId = item.id;
+          renderFilmStage(items);
+        });
+        library.append(card);
+      });
+      previous.addEventListener('click', () => library.scrollBy({ left: -library.clientWidth * .72, behavior: 'smooth' }));
+      next.addEventListener('click', () => library.scrollBy({ left: library.clientWidth * .72, behavior: 'smooth' }));
+      videoGallery.replaceChildren(featureSlot, libraryHead, library);
+    }
+
+    function renderVideoFilters() {
+      const filters = [
+        ['all', '全部'],
+        ['motion', '动态 / 剪辑'],
+        ['lab', '专业 × AI'],
+        ['life', '成长记录']
+      ];
+      const host = document.getElementById('videoFilters');
+      host.replaceChildren(...filters.map(([value, label]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `film-filter${value === activeFilmFilter ? ' active' : ''}`;
+        button.textContent = label;
+        button.addEventListener('click', () => {
+          activeFilmFilter = value;
+          renderVideoFilters();
+          renderFilmStage(value === 'all' ? cinemaItems : cinemaItems.filter(item => item.filter === value));
+        });
+        return button;
       }));
+    }
+
+    function renderVideos(videos) {
+      cinemaItems = videos;
+      activeFilmId = videos[0]?.id || '';
+      const playable = videos.filter(item => item.source).length;
+      const developing = videos.length - playable;
+      document.getElementById('videoCount').textContent = `${String(playable).padStart(2, '0')} playable · ${String(developing).padStart(2, '0')} developing`;
+      renderVideoFilters();
+      renderFilmStage(videos);
     }
 
     async function loadPortfolioContent() {

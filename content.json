@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-27T22:30:00+08:00",
+  "updatedAt": "2026-08-27T23:10:00+08:00",
   "github": {
     "owner": "yy3431073-droid",
     "repository": "ai-money-journey"
@@ -66,7 +66,45 @@
       "source": "xiaoyang-workbench/assets/jasper-opening-meadow-v1.mp4",
       "poster": "xiaoyang-workbench/assets/jasper-opening-meadow-poster-v1.webp",
       "duration": "00:10",
-      "year": "2026"
+      "year": "2026",
+      "filter": "motion",
+      "status": "可播放"
+    },
+    {
+      "id": "night-studio-concept",
+      "number": "FILM 02",
+      "category": "剪辑练习 / 概念",
+      "title": "夜灯下的创作时刻",
+      "description": "关于深夜剪辑、独处与灵感发生的一支氛围短片构想。",
+      "poster": "xiaoyang-workbench/assets/video-concept-night-studio-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "motion",
+      "status": "概念档案"
+    },
+    {
+      "id": "food-lab-concept",
+      "number": "FILM 03",
+      "category": "专业 × AI / 概念",
+      "title": "食品实验室 × AI",
+      "description": "把食品质量与安全专业、数据观察和 AI 创作连接起来的影像方向。",
+      "poster": "xiaoyang-workbench/assets/video-concept-food-lab-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "lab",
+      "status": "概念档案"
+    },
+    {
+      "id": "train-journey-concept",
+      "number": "FILM 04",
+      "category": "成长记录 / 概念",
+      "title": "在路上收集灵感",
+      "description": "一支关于旅途、观察与普通人成长节奏的治愈系短片构想。",
+      "poster": "xiaoyang-workbench/assets/video-concept-train-journey-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "life",
+      "status": "概念档案"
     }
   ]
 }
