@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-27T23:10:00+08:00",
+  "updatedAt": "2026-08-27T23:48:00+08:00",
   "github": {
     "owner": "yy3431073-droid",
     "repository": "ai-money-journey"
@@ -101,6 +101,54 @@
       "title": "在路上收集灵感",
       "description": "一支关于旅途、观察与普通人成长节奏的治愈系短片构想。",
       "poster": "xiaoyang-workbench/assets/video-concept-train-journey-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "life",
+      "status": "概念档案"
+    },
+    {
+      "id": "rain-window-concept",
+      "number": "FILM 05",
+      "category": "声音日记 / 概念",
+      "title": "雨落下来的时候",
+      "description": "以雨声、城市灯光与独处时刻为线索的声音日记构想。",
+      "poster": "xiaoyang-workbench/assets/video-concept-rain-window-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "life",
+      "status": "概念档案"
+    },
+    {
+      "id": "campus-cafe-concept",
+      "number": "FILM 06",
+      "category": "分镜练习 / 概念",
+      "title": "咖啡馆里的分镜本",
+      "description": "从校园午后出发，把零散观察整理成故事分镜的一次练习。",
+      "poster": "xiaoyang-workbench/assets/video-concept-campus-cafe-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "motion",
+      "status": "概念档案"
+    },
+    {
+      "id": "food-market-concept",
+      "number": "FILM 07",
+      "category": "食物观察 / 概念",
+      "title": "清晨食物市集",
+      "description": "记录食物、产地与日常生活细节的微型纪录片方向。",
+      "poster": "xiaoyang-workbench/assets/video-concept-food-market-v1.webp",
+      "duration": "--:--",
+      "year": "2026",
+      "filter": "lab",
+      "status": "概念档案"
+    },
+    {
+      "id": "blue-hour-meadow-concept",
+      "number": "FILM 08",
+      "category": "氛围声景 / 概念",
+      "title": "蓝调时刻的草地",
+      "description": "以暮色、虫鸣与微光组成的沉浸式治愈声景构想。",
+      "poster": "xiaoyang-workbench/assets/video-concept-blue-hour-meadow-v1.webp",
       "duration": "--:--",
       "year": "2026",
       "filter": "life",
