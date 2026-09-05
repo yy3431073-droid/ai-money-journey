@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Jasper 的 AI 菜品视觉实验：套餐封面、菜品特写与视觉一致性练习。" />
+  <title>AI 菜品视觉实验｜Jasper 项目档案</title>
+  <style>
+    :root { --cream: #f2eadb; --ink: #211d18; --leaf: #bcd879; --orange: #e9894e; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 88% 8%, rgba(188,216,121,.13), transparent 28%),
+        radial-gradient(circle at 4% 40%, rgba(233,137,78,.12), transparent 34%),
+        #171612;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+    a { color: inherit; }
+    .topbar {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 18px clamp(20px, 4vw, 64px);
+      border-bottom: 1px solid rgba(242,234,219,.16);
+      background: rgba(23,22,18,.88);
+      backdrop-filter: blur(18px);
+    }
+    .brand { font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .back { text-decoration: none; opacity: .74; }
+    .back:hover, .back:focus-visible { opacity: 1; }
+    main { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: clamp(58px, 8vw, 118px) 0 96px; }
+    .hero { display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(36px, 7vw, 98px); align-items: center; }
+    .kicker { color: var(--leaf); font-size: 11px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 20px 0 26px; font-family: "STSong", "SimSun", serif; font-size: clamp(58px, 7vw, 106px); font-weight: 400; line-height: .93; letter-spacing: -.05em; }
+    .lead { margin: 0; max-width: 520px; color: rgba(242,234,219,.74); font-size: 17px; line-height: 1.9; }
+    .stats { display: flex; gap: 28px; margin-top: 34px; padding-top: 22px; border-top: 1px solid rgba(242,234,219,.2); }
+    .stats strong { display: block; font-family: "STSong", "SimSun", serif; font-size: 36px; font-weight: 400; }
+    .stats span { color: rgba(242,234,219,.55); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .hero-image { position: relative; }
+    .hero-image::before { content: ""; position: absolute; inset: 18px -18px -18px 18px; border: 1px solid rgba(188,216,121,.52); }
+    .hero-image img { position: relative; display: block; width: 100%; max-height: 680px; object-fit: cover; box-shadow: 0 42px 110px rgba(0,0,0,.4); }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin: clamp(100px, 13vw, 170px) 0 28px; }
+    .section-head h2 { max-width: 620px; margin: 0; font-family: "STSong", "SimSun", serif; font-size: clamp(40px, 5vw, 72px); font-weight: 400; line-height: 1.04; }
+    .section-head p { max-width: 400px; margin: 0; color: rgba(242,234,219,.62); line-height: 1.8; }
+    .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    figure { position: relative; margin: 0; overflow: hidden; background: #24221d; }
+    figure:nth-child(1) { grid-column: span 7; }
+    figure:nth-child(2) { grid-column: span 5; margin-top: 68px; }
+    figure:nth-child(3) { grid-column: span 5; }
+    figure:nth-child(4) { grid-column: span 7; margin-top: -42px; }
+    figure img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform .8s cubic-bezier(.2,.75,.16,1); }
+    figure:hover img { transform: scale(1.025); }
+    figcaption { position: absolute; left: 14px; right: 14px; bottom: 14px; display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; color: #1f1c17; background: rgba(242,234,219,.9); font-size: 10px; font-weight: 850; letter-spacing: .07em; backdrop-filter: blur(12px); }
+    .note { max-width: 760px; margin: 44px 0 0 auto; padding: 22px 0 0; border-top: 1px solid rgba(242,234,219,.2); color: rgba(242,234,219,.68); line-height: 1.9; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 18px; }
+      .gallery { grid-template-columns: 1fr; }
+      figure:nth-child(n) { grid-column: auto; margin-top: 0; }
+      .hero-image::before { inset: 10px -10px -10px 10px; }
+      h1 { font-size: clamp(54px, 16vw, 80px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      figure img { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">Jasper / Visual Archive 09</span>
+    <a class="back" href="../../student-profile.html">← 返回作品世界</a>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <div class="kicker">Food / Visual Direction</div>
+        <h1>把一顿饭，<br />拍成有食欲的画面。</h1>
+        <p class="lead">这组练习关注的不是“多生成几张图”，而是套餐构图、菜品差异、色彩稳定和可用于封面的完整度。</p>
+        <div class="stats"><div><strong>11</strong><span>套成品</span></div><div><strong>04</strong><span>组精选</span></div><div><strong>01</strong><span>去重清单</span></div></div>
+      </div>
+      <div class="hero-image"><img src="assets/food-04.webp" alt="京酱肉丝、米饭、蔬菜和茶饮组成的套餐画面" /></div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h2>同一种视觉语言，<br />但每道菜保留自己的性格。</h2>
+        <p>精选展示四组套餐封面。重复、变形或不适合发布的画面没有混进成品区。</p>
+      </div>
+      <div class="gallery">
+        <figure><img src="assets/food-01.webp" alt="酱香鸡翅套餐封面" /><figcaption><span>01 / 酱香鸡翅</span><span>套餐封面</span></figcaption></figure>
+        <figure><img src="assets/food-02.webp" alt="蒜蓉粉丝蒸虾套餐封面" /><figcaption><span>02 / 蒸虾套餐</span><span>套餐封面</span></figcaption></figure>
+        <figure><img src="assets/food-03.webp" alt="土豆炖牛腩套餐封面" /><figcaption><span>03 / 牛腩套餐</span><span>套餐封面</span></figcaption></figure>
+        <figure><img src="assets/food-04.webp" alt="京酱肉丝套餐封面" /><figcaption><span>04 / 京酱肉丝</span><span>套餐封面</span></figcaption></figure>
+      </div>
+      <p class="note">项目保留了成品、草稿、淘汰原因与菜品去重清单，用来约束视觉重复和食物形态错误。当前展示为创作练习，不把生成画面表述成真实菜品摄影。</p>
+    </section>
+  </main>
+</body>
+</html>

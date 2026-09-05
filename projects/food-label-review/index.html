@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="食标智审——面向中小食品企业的新旧国标双轨标签合规辅助平台" />
+  <title>食标智审｜标签双轨预审工作台</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#workspace">跳到审核工作区</a>
+
+  <header class="app-header">
+    <div class="brand-block">
+      <div class="brand-mark" aria-hidden="true">标</div>
+      <div>
+        <div class="brand-name">食标智审</div>
+        <div class="brand-subtitle">新旧国标双轨标签合规辅助平台</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span id="runtimeDot" class="status-dot" aria-hidden="true"></span>
+      <span id="runtimeStatus">规则引擎就绪 · 正在检测OCR状态</span>
+    </div>
+  </header>
+
+  <main id="workspace" class="workspace">
+    <section class="intro-row" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">标签预审工作台</p>
+        <h1 id="page-title">上传标签，定位风险，找到依据</h1>
+        <p class="intro-copy">从标签图片或文字中提取关键字段，分开呈现当前问题与2027换版事项，并保留依据入口和人工复核路径。</p>
+      </div>
+      <div class="scope-note">
+        <span>当前审核范围</span>
+        <strong>预包装食品标签</strong>
+        <small>结果仅用于风险提示，不替代法定检验或专业合规意见</small>
+      </div>
+    </section>
+
+    <section class="audit-grid">
+      <div class="input-panel" aria-labelledby="input-title">
+        <div class="section-heading">
+          <div>
+            <p class="step-label">01 / 提交材料</p>
+            <h2 id="input-title">标签图片与识别文本</h2>
+          </div>
+          <button id="loadSampleButton" class="button button-quiet" type="button">载入演示样本</button>
+        </div>
+
+        <label id="dropZone" class="drop-zone" for="fileInput">
+          <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" />
+          <div id="emptyUpload" class="empty-upload">
+            <div class="upload-symbol" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+            </div>
+            <strong>上传食品包装标签照片</strong>
+            <span>支持 JPG、PNG、WEBP，单张不超过 10 MB</span>
+          </div>
+          <img id="imagePreview" alt="待审核食品标签预览" hidden />
+        </label>
+
+        <div id="imageTools" class="image-tools" hidden>
+          <div class="image-quality">
+            <strong id="imageQualityTitle">图片已载入</strong>
+            <span id="imageQualityDetail">正在检查图片尺寸与方向……</span>
+          </div>
+          <div class="image-tool-actions" aria-label="图片识别辅助工具">
+            <button id="rotateLeftButton" class="tool-button" type="button" title="向左旋转90度">↶ 向左旋转</button>
+            <button id="rotateRightButton" class="tool-button" type="button" title="向右旋转90度">↷ 向右旋转</button>
+            <label class="enhance-switch" for="enhanceImage">
+              <input id="enhanceImage" type="checkbox" checked />
+              <span>增强小字</span>
+            </label>
+          </div>
+          <p>拍摄建议：标签尽量铺平并占满画面，避免反光、阴影和大角度倾斜；复杂包装可分区域拍摄后逐张识别。</p>
+        </div>
+
+        <div class="context-grid" aria-label="审核对象信息">
+          <div class="context-field">
+            <label for="foodCategory">产品类别</label>
+            <select id="foodCategory">
+              <option value="通用预包装食品">通用预包装食品</option>
+              <option value="豆制品">豆制品</option>
+              <option value="饮料">饮料</option>
+              <option value="糕点">糕点</option>
+              <option value="调味品">调味品</option>
+              <option value="其他（待补专属规则）">其他（待补专属规则）</option>
+            </select>
+            <small>用于记录适用范围；本版尚未启用类别专属规则。</small>
+          </div>
+          <div class="context-field">
+            <label for="sampleId">样本编号 <span>选填</span></label>
+            <input id="sampleId" type="text" maxlength="30" placeholder="如 SAMPLE-001" />
+            <small>可与后续真实测试记录表对应。</small>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label-row">
+            <label for="labelText">标签识别文本</label>
+            <div class="field-actions">
+              <button id="ocrButton" class="text-button" type="button" disabled>重新识别</button>
+              <button id="clearButton" class="text-button" type="button">清空</button>
+            </div>
+          </div>
+          <textarea id="labelText" rows="11" placeholder="上传标签图片后进行文字识别，或直接粘贴配料表、营养成分表等标签文字。"></textarea>
+          <div class="field-help">
+            <span id="inputStatus">尚未添加标签内容</span>
+            <span id="charCount">0 字</span>
+          </div>
+          <div id="ocrAssessment" class="ocr-assessment" hidden></div>
+        </div>
+
+        <label class="confirmation-row" for="textConfirmed">
+          <input id="textConfirmed" type="checkbox" />
+          <span>
+            <strong>我已对照原图校对关键字段</strong>
+            <small>至少核对食品名称、配料、净含量、日期、生产者和营养信息；文字发生变化后需重新确认。</small>
+          </span>
+        </label>
+
+        <div class="audit-mode-row">
+          <label for="auditMode">审核基准</label>
+          <select id="auditMode">
+            <option value="dual">新旧国标双轨预审</option>
+            <option value="current">现行规则预审</option>
+            <option value="new">新标换版预审</option>
+          </select>
+          <span id="modeSummary">将当前风险与2027换版任务分开呈现。</span>
+        </div>
+
+        <details class="rule-scope">
+          <summary>本次原型能审什么、不能审什么</summary>
+          <div>
+            <p><strong>可做：</strong>15条文本层面检查，区分12条共轨项与3条2027换版关注项，并关联依据入口。</p>
+            <p><strong>暂不能：</strong>类别专属条款、字号与版面、配料合规性、营养数值计算、豁免与例外判断。</p>
+          </div>
+        </details>
+
+        <div class="action-row">
+          <button id="auditButton" class="button button-primary" type="button" disabled>
+            <span>开始原型预审</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
+          </button>
+          <p>当前启用 <strong id="ruleCount">0</strong> 条原型检查 · 结果须人工复核</p>
+        </div>
+      </div>
+
+      <aside class="process-panel" aria-labelledby="process-title">
+        <p class="step-label">审核流程</p>
+        <h2 id="process-title">每个结论都可追溯</h2>
+        <ol class="process-list">
+          <li class="active"><span>1</span><div><strong>文字提取</strong><small>识别标签中的关键字段</small></div></li>
+          <li><span>2</span><div><strong>规则比对</strong><small>检查完整性与高频风险</small></div></li>
+          <li><span>3</span><div><strong>风险分级</strong><small>区分问题、提醒与通过项</small></div></li>
+          <li><span>4</span><div><strong>人工复核</strong><small>确认适用性、例外与原图细节</small></div></li>
+        </ol>
+        <div class="trust-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 7.8 7 10 4.2-2.2 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div><strong>机器先筛，专业人员复核</strong><span>文本检查通过不等于标签合规</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="progressSection" class="progress-section" hidden aria-live="polite">
+      <div class="progress-copy"><strong id="progressTitle">正在解析标签字段</strong><span id="progressValue">0%</span></div>
+      <div class="progress-track"><span id="progressBar"></span></div>
+      <p id="progressDetail">正在识别产品名称、配料表与营养成分表……</p>
+    </section>
+
+    <section id="resultsSection" class="results-section" hidden aria-labelledby="result-title">
+      <div class="result-topbar">
+        <div>
+          <p class="eyebrow">审核完成 · <span id="auditTimestamp"></span></p>
+          <h2 id="result-title">标签风险预审报告</h2>
+        </div>
+        <div class="report-actions">
+          <button id="downloadButton" class="button button-secondary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
+            下载审核记录
+          </button>
+          <button id="printButton" class="button button-secondary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V4h10v4M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v6H7z"/></svg>
+            打印报告
+          </button>
+        </div>
+      </div>
+
+      <dl id="reportMeta" class="report-meta" aria-label="审核记录信息"></dl>
+
+      <div id="sampleNotice" class="sample-notice" hidden>
+        当前结果来自团队自编演示文本，仅验证流程是否可运行，不计入准确率、客户案例或真实测试统计。
+      </div>
+
+      <div id="dualCompare" class="dual-compare" hidden aria-label="新旧标准双轨结果"></div>
+
+      <div class="summary-strip">
+        <div class="priority-block">
+          <small>机器预审状态</small>
+          <strong id="priorityValue">等待预审</strong>
+          <span id="priorityDetail">不会生成缺乏验证依据的“合规分数”</span>
+        </div>
+        <dl class="metrics">
+          <div><dt id="highCount">0</dt><dd>高风险</dd></div>
+          <div><dt id="mediumCount">0</dt><dd>需关注</dd></div>
+          <div><dt id="passCount">0</dt><dd>文本检查通过</dd></div>
+          <div><dt id="manualCount">0</dt><dd>人工复核</dd></div>
+        </dl>
+      </div>
+
+      <div class="report-grid">
+        <section class="findings-panel" aria-labelledby="findings-title">
+          <div class="section-heading compact">
+            <div><p class="step-label">风险明细</p><h3 id="findings-title">预审发现</h3><span id="reviewProgress" class="review-progress"></span></div>
+            <div class="filter-group" role="group" aria-label="筛选审核结果">
+              <button class="filter active" data-filter="all" type="button">全部</button>
+              <button class="filter" data-filter="risk" type="button">仅看风险</button>
+            </div>
+          </div>
+          <div id="completionBanner" class="completion-banner">机器预审完成，等待逐项人工复核。</div>
+          <div id="findingsList" class="findings-list"></div>
+        </section>
+
+        <aside class="extracted-panel" aria-labelledby="extracted-title">
+          <p class="step-label">字段概览</p>
+          <h3 id="extracted-title">已识别信息</h3>
+          <dl id="extractedFields" class="extracted-fields"></dl>
+          <details class="source-details">
+            <summary>查看本次审核边界</summary>
+            <p>图片文字识别可能存在误差。字号、颜色、版面位置、食品类别例外及具体条款适用性均需人工确认。</p>
+          </details>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>怀化学院 · 食品质量与安全学生团队</span>
+    <span>食标智审 原型 v0.4 · 校赛演示版</span>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="rules.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

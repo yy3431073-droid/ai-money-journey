@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="旅脉——面向文旅主管部门的活动全流程智能运营助手交互原型" />
+  <title>旅脉｜文旅活动运营智能体</title>
+  <style>
+    :root{
+      --ink:#17233b;--navy:#12335b;--navy2:#0b2546;--orange:#ed6a2c;--gold:#f3b34c;
+      --green:#1c7a68;--purple:#6356a6;--paper:#f4f1ea;--surface:#fffefb;--line:#d9d4c9;
+      --muted:#667085;--danger:#b54738;--danger-bg:#fff0ed;--warn:#9a6700;--warn-bg:#fff8df;
+      --success-bg:#eaf7f2;--shadow:0 14px 36px rgba(22,40,66,.08);--radius:14px;
+      --sans:"Microsoft YaHei UI","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;
+      --serif:"STSong","Songti SC","Noto Serif CJK SC",serif;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 var(--sans)}
+    button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit}
+    .skip{position:fixed;left:12px;top:-60px;z-index:99;background:#fff;padding:10px 14px;border:2px solid var(--orange)}.skip:focus{top:12px}
+    .app{min-height:100vh;display:grid;grid-template-columns:248px minmax(0,1fr)}
+    .sidebar{position:sticky;top:0;height:100vh;background:var(--navy2);color:#edf4fb;padding:26px 18px 18px;display:flex;flex-direction:column}
+    .brand{display:flex;gap:12px;align-items:center;padding:0 8px 26px;border-bottom:1px solid rgba(255,255,255,.14)}
+    .brand-mark{width:42px;height:42px;border-radius:50% 50% 46% 54%;background:conic-gradient(from 40deg,var(--orange),var(--gold),#65ad93,var(--orange));display:grid;place-items:center;color:var(--navy2);font-weight:900;box-shadow:inset 0 0 0 7px rgba(255,255,255,.7)}
+    .brand strong{display:block;font-size:20px;letter-spacing:.12em}.brand small{color:#a9bdd4;font-size:11px}
+    .nav-label{margin:24px 10px 8px;font-size:11px;color:#87a0bb;letter-spacing:.16em}
+    .nav{display:grid;gap:4px}.nav button{border:0;background:transparent;color:#bed0e2;text-align:left;padding:11px 12px;border-radius:9px;display:flex;gap:10px;align-items:center}
+    .nav button:hover,.nav button:focus-visible{background:rgba(255,255,255,.08);outline:none}.nav button.active{color:#fff;background:#234d78;box-shadow:inset 3px 0 var(--orange)}
+    .nav .n{width:22px;height:22px;border:1px solid currentColor;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:700}
+    .source-status{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding:16px 8px 0}.source-status b{font-size:12px}.source-line{display:flex;align-items:center;gap:8px;color:#afc2d5;font-size:12px;margin-top:8px}.pulse{width:8px;height:8px;border-radius:50%;background:#53c79d;box-shadow:0 0 0 5px rgba(83,199,157,.12)}
+    .main{min-width:0}.topbar{height:76px;padding:0 30px;background:rgba(255,254,251,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+    .activity-id{display:flex;gap:12px;align-items:center}.crumb{font-size:12px;color:var(--muted)}.activity-id h1{font-size:17px;margin:2px 0 0}.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:99px;background:var(--warn-bg);color:var(--warn);font-size:12px;font-weight:700}.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+    .top-actions{display:flex;gap:10px}.btn{border:1px solid #c8c3b8;background:#fff;padding:9px 14px;border-radius:9px;font-weight:700}.btn:hover{border-color:var(--navy)}.btn.primary{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 5px 14px rgba(237,106,44,.22)}.btn.dark{background:var(--navy);color:#fff;border-color:var(--navy)}.btn.ghost{background:transparent}.btn:focus-visible,.icon-btn:focus-visible{outline:3px solid rgba(237,106,44,.28);outline-offset:2px}
+    .content{max-width:1440px;margin:0 auto;padding:28px 30px 88px}.view{display:none}.view.active{display:block}.eyebrow{color:var(--orange);font-size:12px;font-weight:800;letter-spacing:.14em}.title-row{display:flex;justify-content:space-between;gap:18px;align-items:end;margin:4px 0 20px}.title-row h2{font:700 30px/1.2 var(--serif);margin:4px 0}.title-row p{color:var(--muted);margin:0;max-width:720px}.inline-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .notice{border-left:4px solid var(--orange);background:#fff6ee;padding:13px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}.notice strong{display:block}.notice p{margin:2px 0 0;color:#6d4a37}.notice .icon{font-size:20px}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);margin-bottom:22px}.metric{padding:20px 22px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric span{color:var(--muted);font-size:12px}.metric b{font:700 25px/1.2 var(--serif);display:block;margin-top:7px}.metric small{color:var(--green)}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(310px,.65fr);gap:20px}.panel{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}.panel-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-head h3{margin:0;font-size:16px}.panel-body{padding:20px}.panel-note{font-size:12px;color:var(--muted)}
+    .journey{position:relative;display:grid;gap:0}.step{display:grid;grid-template-columns:42px 1fr auto;gap:12px;min-height:84px;position:relative}.step:not(:last-child)::after{content:"";position:absolute;left:17px;top:39px;bottom:0;width:2px;background:#d5dbe2}.step-dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e8f3ee;color:var(--green);font-weight:900;z-index:1;border:4px solid var(--surface)}.step.current .step-dot{background:var(--orange);color:#fff}.step.pending .step-dot{background:#eef0f3;color:#8490a0}.step-copy strong{display:block;margin:3px 0}.step-copy p{margin:0;color:var(--muted);font-size:13px}.step-tag{font-size:11px;color:var(--muted);padding-top:7px}.step.current .step-tag{color:var(--orange);font-weight:800}
+    .fact-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}.fact{padding:13px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:74px}.fact span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.fact b{font-size:13px}.source-id{font:11px/1.3 Consolas,monospace;color:var(--purple);background:#f0edfb;padding:2px 5px;border-radius:4px;white-space:nowrap}.trace{margin-top:16px;background:#f7f5f0;padding:13px;border-left:3px solid var(--purple)}.trace summary{cursor:pointer;font-weight:700}.trace p{margin:8px 0 0;color:var(--muted);font-size:12px}
+    .checks{display:grid;gap:9px}.check{display:grid;grid-template-columns:22px 1fr auto;gap:9px;align-items:start;padding:11px 0;border-bottom:1px dashed var(--line)}.check:last-child{border:0}.check i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--success-bg);color:var(--green);font-size:11px;font-weight:900}.check.warn i{background:var(--warn-bg);color:var(--warn)}.check.danger i{background:var(--danger-bg);color:var(--danger)}.check p{margin:0;font-size:12px;color:var(--muted)}.check strong{display:block;color:var(--ink);font-size:13px}.check em{font-style:normal;font-size:11px;color:var(--muted)}
+    .conflict-hero{display:grid;grid-template-columns:94px 1fr auto;gap:18px;align-items:center;background:var(--danger-bg);border:1px solid #f3c7bf;border-left:6px solid var(--danger);padding:22px;margin-bottom:20px}.risk-score{height:70px;width:70px;border-radius:50%;border:7px solid #f1b1a5;display:grid;place-items:center;font:800 22px var(--serif);color:var(--danger)}.conflict-hero h3{margin:0 0 5px}.conflict-hero p{margin:0;color:#7d463c}.conflict-meta{text-align:right;font-size:12px;color:var(--muted)}
+    .timeline{position:relative;padding:34px 12px 22px;margin-bottom:16px}.axis{height:12px;background:#e7e2d9;border-radius:99px;position:relative}.axis::before,.axis::after{position:absolute;top:20px;color:var(--muted);font-size:11px}.axis::before{content:"09:00";left:0}.axis::after{content:"17:00";right:0}.eventbar{position:absolute;height:16px;top:-2px;left:0;width:100%;background:#6a8fb3;border-radius:99px}.conflictbar{position:absolute;height:24px;top:-6px;left:50%;width:37.5%;background:repeating-linear-gradient(135deg,var(--danger),var(--danger) 8px,#e68573 8px,#e68573 16px);border-radius:99px}.timeline-label{position:absolute;top:0;font-size:11px;font-weight:700}.timeline-label.event{left:12px;color:var(--navy)}.timeline-label.conflict{left:50%;color:var(--danger)}
+    .evidence-table{width:100%;border-collapse:collapse}.evidence-table th,.evidence-table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.evidence-table th{font-size:11px;color:var(--muted);background:#f7f5f0;letter-spacing:.05em}.evidence-table td{font-size:13px}.score{font-weight:900;color:var(--green)}.reason{color:var(--muted);font-size:12px}.status-ok{color:var(--green);font-weight:800}.status-warn{color:var(--warn);font-weight:800}.status-stop{color:var(--danger);font-weight:800}
+    .section-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:20px}.form{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-weight:700;font-size:12px}.field small{color:var(--muted)}.field input,.field select,.field textarea{width:100%;border:1px solid #bbb6ab;background:#fff;padding:10px 11px;border-radius:7px}.field textarea{min-height:82px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid rgba(18,51,91,.14);border-color:var(--navy)}
+    .dirty-banner{display:none;background:#fff7df;color:#795500;border:1px solid #eed38f;padding:11px 13px;margin-bottom:14px}.dirty-banner.show{display:block}.impact-map{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 0 18px}.impact-node{padding:10px 6px;text-align:center;background:#f0eee9;color:var(--muted);font-size:11px;border-top:3px solid #c8c3b8}.impact-node.dirty{background:#fff2e9;color:#9b4824;border-color:var(--orange);font-weight:800}.impact-node.stable{background:var(--success-bg);color:var(--green);border-color:#6fb39d}.impact-node::after{content:"→";float:right;color:#a9a39a}.impact-node:last-child::after{content:""}
+    .diff{display:none;margin-top:16px}.diff.show{display:block}.diff-row{display:grid;grid-template-columns:120px 1fr 36px 1fr;border-bottom:1px solid var(--line);padding:12px 0;align-items:center;gap:8px}.diff-row b{font-size:12px}.before{color:var(--muted);text-decoration:line-through}.after{color:var(--green);font-weight:800}.arrow{text-align:center;color:var(--orange)}
+    .plan-outline{counter-reset:plan;display:grid}.plan-item{counter-increment:plan;display:grid;grid-template-columns:38px 1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}.plan-item::before{content:counter(plan,decimal-leading-zero);font:700 18px var(--serif);color:var(--orange)}.plan-item strong{display:block}.plan-item p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .channel-tabs{display:flex;border-bottom:1px solid var(--line);gap:4px}.channel-tabs button{border:0;border-bottom:3px solid transparent;background:transparent;padding:11px 14px;color:var(--muted);font-weight:700}.channel-tabs button.active{color:var(--navy);border-color:var(--orange)}.copy-preview h3{font:700 24px var(--serif);margin:8px 0}.copy-preview p{color:#3e4b5b}.copy-preview .tag{color:var(--purple);font-weight:700}
+    .review-score{display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center}.ring{width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--green) 0 92.6%,#e4e1d9 92.6%);display:grid;place-items:center}.ring::after{content:"92.6%\A满意度";white-space:pre;width:116px;height:116px;border-radius:50%;background:var(--surface);display:grid;place-items:center;text-align:center;font:700 20px/1.3 var(--serif)}
+    .kpi-bars{display:grid;gap:12px}.kpi-row{display:grid;grid-template-columns:100px 1fr 72px;gap:10px;align-items:center}.bar{height:8px;background:#e6e2da;border-radius:99px;overflow:hidden}.bar span{height:100%;display:block;background:var(--green)}
+    .mobile-actions{display:none}.toast{position:fixed;right:22px;bottom:22px;background:var(--navy2);color:#fff;padding:12px 16px;border-left:4px solid var(--orange);box-shadow:var(--shadow);transform:translateY(90px);opacity:0;transition:.25s;z-index:90}.toast.show{transform:none;opacity:1}
+    .dialog{border:0;padding:0;max-width:560px;width:calc(100% - 30px);box-shadow:0 30px 80px rgba(0,0,0,.28);border-radius:12px}.dialog::backdrop{background:rgba(10,24,43,.55)}.dialog-head{background:var(--navy);color:#fff;padding:18px 20px;display:flex;justify-content:space-between}.dialog-body{padding:20px}.icon-btn{border:0;background:transparent;color:inherit;font-size:20px}.dropzone{border:2px dashed #b7b1a6;padding:28px;text-align:center;background:#faf8f3}.dropzone b{display:block;margin-bottom:4px}.dropzone p{color:var(--muted);font-size:12px}
+    @media(max-width:1050px){.app{grid-template-columns:76px minmax(0,1fr)}.sidebar{padding:22px 11px}.brand{padding:0 4px 22px}.brand-copy,.nav-label,.nav button span:last-child,.source-status{display:none}.nav button{justify-content:center;padding:10px}.workspace,.section-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+    @media(max-width:700px){body{font-size:13px}.app{display:block}.sidebar{height:auto;position:fixed;z-index:60;left:0;right:0;bottom:0;top:auto;padding:7px 8px;background:var(--navy2)}.brand{display:none}.nav{grid-template-columns:repeat(6,1fr);gap:2px}.nav button{padding:6px 2px;display:grid;justify-items:center;gap:2px;font-size:9px}.nav button span:last-child{display:block}.nav .n{width:20px;height:20px}.topbar{height:64px;padding:0 14px}.crumb,.top-actions .btn:first-child{display:none}.activity-id h1{font-size:14px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.badge{padding:4px 7px}.content{padding:20px 14px 130px}.title-row{display:block}.title-row h2{font-size:24px}.inline-actions{margin-top:12px}.metrics{grid-template-columns:1fr 1fr}.metric{padding:14px}.metric b{font-size:20px}.workspace,.section-grid{display:block}.panel{margin-bottom:14px}.fact-grid,.form{grid-template-columns:1fr}.field.full{grid-column:auto}.conflict-hero{grid-template-columns:64px 1fr;padding:16px;gap:10px}.conflict-meta{display:none}.risk-score{width:56px;height:56px;border-width:5px;font-size:18px}.evidence-table{display:block;overflow-x:auto}.impact-map{grid-template-columns:1fr}.impact-node{text-align:left}.impact-node::after{content:"↓"}.diff-row{grid-template-columns:82px 1fr}.diff-row .arrow{display:none}.before,.after{grid-column:2}.review-score{grid-template-columns:1fr;justify-items:center}.mobile-actions{display:flex;position:fixed;left:0;right:0;bottom:57px;z-index:50;background:rgba(255,254,251,.96);padding:9px 14px;border-top:1px solid var(--line);gap:8px}.mobile-actions .btn{flex:1}.toast{bottom:120px;left:14px;right:14px}.top-actions .primary{font-size:12px;padding:8px 9px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要内容</a>
+  <div class="app">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="brand"><div class="brand-mark">旅</div><div class="brand-copy"><strong>旅脉</strong><small>TOURISM EVENT OS</small></div></div>
+      <div class="nav-label">活动工作台</div>
+      <nav class="nav">
+        <button class="active" data-view="overview" aria-label="01 活动看板"><span class="n">01</span><span>活动看板</span></button>
+        <button data-view="intake" aria-label="02 信息校核"><span class="n">02</span><span>信息校核</span></button>
+        <button data-view="conflict" aria-label="03 资源冲突"><span class="n">03</span><span>资源冲突</span></button>
+        <button data-view="plan" aria-label="04 方案协同"><span class="n">04</span><span>方案协同</span></button>
+        <button data-view="publicity" aria-label="05 宣传执行"><span class="n">05</span><span>宣传执行</span></button>
+        <button data-view="review" aria-label="06 效果复盘"><span class="n">06</span><span>效果复盘</span></button>
+      </nav>
+      <div class="source-status"><b>数据底座状态</b><div class="source-line"><span class="pulse"></span>15 个工作表已连接</div><div class="source-line">最近校核 16:42</div></div>
+    </aside>
+    <main class="main" id="main">
+      <header class="topbar">
+        <div class="activity-id"><div><div class="crumb">活动台账 / SAMPLE-001</div><h1>镜湖春季亲子城市漫游</h1></div><span class="badge">待人工确认</span></div>
+        <div class="top-actions"><button class="btn" id="exportBtn">导出证据包</button><button class="btn primary" id="importBtn">导入新活动</button></div>
+      </header>
+      <div class="content">
+        <section class="view active" data-page="overview">
+          <div class="eyebrow">ACTIVITY CONTROL TOWER</div>
+          <div class="title-row"><div><h2>一场活动，一条可追溯的运营链</h2><p>从信息导入到复盘归档，所有节点共享同一份活动上下文；修改条件时，只重算受影响的策划、资源、宣传与执行节点。</p></div><div class="inline-actions"><button class="btn ghost" data-go="intake">核对活动信息</button><button class="btn dark" data-go="conflict">处理 1 项冲突</button></div></div>
+          <div class="notice"><div class="icon">⚠</div><div><strong>发现 1 项中风险资源冲突，需在方案发布前处理</strong><p>镜湖公园西岸草坪 13:00—16:00 处于公开示例养护时段；智能体已生成“硬质广场替代 + 午后路线绕行”方案。</p></div></div>
+          <div class="metrics">
+            <div class="metric"><span>活动预计客流</span><b>5,000 人</b><small>容量阈值内</small></div>
+            <div class="metric"><span>预算区间</span><b>12–18 万</b><small>币种 CNY</small></div>
+            <div class="metric"><span>已匹配资源</span><b>4 项</b><small>3 场地 + 1 商圈</small></div>
+            <div class="metric"><span>待人工门禁</span><b>2 项</b><small>场地函询 / 宣传审核</small></div>
+          </div>
+          <div class="workspace">
+            <article class="panel"><div class="panel-head"><h3>全流程进度</h3><span class="panel-note">planning_version v1.2</span></div><div class="panel-body">
+              <div class="journey">
+                <div class="step"><div class="step-dot">✓</div><div class="step-copy"><strong>活动信息抽取与校核</strong><p>12 个关键字段已结构化，预算币种、客流口径和约束条件已锁定。</p></div><div class="step-tag">已完成</div></div>
+                <div class="step"><div class="step-dot">✓</div><div class="step-copy"><strong>历史活动与资源召回</strong><p>召回 JH2024-001 等相似案例；匹配 3 个场地、1 个商圈资源。</p></div><div class="step-tag">已完成</div></div>
+                <div class="step current"><div class="step-dot">!</div><div class="step-copy"><strong>冲突检测与资源协调</strong><p>CAL-SAMPLE-001 命中 VEN-JH-002；等待运营人员确认替代方案。</p></div><div class="step-tag">当前节点</div></div>
+                <div class="step pending"><div class="step-dot">4</div><div class="step-copy"><strong>方案、宣传与执行清单</strong><p>确认资源后自动生成 14 要素方案、多渠道文案及责任清单。</p></div><div class="step-tag">待解锁</div></div>
+                <div class="step pending"><div class="step-dot">5</div><div class="step-copy"><strong>效果导入与复盘归档</strong><p>按 T+1 / T+7 生成八部分复盘，并沉淀为下次策划依据。</p></div><div class="step-tag">活动后</div></div>
+              </div>
+            </div></article>
+            <aside class="panel"><div class="panel-head"><h3>决策门禁</h3><span class="panel-note">规则优先于生成</span></div><div class="panel-body"><div class="checks">
+              <div class="check"><i>✓</i><div><strong>容量与 80% 预警线</strong><p>预计 5,000 人，候选场地均未触发停止阈值。</p></div><em>RULE-008</em></div>
+              <div class="check danger"><i>!</i><div><strong>草坪养护时段冲突</strong><p>13:00—16:00 不可搭建，必须改线或更换载体。</p></div><em>CAL-SAMPLE-001</em></div>
+              <div class="check warn"><i>?</i><div><strong>场地费用待函询</strong><p>数据包标注“待询价”，不得按 0 元计入预算。</p></div><em>VEN-JH-002</em></div>
+              <div class="check warn"><i>审</i><div><strong>宣传发布审核</strong><p>时间、地点、价格或风险提示变化时，所有渠道联动改写。</p></div><em>RULE-005</em></div>
+            </div></div></aside>
+          </div>
+        </section>
+
+        <section class="view" data-page="intake">
+          <div class="eyebrow">EVENT CONTEXT OBJECT</div>
+          <div class="title-row"><div><h2>先确认事实，再让智能体做判断</h2><p>每个字段保留原文、结构化值、置信度与来源；未确认的费用和审批状态不进入“已落实”口径。</p></div><button class="btn primary" id="confirmFacts">确认并进入冲突检测</button></div>
+          <div class="workspace">
+            <article class="panel"><div class="panel-head"><h3>结构化活动信息</h3><span class="badge">12/12 已抽取</span></div><div class="panel-body">
+              <div class="fact-grid">
+                <div class="fact"><span>活动类型</span><b>城市漫游 / 亲子</b></div><div class="fact"><span>目标人群</span><b>亲子家庭、周边市民</b></div>
+                <div class="fact"><span>活动时间</span><b>2026-04-18 09:00</b></div><div class="fact"><span>预计客流</span><b>5,000 人</b></div>
+                <div class="fact"><span>活动区域</span><b>镜湖公园—鸠兹广场—中山路步行街</b></div><div class="fact"><span>预算</span><b>CNY 120,000–180,000</b></div>
+                <div class="fact"><span>资源偏好</span><b>VEN-JH-001 / 002 / 003 · BD-JH-001</b></div><div class="fact"><span>传播渠道</span><b>微信公众号、小红书、亲子社群</b></div>
+                <div class="fact"><span>消费带动目标</span><b>CNY 200,000</b></div><div class="fact"><span>强约束</span><b>禁明火、控音量、草坪养护</b></div>
+              </div>
+              <details class="trace" open><summary>数据血缘：测试任务 → 活动上下文</summary><p>来源 <span class="source-id">测试任务!SAMPLE-001</span>；字段经过日期、币种、人数与资源 ID 规范化。任何人工修改都会写入 planning_version 与 change_log。</p></details>
+            </div></article>
+            <aside class="panel"><div class="panel-head"><h3>需要人工确认</h3><span class="panel-note">2 项</span></div><div class="panel-body"><div class="checks">
+              <div class="check warn"><i>1</i><div><strong>结束时间缺失</strong><p>原始任务只给出开始时间；当前按“09:00—17:00”策划假设运行。</p></div><em>假设 A-001</em></div>
+              <div class="check warn"><i>2</i><div><strong>具体费用未询价</strong><p>候选场馆费用均为“待询价”，预算已保留 15% 机动金。</p></div><em>RULE-003</em></div>
+            </div><div class="trace"><strong>治理原则</strong><p>“未知”不等于“没有”；智能体可以生成建议，但不能替人审批高风险事项。</p></div></div></aside>
+          </div>
+        </section>
+
+        <section class="view" data-page="conflict">
+          <div class="eyebrow">CONFLICT & RESOURCE ENGINE</div>
+          <div class="title-row"><div><h2>把冲突定位到时间、资源和责任动作</h2><p>先执行硬约束淘汰，再对合格资源做软评分；所有推荐都能说明“为什么”和“依据哪条数据”。</p></div><button class="btn primary" data-go="plan">采用替代方案</button></div>
+          <div class="conflict-hero"><div class="risk-score">中</div><div><h3>VEN-JH-002 × CAL-SAMPLE-001 时间重叠</h3><p>镜湖公园西岸草坪 13:00—16:00 不可搭建；与活动午后亲子互动段重叠 180 分钟。</p></div><div class="conflict-meta"><span class="source-id">公开示例冲突</span><br />检测：区间重叠 + 同场地</div></div>
+          <article class="panel" style="margin-bottom:20px"><div class="panel-head"><h3>时间重叠证据</h3><span class="panel-note">09:00—17:00 活动假设</span></div><div class="panel-body"><div class="timeline"><div class="timeline-label event">活动运行</div><div class="timeline-label conflict">养护 13:00—16:00</div><div class="axis"><span class="eventbar"></span><span class="conflictbar"></span></div></div><div class="notice" style="margin:10px 0 0"><div class="icon">→</div><div><strong>推荐处置：保留上午自然观察，午后转移至 VEN-JH-003 鸠兹广场</strong><p>硬质广场支持启动、展陈和城市定向集散；同时触发路线、物料点位、宣传地点和执行清单四个节点重算。</p></div></div></div></article>
+          <div class="section-grid">
+            <article class="panel"><div class="panel-head"><h3>资源匹配与可解释评分</h3><span class="panel-note">硬门禁 → 软评分</span></div><div class="panel-body" style="padding:0"><table class="evidence-table"><thead><tr><th>候选资源</th><th>门禁</th><th>综合分</th><th>推荐依据 / 风险</th></tr></thead><tbody>
+              <tr><td><b>鸠兹广场</b><br><span class="source-id">VEN-JH-003</span></td><td class="status-ok">通过</td><td class="score">91</td><td><b>午后首选</b><div class="reason">容量、集散和硬质地面适配；费用待函询。</div></td></tr>
+              <tr><td><b>鸠兹风景区</b><br><span class="source-id">VEN-JH-001</span></td><td class="status-ok">通过</td><td class="score">87</td><td><b>开幕与打卡</b><div class="reason">城市漫游和文化展示适配，容量充足。</div></td></tr>
+              <tr><td><b>镜湖公园</b><br><span class="source-id">VEN-JH-002</span></td><td class="status-warn">条件通过</td><td class="score">78</td><td><b>仅上午使用</b><div class="reason">亲子自然观察高度适配；午后草坪冲突。</div></td></tr>
+            </tbody></table></div></article>
+            <aside class="panel"><div class="panel-head"><h3>评分口径</h3><span class="panel-note">不是黑盒排名</span></div><div class="panel-body"><div class="checks">
+              <div class="check"><i>30</i><div><strong>主题适配 30%</strong><p>是否支持城市漫游、亲子和文化展示。</p></div></div>
+              <div class="check"><i>25</i><div><strong>人群适配 25%</strong><p>亲子安全、停留空间与服务设施。</p></div></div>
+              <div class="check"><i>25</i><div><strong>时空可用 25%</strong><p>日历可用性、路线衔接和时间窗口。</p></div></div>
+              <div class="check"><i>20</i><div><strong>容量运营 20%</strong><p>容量阈值、集散效率和历史表现。</p></div></div>
+            </div><div class="trace"><p>若命中禁用、容量停止线或同一供应商重叠，直接淘汰，不参与软评分。</p></div></div></aside>
+          </div>
+        </section>
+
+        <section class="view" data-page="plan">
+          <div class="eyebrow">INCREMENTAL RE-PLANNING</div>
+          <div class="title-row"><div><h2>改一个条件，自动标出该重算的部分</h2><p>活动上下文是唯一事实源。修改预算、时间、人群或主场地后，依赖图标记脏节点并生成可审阅差异。</p></div><button class="btn primary" id="replanBtn">重新协调资源</button></div>
+          <div id="dirtyBanner" class="dirty-banner">检测到活动条件变化。资源、路线、宣传和执行清单将重算；历史案例检索保持复用。</div>
+          <div class="impact-map" aria-label="增量重算影响图"><div class="impact-node stable">字段抽取</div><div class="impact-node stable">历史召回</div><div class="impact-node dirty">资源匹配</div><div class="impact-node dirty">方案 / 路线</div><div class="impact-node dirty">宣传 / 清单</div></div>
+          <div class="section-grid">
+            <article class="panel"><div class="panel-head"><h3>活动条件</h3><span class="panel-note">修改会生成 change_log</span></div><div class="panel-body"><form class="form" id="conditionForm">
+              <div class="field"><label for="audience">目标人群</label><select id="audience"><option value="亲子家庭、周边市民">亲子家庭、周边市民</option><option value="18—35岁青年游客">18—35岁青年游客</option><option value="亲子家庭与银发陪同者">亲子家庭与银发陪同者</option></select></div>
+              <div class="field"><label for="start">开始时间</label><select id="start"><option value="09:00">09:00（原方案）</option><option value="10:00">10:00</option><option value="13:00">13:00</option></select></div>
+              <div class="field"><label for="budget">预算上限（CNY）</label><select id="budget"><option value="180000">180,000（原方案）</option><option value="150000">150,000</option><option value="126000">126,000（压缩 30%）</option></select></div>
+              <div class="field"><label for="venue">午后主场地</label><select id="venue"><option value="VEN-JH-002">镜湖公园 · VEN-JH-002</option><option value="VEN-JH-003">鸠兹广场 · VEN-JH-003</option><option value="VEN-JH-001">鸠兹风景区 · VEN-JH-001</option></select></div>
+              <div class="field full"><label for="instruction">工作人员补充要求</label><textarea id="instruction">午后避免使用养护草坪；保留亲子自然观察；宣传口径同步更新。</textarea><small>系统不会覆盖原方案；新结果写入 planning_version v1.3。</small></div>
+            </form>
+            <div class="diff" id="diff"><h3>本次调整差异</h3><div class="diff-row"><b>午后场地</b><span class="before">镜湖公园西岸草坪</span><span class="arrow">→</span><span class="after" id="diffVenue">鸠兹广场硬质区域</span></div><div class="diff-row"><b>冲突状态</b><span class="before">中风险 / 重叠 180 分钟</span><span class="arrow">→</span><span class="after">已规避，待场地函询</span></div><div class="diff-row"><b>预算结构</b><span class="before">上限 180,000</span><span class="arrow">→</span><span class="after" id="diffBudget">上限 180,000；机动金 15%</span></div><div class="diff-row"><b>联动节点</b><span class="before">原路线 / 原宣传地点</span><span class="arrow">→</span><span class="after">路线、物料、三渠道文案、责任清单</span></div></div>
+            </div></article>
+            <aside class="panel"><div class="panel-head"><h3>14 要素方案骨架</h3><span class="panel-note">RULE-001</span></div><div class="panel-body"><div class="plan-outline">
+              <div class="plan-item"><div><strong>主题与目标</strong><p>镜湖寻春记 · 亲子城市自然观察</p></div><span class="status-ok">已生成</span></div>
+              <div class="plan-item"><div><strong>人群与规模</strong><p>亲子家庭 / 周边市民，预计 5,000 人</p></div><span class="status-ok">已生成</span></div>
+              <div class="plan-item"><div><strong>时空与路线</strong><p>上午镜湖公园，午后鸠兹广场—步行街</p></div><span class="status-warn">待确认</span></div>
+              <div class="plan-item"><div><strong>资源与预算</strong><p>场地、商圈、物料与 15% 机动金</p></div><span class="status-warn">待询价</span></div>
+              <div class="plan-item"><div><strong>安全与应急</strong><p>分时导流、儿童走失、医疗与天气预案</p></div><span class="status-ok">已生成</span></div>
+              <div class="plan-item"><div><strong>传播与复盘</strong><p>三渠道内容、UTM 口径、T+1 / T+7 复盘</p></div><span class="status-ok">已生成</span></div>
+            </div></div></aside>
+          </div>
+        </section>
+
+        <section class="view" data-page="publicity">
+          <div class="eyebrow">CONTENT & EXECUTION</div>
+          <div class="title-row"><div><h2>方案确认后，宣传与执行同步生成</h2><p>同一事实源驱动新闻稿、公众号、小红书和执行清单；地点或时间变化时，所有受影响渠道一起进入待审。</p></div><div class="inline-actions"><button class="btn">导出执行清单</button><button class="btn primary" id="approveCopy">提交宣传审核</button></div></div>
+          <div class="section-grid"><article class="panel"><div class="panel-head"><h3>渠道内容预览</h3><span class="badge">待审核</span></div><div class="panel-body"><div class="channel-tabs"><button class="active">微信公众号</button><button>小红书</button><button>新闻稿</button></div><div class="copy-preview"><div class="eyebrow" style="margin-top:18px">镜湖寻春记</div><h3>带上孩子，把镜湖区读成一本会呼吸的自然课本</h3><p>4 月 18 日，从镜湖公园的春日观察出发，沿鸠兹广场走进中山路步行街。自然任务卡、城市定向与商圈亲子权益串成一条可边走边玩的城市漫游线。</p><p><b>时间：</b>2026 年 4 月 18 日 09:00 起<br><b>午后集散：</b>鸠兹广场硬质区域（以最终审核为准）</p><p class="tag">#镜湖寻春记 #亲子城市漫游 #芜湖周末去哪儿</p><div class="trace"><p>事实字段：SAMPLE-001 · 场地依据：VEN-JH-003 · 发布门禁：RULE-005 · 未确认费用未写入文案</p></div></div></div></article>
+            <aside class="panel"><div class="panel-head"><h3>执行清单</h3><span class="panel-note">10 项 / 3 待确认</span></div><div class="panel-body"><div class="checks">
+              <div class="check"><i>✓</i><div><strong>上午自然观察点位</strong><p>责任：活动执行组 · T-7 复核</p></div></div><div class="check warn"><i>函</i><div><strong>鸠兹广场场地函询</strong><p>责任：资源协调组 · T-14 截止</p></div></div><div class="check warn"><i>价</i><div><strong>场地与物料询价回填</strong><p>责任：采购协同 · 未回填不得锁预算</p></div></div><div class="check"><i>✓</i><div><strong>亲子客流分时导流</strong><p>参考 JH2024-001 复盘经验</p></div></div><div class="check warn"><i>审</i><div><strong>三渠道宣传审核</strong><p>责任：宣传审核人 · 发布前门禁</p></div></div>
+            </div></div></aside></div>
+        </section>
+
+        <section class="view" data-page="review">
+          <div class="eyebrow">EFFECT & LEARNING LOOP</div>
+          <div class="title-row"><div><h2>复盘不是一篇总结，而是下一场活动的知识</h2><p>以下为数据包历史活动 JH2024-001 的真实指标示例，用来说明效果数据如何反哺资源匹配与预算建议；不是本项目已落地成效。</p></div><button class="btn primary">导入本场效果数据</button></div>
+          <div class="metrics"><div class="metric"><span>历史参与人数</span><b>7,642</b><small>JH2024-001</small></div><div class="metric"><span>活动收入</span><b>¥382,600</b><small>预算执行率 96.76%</small></div><div class="metric"><span>传播曝光</span><b>326,800</b><small>社交阅读 245,000</small></div><div class="metric"><span>投入产出比</span><b>2.47</b><small>数据包计算口径</small></div></div>
+          <div class="section-grid"><article class="panel"><div class="panel-head"><h3>八部分复盘摘要</h3><span class="source-id">执行效果!JH2024-001</span></div><div class="panel-body"><div class="review-score"><div class="ring"></div><div class="kpi-bars"><div class="kpi-row"><span>客流达成</span><div class="bar"><span style="width:95%"></span></div><b>7,642</b></div><div class="kpi-row"><span>预算控制</span><div class="bar"><span style="width:96.76%"></span></div><b>96.76%</b></div><div class="kpi-row"><span>传播完成</span><div class="bar"><span style="width:82%"></span></div><b>32.68 万</b></div><div class="kpi-row"><span>投诉控制</span><div class="bar"><span style="width:93%"></span></div><b>7 件</b></div></div></div><div class="trace"><strong>可复用经验</strong><p>“分时导流有效；商户权益提前售罄，需建立动态库存。”下一场亲子漫游已自动加入分时任务卡与商户权益库存门禁。</p></div></div></article>
+            <aside class="panel"><div class="panel-head"><h3>学习回写</h3><span class="panel-note">人审后入库</span></div><div class="panel-body"><div class="checks"><div class="check"><i>1</i><div><strong>历史活动库</strong><p>形成标准化效果字段与八部分复盘。</p></div></div><div class="check"><i>2</i><div><strong>资源画像库</strong><p>更新场地承载、商户权益售罄与服务表现。</p></div></div><div class="check"><i>3</i><div><strong>策略规则库</strong><p>沉淀“高客流分时导流”和“权益动态库存”规则。</p></div></div><div class="check warn"><i>审</i><div><strong>人工审核门禁</strong><p>仅经确认的经验进入下次推荐，避免模型自循环污染。</p></div></div></div></div></aside></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="mobile-actions"><button class="btn" data-go="intake">核对信息</button><button class="btn primary" data-go="conflict">处理冲突</button></div>
+  <div class="toast" role="status" aria-live="polite" id="toast">操作已完成</div>
+  <dialog class="dialog" id="importDialog"><div class="dialog-head"><strong>导入活动信息</strong><button class="icon-btn" aria-label="关闭" id="closeDialog">×</button></div><div class="dialog-body"><div class="dropzone"><b>拖入 Word、Excel、PDF 或粘贴活动通知</b><p>原型演示：文件将进入字段抽取与人工校核，不会直接生成发布方案。</p><button class="btn dark" id="demoImport">载入 SAMPLE-001 演示数据</button></div></div></dialog>
+  <script>
+    const pages=[...document.querySelectorAll('.view')];
+    const navs=[...document.querySelectorAll('.nav button')];
+    const toast=document.getElementById('toast');
+    function showToast(message){toast.textContent=message;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2400)}
+    function showView(name, push=true){
+      pages.forEach(p=>p.classList.toggle('active',p.dataset.page===name));
+      navs.forEach(n=>n.classList.toggle('active',n.dataset.view===name));
+      if(push){const url=new URL(location.href);url.searchParams.set('view',name);history.replaceState({},'',url)}
+      window.scrollTo({top:0,left:0,behavior:'auto'});
+    }
+    navs.forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));
+    document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.go)));
+    const initial=new URLSearchParams(location.search).get('view');if(initial&&pages.some(p=>p.dataset.page===initial))showView(initial,false);
+    const dialog=document.getElementById('importDialog');
+    document.getElementById('importBtn').addEventListener('click',()=>dialog.showModal());
+    document.getElementById('closeDialog').addEventListener('click',()=>dialog.close());
+    document.getElementById('demoImport').addEventListener('click',()=>{dialog.close();showView('intake');showToast('SAMPLE-001 已载入，进入字段校核')});
+    document.getElementById('confirmFacts').addEventListener('click',()=>{showView('conflict');showToast('活动事实已锁定，发现 1 项中风险冲突')});
+    document.getElementById('exportBtn').addEventListener('click',()=>showToast('已生成 11 键结构化证据包（原型演示）'));
+    document.getElementById('approveCopy').addEventListener('click',()=>showToast('宣传内容已提交人工审核门禁'));
+    const form=document.getElementById('conditionForm'),dirty=document.getElementById('dirtyBanner'),diff=document.getElementById('diff');
+    form.addEventListener('input',()=>{dirty.classList.add('show');diff.classList.remove('show')});
+    document.getElementById('replanBtn').addEventListener('click',()=>{
+      const v=document.getElementById('venue').value,b=document.getElementById('budget').value;
+      const names={'VEN-JH-002':'镜湖公园（仅上午可用）','VEN-JH-003':'鸠兹广场硬质区域','VEN-JH-001':'鸠兹风景区'};
+      document.getElementById('diffVenue').textContent=names[v];
+      document.getElementById('diffBudget').textContent=`上限 ${Number(b).toLocaleString('zh-CN')}；机动金 15%`;
+      dirty.classList.remove('show');diff.classList.add('show');showToast('已生成 planning_version v1.3，4 个节点完成重算');
+    });
+    document.querySelectorAll('.channel-tabs button').forEach(btn=>btn.addEventListener('click',e=>{document.querySelectorAll('.channel-tabs button').forEach(b=>b.classList.remove('active'));e.currentTarget.classList.add('active');showToast(`${e.currentTarget.textContent}文案已切换`)}));
+  </script>
+</body>
+</html>
